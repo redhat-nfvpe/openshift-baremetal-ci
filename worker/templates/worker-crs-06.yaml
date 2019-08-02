@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: openshift-nfvpe-06-bmc-secret
+type: Opaque
+data:
+  username: cm9vdA==
+  password: Y2Fsdmlu
+
+---
+apiVersion: metal3.io/v1alpha1
+kind: BareMetalHost
+metadata:
+  name: openshift-nfvpe-06
+spec:
+  online: true
+  bmc:
+    address: ipmi://10.19.111.17
+    credentialsName: openshift-nfvpe-06-bmc-secret
+  bootMACAddress: a4:bf:01:51:30:4c

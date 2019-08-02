@@ -2,6 +2,11 @@
 
 set -e
 
+# Worker Node OpenShift API Interface MACs
+# nfvpe-06: 3c:fd:fe:a0:d5:e1
+# nfvpe-07: 3c:fd:fe:ba:0a:78
+# nfvpe-08: 3c:fd:fe:ba:07:9c
+
 workerNode=nfvpe-07
 timeout=1800
 
