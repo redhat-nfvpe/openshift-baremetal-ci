@@ -32,7 +32,7 @@ wait_for_worker() {
 ssh_execute() {
 	host=$1
 	cmd=$2
-	ssh -X -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l core $host
+	ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l core $host "$cmd"
 }
 
 if [ oc get baremetalhosts --all-namespaces | grep $workerNode | grep "provisioned" ]; then
@@ -55,13 +55,20 @@ oc scale --replicas=1 machinesets sriov-worker-0 -n openshift-machine-api
 
 wait_for_worker $workerNode provisioned 30
 
-workerIP=$(ip neighbor | grep -i 3c:fd:fe:ba:0a:78 | cut  -d" " -f1)
 
-up=$(ssh_execute $workerIP "uptime -p")
+while true
+do
+	workerIP=$(ip neighbor | grep -i 3c:fd:fe:ba:0a:78 | tail -n1 | cut  -d" " -f1)
+        up=$(ssh_execute $workerIP "uptime -p" | awk -F', ' '{ print $NF }' | cut -d ' ' -f1)
+        if (( $(echo "$up > 3" | bc -l) )); then
+                break
+        fi
+done
 
-ssh_execute $workerIP "sudo sed -i -e '$a\192.168.111.5 api-int.sriov.dev.metalkube.org api-int' /etc/hosts" 
+workerIP=$(ip neighbor | grep -i 3c:fd:fe:ba:0a:78 | tail -n1 | cut  -d" " -f1)
+ssh_execute $workerIP "sudo sed -i -e '\$a\192.168.111.5 api-int.sriov.dev.metalkube.org api-int' /etc/hosts"
 ssh_execute $workerIP "sudo sed -i '/192.168.111.1/d' /etc/resolv.conf" 
-ssh_execute $workerIP "sudo sed -i 's/^search oot.lab.eng.bos.redhat.com.*/192.168.111.1/g' /etc/resolv.conf"
+ssh_execute $workerIP "sudo sed -i -e 's/^search oot.lab.eng.bos.redhat.com.*/& \nnameserver 192.168.111.1/g' /etc/resolv.conf"
 ssh_execute $workerIP "sudo systemctl restart crio"
 
 
