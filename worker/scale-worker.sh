@@ -12,11 +12,11 @@ set -x
 workerNode=$1
 timeout=1800
 
-if [ "$(workerNode)" == "nfvpe-06" ];then
+if [ "$workerNode" == "nfvpe-06" ];then
 	MAC="3c:fd:fe:a0:d5:e1"
-elif [ "$(workerNode)" == "nfvpe-07" ];then
+elif [ "$workerNode" == "nfvpe-07" ];then
 	MAC="3c:fd:fe:ba:0a:78"
-elif [ "$(workerNode)" == "nfvpe-08" ];then
+elif [ "$workerNode" == "nfvpe-08" ];then
 	MAC="3c:fd:fe:ba:07:9c"
 else
 	echo "workerNode $workerNode is not supported, please specify valid worker node 'nfvpe-06,nfvpe-07,nfvpe-08'"
@@ -64,14 +64,18 @@ fi
 
 wait_for_worker $workerNode ready 5
 
-oc scale --replicas=1 machinesets sriov-worker-0 -n openshift-machine-api
+desiredWorkerNum=$(oc get machinesets -n openshift-machine-api | tail -n1 | awk -F' ' '{print $2}')
+
+desiredWorkerNum=$((desiredWorkerNum+1))
+
+oc scale --replicas=$desiredWorkerNum machinesets sriov-worker-0 -n openshift-machine-api
 
 wait_for_worker $workerNode provisioned 30
 
 
 while true
 do
-	workerIP=$(ip neighbor | grep -i $(MAC) | tail -n1 | cut  -d" " -f1)
+	workerIP=$(ip neighbor | grep -i $MAC | tail -n1 | cut  -d" " -f1)
         up=$(ssh_execute $workerIP "uptime -p" | awk -F' ' '{ print $2 }')
         if (( $(echo "$up > 3" | bc -l) )); then
                 break
@@ -79,7 +83,7 @@ do
 	sleep 30
 done
 
-workerIP=$(ip neighbor | grep -i $(MAC) | tail -n1 | cut  -d" " -f1)
+workerIP=$(ip neighbor | grep -i $MAC | tail -n1 | cut  -d" " -f1)
 ssh_execute $workerIP "sudo sed -i -e '\$a\192.168.111.5 api-int.sriov.dev.metalkube.org api-int' /etc/hosts"
 ssh_execute $workerIP "sudo sed -i '/192.168.111.1/d' /etc/resolv.conf" 
 ssh_execute $workerIP "sudo sed -i -e 's/^search .*/& \nnameserver 192.168.111.1/g' /etc/resolv.conf"
