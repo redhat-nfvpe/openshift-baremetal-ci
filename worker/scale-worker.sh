@@ -1,14 +1,27 @@
 #!/bin/bash
 
-set -e
+set -x
 
 # Worker Node OpenShift API Interface MACs
 # nfvpe-06: 3c:fd:fe:a0:d5:e1
 # nfvpe-07: 3c:fd:fe:ba:0a:78
 # nfvpe-08: 3c:fd:fe:ba:07:9c
 
-workerNode=nfvpe-07
+#workerNode=nfvpe-07
+
+workerNode=$1
 timeout=1800
+
+if [ "$(workerNode)" == "nfvpe-06" ];then
+	MAC="3c:fd:fe:a0:d5:e1"
+elif [ "$(workerNode)" == "nfvpe-07" ];then
+	MAC="3c:fd:fe:ba:0a:78"
+elif [ "$(workerNode)" == "nfvpe-08" ];then
+	MAC="3c:fd:fe:ba:07:9c"
+else
+	echo "workerNode $workerNode is not supported, please specify valid worker node 'nfvpe-06,nfvpe-07,nfvpe-08'"
+	exit 1
+fi
 
 wait_for_worker() {
 	worker=$1
@@ -20,9 +33,9 @@ wait_for_worker() {
 	while [ "$(oc get baremetalhosts --all-namespaces | grep $worker | grep $state)" = "" ]
 	do
 		sleep $interval
-		let count++
+		count=$((count+1))
 		let timepassed="$count*$interval"
-		if (( $timepassed > $timeout )); then
+		if [ $timepassed -gt $timeout ]; then
 			echo "Time out waiting for $worker to become $state."
 			exit 1
 		fi
@@ -35,18 +48,18 @@ ssh_execute() {
 	ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l core $host "$cmd"
 }
 
-if [ oc get baremetalhosts --all-namespaces | grep $workerNode | grep "provisioned" ]; then
+if [ "$(oc get baremetalhosts --all-namespaces | grep $workerNode | grep 'provisioned')" != "" ]; then
 	oc scale --replicas=0 machinesets sriov-worker-0 -n openshift-machine-api
 fi
 
-if [ oc get baremetalhosts --all-namespaces | grep $workerNode | grep "provisioning" ]; then
+if [ "$(oc get baremetalhosts --all-namespaces | grep $workerNode | grep 'provisioning')" != "" ]; then
 	wait_for_worker $workerNode provisioned 30
 	oc scale --replicas=0 machinesets sriov-worker-0 -n openshift-machine-api
 fi
 
-if [ ! oc get baremetalhosts --all-namespaces | grep $workerNode ]; then
+if [ "$(oc get baremetalhosts --all-namespaces | grep $workerNode)" == "" ]; then
 	echo "Adding work node $workerNode definition"
-	oc apply -f templates/worker-crs.yaml --namespace=openshift-machine-api 
+	oc apply -f templates/$workerNode.yaml --namespace=openshift-machine-api
 fi
 
 wait_for_worker $workerNode ready 5
@@ -58,17 +71,18 @@ wait_for_worker $workerNode provisioned 30
 
 while true
 do
-	workerIP=$(ip neighbor | grep -i 3c:fd:fe:ba:0a:78 | tail -n1 | cut  -d" " -f1)
-        up=$(ssh_execute $workerIP "uptime -p" | awk -F', ' '{ print $NF }' | cut -d ' ' -f1)
+	workerIP=$(ip neighbor | grep -i $(MAC) | tail -n1 | cut  -d" " -f1)
+        up=$(ssh_execute $workerIP "uptime -p" | awk -F' ' '{ print $2 }')
         if (( $(echo "$up > 3" | bc -l) )); then
                 break
         fi
+	sleep 30
 done
 
-workerIP=$(ip neighbor | grep -i 3c:fd:fe:ba:0a:78 | tail -n1 | cut  -d" " -f1)
+workerIP=$(ip neighbor | grep -i $(MAC) | tail -n1 | cut  -d" " -f1)
 ssh_execute $workerIP "sudo sed -i -e '\$a\192.168.111.5 api-int.sriov.dev.metalkube.org api-int' /etc/hosts"
 ssh_execute $workerIP "sudo sed -i '/192.168.111.1/d' /etc/resolv.conf" 
-ssh_execute $workerIP "sudo sed -i -e 's/^search oot.lab.eng.bos.redhat.com.*/& \nnameserver 192.168.111.1/g' /etc/resolv.conf"
+ssh_execute $workerIP "sudo sed -i -e 's/^search .*/& \nnameserver 192.168.111.1/g' /etc/resolv.conf"
 ssh_execute $workerIP "sudo systemctl restart crio"
 
 
