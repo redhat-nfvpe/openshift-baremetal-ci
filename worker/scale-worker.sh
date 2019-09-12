@@ -92,9 +92,41 @@ ssh_execute $workerIP "sudo systemctl restart crio"
 
 echo "Waiting for worker $worker to appear as OpenShift node ..."
 count=0
-while [ "$(oc get nodes | grep $workerNode)" = "" ]
+while [ "$(oc get nodes | grep $workerNode | awk -F' ' '{print $2}')" != "Ready" ]
 do
-	oc get csr -o name | xargs -n 1 oc adm certificate approve
+	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
+	sleep 5
+	let count++
+	let timepassed="$count*5"
+	if (( $timepassed > 600 )); then
+		echo "Time out waiting for $worker to appear as OpenShift node."
+		exit 1
+	fi
+done
+
+sleep 10
+
+workerIP=$(ip neighbor | grep -i $MAC | tail -n1 | cut  -d" " -f1)
+
+oc apply -f templates/hugepage-machine-config.yaml
+
+while true
+do
+        up=$(ssh_execute $workerIP "uptime -p" | awk -F' ' '{ print $2 }')
+        if (( $(echo "$up > 2" | bc -l) )); then
+                break
+        fi
+	sleep 30
+done
+
+ssh_execute $workerIP "sudo sed -i '/192.168.111.1/d' /etc/resolv.conf"
+ssh_execute $workerIP "sudo sed -i -e 's/^search .*/& \nnameserver 192.168.111.1/g' /etc/resolv.conf"
+
+echo "Waiting for worker $worker to become Ready after applying hugepage config ..."
+count=0
+while [ "$(oc get nodes | grep $workerNode | awk -F' ' '{print $2}')" != "Ready" ]
+do
+	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
 	sleep 5
 	let count++
 	let timepassed="$count*5"
