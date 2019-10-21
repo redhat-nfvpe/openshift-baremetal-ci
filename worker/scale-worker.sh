@@ -4,7 +4,8 @@ set -x
 
 # Worker Node OpenShift API Interface MACs
 # nfvpe-06: 3c:fd:fe:a0:d5:e1
-# nfvpe-07: 3c:fd:fe:ba:0a:78
+# nfvpe-07: 3c:fd:fe:ba:0a:78 -> used to have problem of becoming link down on switch side
+# nfvpe-07: 3c:fd:fe:ba:0a:79 <- currently use this address as baremetal API interface
 # nfvpe-08: 3c:fd:fe:ba:07:9c
 
 #workerNode=nfvpe-07
@@ -15,7 +16,7 @@ timeout=1800
 if [ "$workerNode" == "nfvpe-06" ];then
 	MAC="3c:fd:fe:a0:d5:e1"
 elif [ "$workerNode" == "nfvpe-07" ];then
-	MAC="3c:fd:fe:ba:0a:78"
+	MAC="3c:fd:fe:ba:0a:79"
 elif [ "$workerNode" == "nfvpe-08" ];then
 	MAC="3c:fd:fe:ba:07:9c"
 else
