@@ -85,22 +85,28 @@ do
 done
 
 workerIP=$(ip neighbor | grep -i $MAC | tail -n1 | cut  -d" " -f1)
-ssh_execute $workerIP "sudo sed -i -e '\$a\192.168.111.5 api-int.sriov.dev.metalkube.org api-int' /etc/hosts"
-ssh_execute $workerIP "sudo sed -i '/192.168.111.1/d' /etc/resolv.conf" 
-ssh_execute $workerIP "sudo sed -i -e 's/^search .*/& \nnameserver 192.168.111.1/g' /etc/resolv.conf"
-ssh_execute $workerIP "sudo systemctl restart crio"
 
 
-echo "Waiting for worker $worker to appear as OpenShift node ..."
+
+# In 4.3, node can come up without setting below config
+# 192.168.111.1 dns can be correctly configured in /etc/resolve.conf
+
+#ssh_execute $workerIP "sudo sed -i -e '\$a\192.168.111.5 api-int.sriov.dev.metalkube.org api-int' /etc/hosts"
+#ssh_execute $workerIP "sudo sed -i '/192.168.111.1/d' /etc/resolv.conf"
+#ssh_execute $workerIP "sudo sed -i -e 's/^search .*/& \nnameserver 192.168.111.1/g' /etc/resolv.conf"
+#ssh_execute $workerIP "sudo systemctl restart crio"
+
+
+echo "Waiting for worker $workerNode to appear as OpenShift node ..."
 count=0
-while [ "$(oc get nodes | grep $workerNode | awk -F' ' '{print $2}')" != "Ready" ]
+while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != "Ready" ]
 do
 	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
 	sleep 5
 	let count++
-	let timepassed="$count*5"
-	if (( $timepassed > 600 )); then
-		echo "Time out waiting for $worker to appear as OpenShift node."
+	let timepassed="$count*30"
+	if (( $timepassed > 1200 )); then
+		echo "Time out waiting for $workerNode to appear as OpenShift node."
 		exit 1
 	fi
 done
@@ -120,19 +126,19 @@ do
 	sleep 30
 done
 
-ssh_execute $workerIP "sudo sed -i '/192.168.111.1/d' /etc/resolv.conf"
-ssh_execute $workerIP "sudo sed -i -e 's/^search .*/& \nnameserver 192.168.111.1/g' /etc/resolv.conf"
+#ssh_execute $workerIP "sudo sed -i '/192.168.111.1/d' /etc/resolv.conf"
+#ssh_execute $workerIP "sudo sed -i -e 's/^search .*/& \nnameserver 192.168.111.1/g' /etc/resolv.conf"
 
-echo "Waiting for worker $worker to become Ready after applying hugepage config ..."
+echo "Waiting for worker $workerNode to become Ready after applying hugepage config ..."
 count=0
-while [ "$(oc get nodes | grep $workerNode | awk -F' ' '{print $2}')" != "Ready" ]
+while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != "Ready" ]
 do
 	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
 	sleep 5
 	let count++
-	let timepassed="$count*5"
-	if (( $timepassed > 600 )); then
-		echo "Time out waiting for $worker to appear as OpenShift node."
+	let timepassed="$count*30"
+	if (( $timepassed > 1000 )); then
+		echo "Time out waiting for $workerNode to appear as OpenShift node."
 		exit 1
 	fi
 done
