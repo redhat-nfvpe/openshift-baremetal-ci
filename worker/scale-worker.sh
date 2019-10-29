@@ -102,7 +102,7 @@ count=0
 while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != "Ready" ]
 do
 	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
-	sleep 5
+	sleep 30
 	let count++
 	let timepassed="$count*30"
 	if (( $timepassed > 1200 )); then
@@ -134,11 +134,11 @@ count=0
 while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != "Ready" ]
 do
 	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
-	sleep 5
+	sleep 30
 	let count++
 	let timepassed="$count*30"
-	if (( $timepassed > 1000 )); then
-		echo "Time out waiting for $workerNode to appear as OpenShift node."
+	if (( $timepassed > 1200 )); then
+		echo "Time out waiting for $workerNode to become Ready after applying hugepage config."
 		exit 1
 	fi
 done
