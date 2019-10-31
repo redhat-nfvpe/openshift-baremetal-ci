@@ -88,27 +88,4 @@ for i in {1..12}; do
 	fi
 done
 
-oc create -f sn-intel.yaml
-sleep 1
-oc create -f pod-simple.yaml
-sleep 1
-oc wait --for condition=ready pods testpod-simple -n default --timeout=60s
-
-for i in {1..6}; do
-	sleep 10
-	pod_state=$(oc get pods testpod-simple | tail -n 1 | awk '{print $3}')
-
-	if [ "$pod_state" == "Running" ]; then
-		break
-	fi
-
-	if [ $i -eq 6 ]; then
-		exit 1
-	fi
-done
-
-oc exec testpod-simple -- ip link show net1
-oc exec testpod-simple -- ethtool -i net1
-oc exec testpod-simple -- env | grep PCIDEVICE
-
 popd
