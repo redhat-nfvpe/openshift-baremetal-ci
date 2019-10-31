@@ -131,6 +131,18 @@ oc delete -f pod4.yaml
 sleep 1
 oc create -f pod5.yaml
 # Check that Topology Affinity un-satisified
+for i in {1..10}; do
+	sleep 1
+	pod_state=$(oc get pods testpod5 | tail -n 1 | awk '{print $3 $4 $5}')
+
+	if [ "$pod_state" == "TopologyAffinityError" ]; then
+		break
+	fi
+
+	if [ $i -eq 10 ]; then
+		exit 1
+	fi
+done
 
 oc delete -f pod1.yaml
 oc delete -f pod2.yaml
