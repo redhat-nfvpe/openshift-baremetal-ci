@@ -115,7 +115,21 @@ sleep 10
 
 workerIP=$(ip neighbor | grep -i $MAC | tail -n1 | cut  -d" " -f1)
 
-oc apply -f templates/hugepage-machine-config.yaml
+oc apply -f templates/performance.yaml
+
+# After applying performance.yaml config, node will become rebooted -> NotReady
+echo "Waiting for worker $workerNode to become 'NotReady,ScheduleDisabled' ..."
+count=0
+while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != "NotReady"* ]
+do
+	sleep 30
+	let count++
+	let timepassed="$count*30"
+	if (( $timepassed > 1200 )); then
+		echo "Time out waiting for $workerNode to become 'NotReady,ScheduleDisabled'."
+		exit 1
+	fi
+done
 
 while true
 do
