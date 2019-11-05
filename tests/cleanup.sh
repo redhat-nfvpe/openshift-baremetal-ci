@@ -10,6 +10,11 @@ oc delete -f pod5.yaml
 oc delete -f sn-intel.yaml
 popd
 
+pushd
+oc delete -f policy-intel.yaml
+sleep 60
+popd
+
 pushd sriov-network-operator
 make undeploy
 popd
