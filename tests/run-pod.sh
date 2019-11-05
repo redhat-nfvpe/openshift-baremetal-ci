@@ -148,5 +148,47 @@ oc delete -f pod1.yaml
 oc delete -f pod2.yaml
 oc delete -f pod3.yaml
 oc delete -f pod5.yaml
+
+# runtimeConfig, MAC and IP
+oc create -f pod6.yaml
+sleep 1
+oc wait --for condition=ready pods testpod6 -n default --timeout=60s
+
+oc create -f pod7.yaml
+sleep 1
+oc wait --for condition=ready pods testpod7 -n default --timeout=60s
+
+for i in {1..6}; do
+	sleep 10
+	pod_state=$(oc get pods testpod7 | tail -n 1 | awk '{print $3}')
+
+	if [ "$pod_state" == "Running" ]; then
+		break
+	fi
+
+	if [ $i -eq 6 ]; then
+		exit 1
+	fi
+done
+
+oc exec testpod6 -- ip link show net1
+oc exec testpod6 -- ethtool -i net1
+oc exec testpod6 -- env | grep PCIDEVICE
+pod6_ipv4=$(oc exec testpod1 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+pod6_ipv6=$(oc exec testpod1 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+
+oc exec testpod7 -- ip link show net1
+oc exec testpod7 -- ethtool -i net1
+oc exec testpod7 -- env | grep PCIDEVICE
+pod7_ipv4=$(oc exec testpod1 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+pod7_ipv6=$(oc exec testpod1 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+
+oc exec testpod7 -- ping -c 5 $pod6_ipv4 -I net1
+oc exec testpod7 -- ping6 -c 5 $pod6_ipv6 -I net1
+
+
+oc delete -f pod6.yaml
+oc delete -f pod7.yaml
+
 oc delete -f sn-intel.yaml
 popd
