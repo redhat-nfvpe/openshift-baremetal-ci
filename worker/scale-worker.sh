@@ -16,7 +16,7 @@ timeout=1800
 if [ "$workerNode" == "nfvpe-06" ];then
 	MAC="3c:fd:fe:a0:d5:e1"
 elif [ "$workerNode" == "nfvpe-07" ];then
-	MAC="3c:fd:fe:ba:0a:79"
+	MAC="3c:fd:fe:ba:0a:78"
 elif [ "$workerNode" == "nfvpe-08" ];then
 	MAC="3c:fd:fe:ba:07:9c"
 else
@@ -118,15 +118,15 @@ workerIP=$(ip neighbor | grep -i $MAC | tail -n1 | cut  -d" " -f1)
 oc apply -f templates/performance.yaml
 
 # After applying performance.yaml config, node will become rebooted -> NotReady
-echo "Waiting for worker $workerNode to become 'NotReady,ScheduleDisabled' ..."
+echo "Waiting for worker $workerNode to become 'NotReady,SchedulingDisabled' ..."
 count=0
-while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != "NotReady"* ]
+while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != *"NotReady,SchedulingDisabled"* ]
 do
 	sleep 30
 	let count++
 	let timepassed="$count*30"
 	if (( $timepassed > 1200 )); then
-		echo "Time out waiting for $workerNode to become 'NotReady,ScheduleDisabled'."
+		echo "Time out waiting for $workerNode to become 'NotReady,SchedulingDisabled'."
 		exit 1
 	fi
 done
