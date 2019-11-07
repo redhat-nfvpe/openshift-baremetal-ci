@@ -15,10 +15,13 @@ timeout=1800
 
 if [ "$workerNode" == "nfvpe-06" ];then
 	MAC="3c:fd:fe:a0:d5:e1"
+	NODE_IP="10.19.111.16"
 elif [ "$workerNode" == "nfvpe-07" ];then
 	MAC="3c:fd:fe:ba:0a:78"
+	NODE_IP="10.19.111.18"
 elif [ "$workerNode" == "nfvpe-08" ];then
 	MAC="3c:fd:fe:ba:07:9c"
+	NODE_IP="10.19.111.20"
 else
 	echo "workerNode $workerNode is not supported, please specify valid worker node 'nfvpe-06,nfvpe-07,nfvpe-08'"
 	exit 1
@@ -99,7 +102,7 @@ workerIP=$(ip neighbor | grep -i $MAC | tail -n1 | cut  -d" " -f1)
 
 echo "Waiting for worker $workerNode to appear as OpenShift node ..."
 count=0
-while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != "Ready" ]
+while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print $2}')" != "Ready" ]
 do
 	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
 	sleep 30
@@ -120,7 +123,7 @@ oc apply -f templates/performance.yaml
 # After applying performance.yaml config, node will become rebooted -> NotReady
 echo "Waiting for worker $workerNode to become 'NotReady,SchedulingDisabled' ..."
 count=0
-while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != *"NotReady,SchedulingDisabled"* ]
+while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print $2}')" != *"NotReady,SchedulingDisabled"* ]
 do
 	sleep 30
 	let count++
@@ -145,7 +148,7 @@ done
 
 echo "Waiting for worker $workerNode to become Ready after applying hugepage config ..."
 count=0
-while [ "$(oc get nodes -o wide | grep $workerIP | awk -F' ' '{print $2}')" != "Ready" ]
+while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print $2}')" != "Ready" ]
 do
 	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
 	sleep 30
