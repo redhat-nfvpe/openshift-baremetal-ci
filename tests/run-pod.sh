@@ -195,7 +195,7 @@ fi
 oc exec testpod7 -- ip link show net1
 oc exec testpod7 -- ethtool -i net1
 oc exec testpod7 -- env | grep PCIDEVICE
-pod7_mac=$(oc exec testpod6 -- ip link show net1 | grep 'link/ether' | awk '{print $2}')
+pod7_mac=$(oc exec testpod7 -- ip link show net1 | grep 'link/ether' | awk '{print $2}')
 pod7_ipv4=$(oc exec testpod7 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
 pod7_ipv6=$(oc exec testpod7 -- ip addr show net1 | grep "inet6\b" | grep global | awk '{print $2}' | cut -d/ -f1)
 
