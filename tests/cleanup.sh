@@ -9,6 +9,8 @@ oc delete -f pod4.yaml
 oc delete -f pod5.yaml
 oc delete -f pod6.yaml
 oc delete -f pod7.yaml
+oc delete -f pod8.yaml
+oc delete -f pod9.yaml
 oc delete -f sn-intel.yaml
 oc delete -f sn-static-ipam.yaml
 popd
