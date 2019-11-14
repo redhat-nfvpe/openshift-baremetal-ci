@@ -176,14 +176,40 @@ done
 oc exec testpod6 -- ip link show net1
 oc exec testpod6 -- ethtool -i net1
 oc exec testpod6 -- env | grep PCIDEVICE
-pod6_ipv4=$(oc exec testpod1 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-pod6_ipv6=$(oc exec testpod1 -- ip addr show net1 | grep "inet6\b" | grep global | awk '{print $2}' | cut -d/ -f1)
+pod6_mac=$(oc exec testpod6 -- ip link show net1 | grep 'link/ether' | awk '{print $2}')
+pod6_ipv4=$(oc exec testpod6 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+pod6_ipv6=$(oc exec testpod6 -- ip addr show net1 | grep "inet6\b" | grep global | awk '{print $2}' | cut -d/ -f1)
+
+if [ "$pod6_mac" != "ca:fe:c0:ff:ee:01" ]; then
+	exit 1
+fi
+
+if [ "$pod6_ipv4" != "192.168.100.101" ]; then
+	exit 1
+fi
+
+if [ "$pod6_ipv6" != "2001::1" ]; then
+	exit 1
+fi
 
 oc exec testpod7 -- ip link show net1
 oc exec testpod7 -- ethtool -i net1
 oc exec testpod7 -- env | grep PCIDEVICE
-pod7_ipv4=$(oc exec testpod1 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-pod7_ipv6=$(oc exec testpod1 -- ip addr show net1 | grep "inet6\b" | grep global | awk '{print $2}' | cut -d/ -f1)
+pod7_mac=$(oc exec testpod6 -- ip link show net1 | grep 'link/ether' | awk '{print $2}')
+pod7_ipv4=$(oc exec testpod7 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
+pod7_ipv6=$(oc exec testpod7 -- ip addr show net1 | grep "inet6\b" | grep global | awk '{print $2}' | cut -d/ -f1)
+
+if [ "$pod7_mac" != "ca:fe:c0:ff:ee:02" ]; then
+	exit 1
+fi
+
+if [ "$pod7_ipv4" != "192.168.100.102" ]; then
+	exit 1
+fi
+
+if [ "$pod7_ipv6" != "2001::2" ]; then
+	exit 1
+fi
 
 oc exec testpod7 -- ping -c 5 $pod6_ipv4 -I net1
 oc exec testpod7 -- ping6 -c 5 $pod6_ipv6 -I net1
