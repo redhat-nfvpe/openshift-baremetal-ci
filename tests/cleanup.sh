@@ -7,10 +7,13 @@ oc delete -f pod2.yaml
 oc delete -f pod3.yaml
 oc delete -f pod4.yaml
 oc delete -f pod5.yaml
+oc delete -f pod6.yaml
+oc delete -f pod7.yaml
 oc delete -f sn-intel.yaml
+oc delete -f sn-static-ipam.yaml
 popd
 
-pushd
+pushd templates
 oc delete -f policy-intel.yaml
 sleep 60
 popd

@@ -6,8 +6,8 @@ metadata:
     k8s.v1.cni.cncf.io/networks: '[
         {
                 "name": "sriov-intel",
-                "mac": "CA:FE:C0:FF:EE:01",
-                "ips": ["192.168.100.102/24", "2001::1/64"]
+                "mac": "CA:FE:C0:FF:EE:02",
+                "ips": ["192.168.100.102/24", "2001::2/64"]
         }
 ]'
 spec:
@@ -22,10 +22,12 @@ spec:
     args: [ "while true; do sleep 300000; done;" ]
     resources:
       requests:
+        openshift.io/intelnics: 1
         hugepages-1Gi: 2Gi
         cpu: '10'
         memory: 100Mi
       limits:
+        openshift.io/intelnics: 1
         hugepages-1Gi: 2Gi
         cpu: '10'
         memory: 100Mi
