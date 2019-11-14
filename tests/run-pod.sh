@@ -219,7 +219,7 @@ oc delete -f pod7.yaml
 oc delete -f sn-static-ipam.yaml
 
 # default route override
-oc create -f sn-intel.yaml
+oc create -f sn-static-ipam.yaml
 oc create -f pod8.yaml
 sleep 1
 oc wait --for condition=ready pods testpod8 -n default --timeout=60s
@@ -232,9 +232,23 @@ oc exec testpod8 -- ip link show net1
 oc exec testpod8 -- ethtool -i net1
 oc exec testpod8 -- env | grep PCIDEVICE
 pod8_ipv4=$(oc exec testpod8 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-pod8_default_route=$(oc exec testpod8 -- ip route | grep default | awk '{print $3}')
+pod8_ipv6=$(oc exec testpod8 -- ip addr show net1 | grep "inet6\b" | grep global | awk '{print $2}' | cut -d/ -f1)
+pod8_default_route_ipv4=$(oc exec testpod8 -- ip route | grep default | awk '{print $3}')
+pod8_default_route_ipv6=$(oc exec testpod8 -- ip -6 route | grep default | awk '{print $3}')
 
-if [ "$pod8_default_route" != "10.10.0.1" ]; then
+if [ "$pod8_ipv4" != "192.168.10.11" ]; then
+	exit 1
+fi
+
+if [ "$pod8_ipv6" != "2001::11" ]; then
+	exit 1
+fi
+
+if [ "$pod8_default_route_ipv4" != "192.168.10.1" ]; then
+	exit 1
+fi
+
+if [ "$pod8_default_route_ipv6" != "2001::1" ]; then
 	exit 1
 fi
 
@@ -242,14 +256,30 @@ oc exec testpod9 -- ip link show net1
 oc exec testpod9 -- ethtool -i net1
 oc exec testpod9 -- env | grep PCIDEVICE
 pod9_ipv4=$(oc exec testpod9 -- ip addr show net1 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1)
-pod9_default_route=$(oc exec testpod9 -- ip route | grep default | awk '{print $3}')
+pod9_ipv6=$(oc exec testpod9 -- ip addr show net1 | grep "inet6\b" | grep global | awk '{print $2}' | cut -d/ -f1)
+pod9_default_route_ipv4=$(oc exec testpod9 -- ip route | grep default | awk '{print $3}')
+pod9_default_route_ipv6=$(oc exec testpod9 -- ip -6 route | grep default | awk '{print $3}')
 
-if [ "$pod9_default_route" != "10.10.0.1" ]; then
+if [ "$pod9_ipv4" != "192.168.10.12" ]; then
 	exit 1
 fi
+
+if [ "$pod9_ipv6" != "2001::12" ]; then
+	exit 1
+fi
+
+if [ "$pod9_default_route_ipv4" != "192.168.10.1" ]; then
+	exit 1
+fi
+
+if [ "$pod9_default_route_ipv6" != "2001::1" ]; then
+	exit 1
+fi
+
 oc exec testpod9 -- ping -c 5 $pod8_ipv4 -I net1
+oc exec testpod9 -- ping6 -c 5 $pod8_ipv6 -I net1
 
 oc delete -f pod8.yaml
 oc delete -f pod9.yaml
-oc delete -f sn-intel.yaml
+oc delete -f sn-static-ipam.yaml
 popd
