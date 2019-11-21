@@ -6,14 +6,15 @@ set -x
 SRIOV_OPERATOR_REPO=https://github.com/openshift/sriov-network-operator.git
 SRIOV_OPERATOR_NAMESPACE=openshift-sriov-network-operator
 
-WORKER_NODE=dev-worker-0
+# WORKER_NODE=dev-worker-0
+WORKER_NODE=nfvpe-08.oot.lab.eng.bos.redhat.com
 NUM_OF_WORKER=$(oc get nodes | grep worker | wc -l)
 NUM_OF_MASTER=$(oc get nodes | grep master | wc -l)
 
 oc label node $WORKER_NODE --overwrite=true feature.node.kubernetes.io/network-sriov.capable=true
 
 if [ ! -d "sriov-network-operator" ]; then
-	git clone $SRIOV_OPERATOR_REPO
+	sudo git clone $SRIOV_OPERATOR_REPO
 fi
 
 pushd sriov-network-operator
