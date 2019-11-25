@@ -1,0 +1,10 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: ptp-operator-subsription
+  namespace: openshift-ptp
+spec:
+  channel: "4.3"
+  name: ptp-operator
+  source: opsrctest
+  sourceNamespace: openshift-marketplace

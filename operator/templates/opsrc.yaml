@@ -1,0 +1,15 @@
+apiVersion: "operators.coreos.com/v1"
+kind: "OperatorSource"
+metadata:
+  name: "opsrctest"
+  namespace: "openshift-marketplace"
+  labels:
+    opsrc-provider: opsrctest
+spec:
+  authorizationToken:
+    secretName: mysecret
+  type: appregistry
+  endpoint: "https://quay.io/cnr"
+  registryNamespace: "redhat-operators-art"
+  displayName: "opsrctest"
+  publisher: "opsrctest"
