@@ -123,7 +123,7 @@ oc apply -f templates/performance.yaml
 # After applying performance.yaml config, node will become rebooted -> NotReady
 echo "Waiting for worker $workerNode to become 'NotReady,SchedulingDisabled' ..."
 count=0
-while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print $2}')" != *"NotReady,SchedulingDisabled"* ]
+while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print $2}')" != "NotReady,SchedulingDisabled" ]
 do
 	sleep 30
 	let count++
@@ -148,7 +148,10 @@ done
 
 echo "Waiting for worker $workerNode to become Ready after applying hugepage config ..."
 count=0
-while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print $2}')" != "Ready" ]
+while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print $2}')" != "Ready" ] &&
+      [ "$(oc get nodes -o wide | grep "master-0" | awk -F' ' '{print $2}')" != "Ready" ] &&
+      [ "$(oc get nodes -o wide | grep "master-1" | awk -F' ' '{print $2}')" != "Ready" ] &&
+      [ "$(oc get nodes -o wide | grep "master-2" | awk -F' ' '{print $2}')" != "Ready" ]
 do
 	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
 	sleep 30
