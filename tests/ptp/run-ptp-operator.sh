@@ -41,5 +41,7 @@ done
 popd
 
 pushd templates
+oc create -f ptpconfig_cr.yaml
 sleep 30
+oc delete -f ptpconfig_cr.yaml
 popd
