@@ -152,6 +152,7 @@ oc delete -f sn-intel.yaml
 
 # runtimeConfig, MAC and IP
 oc create -f sn-static-ipam.yaml
+sleep 1
 oc create -f pod6.yaml
 sleep 1
 oc wait --for condition=ready pods testpod6 -n default --timeout=60s
@@ -220,6 +221,7 @@ oc delete -f sn-static-ipam.yaml
 
 # default route override
 oc create -f sn-static-ipam.yaml
+sleep 1
 oc create -f pod8.yaml
 sleep 1
 oc wait --for condition=ready pods testpod8 -n default --timeout=60s
