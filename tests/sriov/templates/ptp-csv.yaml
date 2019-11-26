@@ -1,0 +1,14 @@
+apiVersion: operators.coreos.com/v1alpha1
+kind: ClusterServiceVersion
+spec:
+  install:
+    spec:
+      deployments:
+        spec:
+          template:
+            spec:
+              containers:
+              - image: PTP_OPERATOR_IMAGE
+                env:
+                - name: LINUXPTP_DAEMON_IMAGE
+                  value: PTP_IMAGE
