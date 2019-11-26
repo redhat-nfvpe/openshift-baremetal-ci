@@ -3,7 +3,7 @@
 set -e
 set -x
 
-PTP_OPERATOR_REPO=https://github.com/openshift/ptp-operator.git
+PTP_OPERATOR_REPO=https://github.com/zshi-redhat/ptp-operator.git
 PTP_OPERATOR_NAMESPACE=openshift-ptp
 
 # WORKER_NODE=dev-worker-0
@@ -13,7 +13,10 @@ NUM_OF_MASTER=$(oc get nodes | grep master | wc -l)
 NUM_OF_NODES=$(oc get nodes | grep 'worker\|master' | wc -l)
 
 if [ ! -d "ptp-operator" ]; then
-	sudo git clone $PTP_OPERATOR_REPO
+	git clone $PTP_OPERATOR_REPO
+	pushd ptp-operator
+	git checkout fix-env-var-name
+	popd
 fi
 
 pushd ptp-operator
