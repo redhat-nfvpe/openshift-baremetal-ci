@@ -121,7 +121,7 @@ workerIP=$(ip neighbor | grep -i $MAC | tail -n1 | cut  -d" " -f1)
 oc apply -f templates/performance.yaml
 
 # After applying performance.yaml config, node will become rebooted -> NotReady
-echo "Waiting for worker $workerNode to become 'NotReady,SchedulingDisabled' ..."
+echo "Waiting for worker $workerNode to become 'Ready,SchedulingDisabled' ..."
 count=0
 while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print $2}')" != "NotReady,SchedulingDisabled" ]
 do
@@ -129,7 +129,7 @@ do
 	let count++
 	let timepassed="$count*30"
 	if (( $timepassed > 1200 )); then
-		echo "Time out waiting for $workerNode to become 'NotReady,SchedulingDisabled'."
+		echo "Time out waiting for $workerNode to become 'Ready,SchedulingDisabled'."
 		exit 1
 	fi
 done
