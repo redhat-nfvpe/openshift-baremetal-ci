@@ -68,4 +68,6 @@ sleep 60
 
 ./requirements/oc --config ./ocp/auth/kubeconfig get clusterversion
 
+cp -rf ./requirements/oc /usr/local/bin/
+
 popd
