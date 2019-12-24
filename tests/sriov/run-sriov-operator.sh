@@ -3,11 +3,15 @@
 set -e
 set -x
 
+yum install -y wget skopeo jq
+
 SRIOV_OPERATOR_REPO=https://github.com/openshift/sriov-network-operator.git
 SRIOV_OPERATOR_NAMESPACE=openshift-sriov-network-operator
 
 # WORKER_NODE=dev-worker-0
-WORKER_NODE=nfvpe-08.oot.lab.eng.bos.redhat.com
+# WORKER_NODE=nfvpe-08.oot.lab.eng.bos.redhat.com
+export WORKER_NODE=${WORKER_NODE:-"dev-worker-0"}
+
 NUM_OF_WORKER=$(oc get nodes | grep worker | wc -l)
 NUM_OF_MASTER=$(oc get nodes | grep master | wc -l)
 

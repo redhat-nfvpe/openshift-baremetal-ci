@@ -9,12 +9,12 @@ spec:
   nicSelector:
     deviceID: "158b"
     rootDevices:
-#    - 0000:86:00.1  # nfvpe-07
-    - 0000:87:00.1  # nfvpe-08
+    - 0000:86:00.1  # nfvpe-07
+#    - 0000:87:00.1  # nfvpe-08
     vendor: "8086"
     pfNames:
-#    - ens803f1  # nfvpe-07
-    - ens787f1  # nfvpe-08
+    - ens803f1  # nfvpe-07
+#    - ens787f1  # nfvpe-08
   nodeSelector:
     feature.node.kubernetes.io/network-sriov.capable: "true"
   numVfs: 4
