@@ -45,6 +45,8 @@ sleep 600
 ./requirements/openshift-install --dir ./ocp wait-for bootstrap-complete --log-level debug
 
 sleep 30
+cp -rf ./requirements/oc /usr/local/bin/
+./requirements/oc --config ./ocp/auth/kubeconfig get nodes
 
 # Destroy bootstrap VM
 virsh destroy dev-bootstrap || true
@@ -57,8 +59,7 @@ do
 	echo "waiting for image-registry operator to be deployed"
 done
 
-sleep 60
-
+sleep 5
 # patch storage to emptyDir to workthrough warning: "Unable to apply resources: storage backend not configured"
 ./requirements/oc --config ./ocp/auth/kubeconfig patch configs.imageregistry.operator.openshift.io cluster \
 	-p '{"spec":{"emptyDir":{}}}' --type='merge'
@@ -66,8 +67,8 @@ sleep 60
 # Wait for install complete
 ./requirements/openshift-install --dir ./ocp wait-for install-complete --log-level debug
 
+./requirements/oc --config ./ocp/auth/kubeconfig get nodes
+./requirements/oc --config ./ocp/auth/kubeconfig get co
 ./requirements/oc --config ./ocp/auth/kubeconfig get clusterversion
-
-cp -rf ./requirements/oc /usr/local/bin/
 
 popd
