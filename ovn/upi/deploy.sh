@@ -39,7 +39,7 @@ sleep 30
 ./scripts/manage.sh deploy workers
 
 # Wait for extra 5min for bootstrap to complete
-sleep 600
+sleep 320
 
 # Wait for bootstrap complete
 ./requirements/openshift-install --dir ./ocp wait-for bootstrap-complete --log-level debug
