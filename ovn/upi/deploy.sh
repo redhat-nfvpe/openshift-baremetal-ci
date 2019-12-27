@@ -11,6 +11,7 @@ export OPENSHIFT_MAJOR_VERSION=${OPENSHIFT_MAJOR_VERSION:-"4.3"}
 trap cleanup 0 1
 
 cleanup() {
+	pushd kni-upi-lab
 	# Gather bootstrap & master logs
 	./requirements/openshift-install gather bootstrap \
 		--dir=./ocp --bootstrap 192.168.111.10 \
@@ -20,13 +21,13 @@ cleanup() {
 
 	# Destroy bootstrap VM
 	# virsh destroy dev-bootstrap || true
-	virsh list --name | grep bootstrap | xargs virsh destroy
+	virsh list --name | grep bootstrap | xargs virsh destroy || true
 
-	./requirements/oc --config ./ocp/auth/kubeconfig get nodes
-	./requirements/oc --config ./ocp/auth/kubeconfig get co
-	./requirements/oc --config ./ocp/auth/kubeconfig get clusterversion
+	./requirements/oc --config ./ocp/auth/kubeconfig get nodes || true
+	./requirements/oc --config ./ocp/auth/kubeconfig get co || true
+	./requirements/oc --config ./ocp/auth/kubeconfig get clusterversion || true
+	popd
 }
-
 
 yum install -y git
 
