@@ -21,6 +21,10 @@ cleanup() {
 	# Destroy bootstrap VM
 	# virsh destroy dev-bootstrap || true
 	virsh list --name | grep bootstrap | xargs virsh destroy
+
+	./requirements/oc --config ./ocp/auth/kubeconfig get nodes
+	./requirements/oc --config ./ocp/auth/kubeconfig get co
+	./requirements/oc --config ./ocp/auth/kubeconfig get clusterversion
 }
 
 
@@ -85,9 +89,5 @@ sleep 20
 
 # Wait for install complete
 ./requirements/openshift-install --dir ./ocp wait-for install-complete --log-level debug
-
-./requirements/oc --config ./ocp/auth/kubeconfig get nodes || true
-./requirements/oc --config ./ocp/auth/kubeconfig get co || true
-./requirements/oc --config ./ocp/auth/kubeconfig get clusterversion || true
 
 popd
