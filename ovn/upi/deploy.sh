@@ -11,13 +11,13 @@ export OPENSHIFT_MAJOR_VERSION=${OPENSHIFT_MAJOR_VERSION:-"4.3"}
 trap cleanup 0 1
 
 cleanup() {
-	# Destroy bootstrap VM
-	# virsh destroy dev-bootstrap || true
-	virsh list --name | grep bootstrap | xargs virsh destroy
-
 	# Gather bootstrap & master logs
 	./requirements/openshift-install gather bootstrap \
 		--dir=./ocp --bootstrap 192.168.111.10 --master 192.168.111.11
+
+	# Destroy bootstrap VM
+	# virsh destroy dev-bootstrap || true
+	virsh list --name | grep bootstrap | xargs virsh destroy
 }
 
 
