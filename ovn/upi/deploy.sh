@@ -8,6 +8,19 @@ export OPENSHIFT_MAJOR_VERSION=${OPENSHIFT_MAJOR_VERSION:-"4.3"}
 # export PULL_SECRET=${PULL_SECRET:-""}
 # [ -z $PULL_SECRET ] && echo "empty pull secret, exiting" && exit 1
 
+trap cleanup 0 1
+
+cleanup() {
+	# Destroy bootstrap VM
+	# virsh destroy dev-bootstrap || true
+	virsh list --name | grep bootstrap | xargs virsh destroy
+
+	# Gather bootstrap & master logs
+	./requirements/openshift-install gather bootstrap \
+		--dir=./ocp --bootstrap 192.168.111.10 --master 192.168.111.11
+}
+
+
 yum install -y git
 
 rm -rf kni-upi-lab
@@ -47,10 +60,6 @@ sleep 320
 sleep 30
 cp -rf ./requirements/oc /usr/local/bin/
 ./requirements/oc --config ./ocp/auth/kubeconfig get nodes
-
-# Destroy bootstrap VM
-virsh destroy dev-bootstrap || true
-virsh undefine dev_bootstrap || true
 
 sleep 30
 while [ "$(./requirements/oc --config ./ocp/auth/kubeconfig get co | grep image-registry)" == "" ]
