@@ -62,6 +62,8 @@ cp -rf ./requirements/oc /usr/local/bin/
 ./requirements/oc --config ./ocp/auth/kubeconfig get nodes || true
 
 sleep 30
+# Start Openshift-installer wait-for when image-registry is rendered
+# This allows us to wait a few more mins for cluster to come up
 while [ "$(./requirements/oc --config ./ocp/auth/kubeconfig get co | grep image-registry)" == "" ]
 do
 	sleep 10
@@ -70,8 +72,9 @@ done
 
 sleep 20
 # Patch storage to emptyDir to workthrough warning: "Unable to apply resources: storage backend not configured"
-./requirements/oc --config ./ocp/auth/kubeconfig patch configs.imageregistry.operator.openshift.io cluster \
-	-p '{"spec":{"storage":{"emptyDir":{}}}}' --type='merge'
+# Comment out, this is only required for pre-4.2 releases
+#./requirements/oc --config ./ocp/auth/kubeconfig patch configs.imageregistry.operator.openshift.io cluster \
+#	-p '{"spec":{"storage":{"emptyDir":{}}}}' --type='merge'
 
 # Patch storage to 'Removed' managementState. This makes image-registry operator become Available immediately
 # ./requirements/oc --config ./ocp/auth/kubeconfig patch configs.imageregistry.operator.openshift.io cluster \
