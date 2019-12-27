@@ -11,13 +11,12 @@ export OPENSHIFT_MAJOR_VERSION=${OPENSHIFT_MAJOR_VERSION:-"4.3"}
 trap cleanup 0 1
 
 cleanup() {
-	pushd kni-upi-lab
 	# Gather bootstrap & master logs
 	./requirements/openshift-install gather bootstrap \
 		--dir=./ocp --bootstrap 192.168.111.10 \
 		--master 192.168.111.11 \
 		--master 192.168.111.12 \
-		--master 192.168.111.13
+		--master 192.168.111.13 || true
 
 	# Destroy bootstrap VM
 	# virsh destroy dev-bootstrap || true
@@ -90,5 +89,3 @@ sleep 20
 
 # Wait for install complete
 ./requirements/openshift-install --dir ./ocp wait-for install-complete --log-level debug
-
-popd
