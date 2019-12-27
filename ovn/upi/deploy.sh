@@ -59,7 +59,7 @@ sleep 320
 
 sleep 30
 cp -rf ./requirements/oc /usr/local/bin/
-./requirements/oc --config ./ocp/auth/kubeconfig get nodes
+./requirements/oc --config ./ocp/auth/kubeconfig get nodes || true
 
 sleep 30
 while [ "$(./requirements/oc --config ./ocp/auth/kubeconfig get co | grep image-registry)" == "" ]
@@ -80,8 +80,8 @@ sleep 20
 # Wait for install complete
 ./requirements/openshift-install --dir ./ocp wait-for install-complete --log-level debug
 
-./requirements/oc --config ./ocp/auth/kubeconfig get nodes
-./requirements/oc --config ./ocp/auth/kubeconfig get co
-./requirements/oc --config ./ocp/auth/kubeconfig get clusterversion
+./requirements/oc --config ./ocp/auth/kubeconfig get nodes || true
+./requirements/oc --config ./ocp/auth/kubeconfig get co || true
+./requirements/oc --config ./ocp/auth/kubeconfig get clusterversion || true
 
 popd
