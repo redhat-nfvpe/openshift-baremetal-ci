@@ -13,7 +13,10 @@ trap cleanup 0 1
 cleanup() {
 	# Gather bootstrap & master logs
 	./requirements/openshift-install gather bootstrap \
-		--dir=./ocp --bootstrap 192.168.111.10 --master 192.168.111.11
+		--dir=./ocp --bootstrap 192.168.111.10 \
+		--master 192.168.111.11 \
+		--master 192.168.111.12 \
+		--master 192.168.111.13
 
 	# Destroy bootstrap VM
 	# virsh destroy dev-bootstrap || true
