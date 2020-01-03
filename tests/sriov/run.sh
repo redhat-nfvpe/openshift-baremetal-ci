@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -x
+
 trap cleanup 0 1
 
 cleanup() {
