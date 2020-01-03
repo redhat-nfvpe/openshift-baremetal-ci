@@ -38,7 +38,7 @@ wait_for_worker() {
 	do
 		sleep $interval
 		count=$((count+1))
-		let timepassed="$count*$interval"
+		timepassed=$(($count*$interval))
 		if [ $timepassed -gt $timeout ]; then
 			echo "Time out waiting for $worker to become $state."
 			exit 1
@@ -106,8 +106,8 @@ while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print
 do
 	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
 	sleep 30
-	let count++
-	let timepassed="$count*30"
+	count=$(($count+1))
+	timepassed=$(($count*30))
 	if (( $timepassed > 1200 )); then
 		echo "Time out waiting for $workerNode to appear as OpenShift node."
 		exit 1
@@ -126,8 +126,8 @@ count=0
 while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print $2}')" != "NotReady,SchedulingDisabled" ]
 do
 	sleep 30
-	let count++
-	let timepassed="$count*30"
+	count=$(($count+1))
+	timepassed=$(($count*30))
 	if (( $timepassed > 1200 )); then
 		echo "Time out waiting for $workerNode to become 'Ready,SchedulingDisabled'."
 		exit 1
@@ -155,8 +155,8 @@ while [ "$(oc get nodes -o wide | grep "$workerIP\|$NODE_IP" | awk -F' ' '{print
 do
 	oc get csr -o name | xargs -n 1 oc adm certificate approve || true
 	sleep 30
-	let count++
-	let timepassed="$count*30"
+	count=$(($count+1))
+	timepassed=$(($count*30))
 	if (( $timepassed > 1200 )); then
 		echo "Time out waiting for $workerNode to become Ready after applying hugepage config."
 		exit 1
