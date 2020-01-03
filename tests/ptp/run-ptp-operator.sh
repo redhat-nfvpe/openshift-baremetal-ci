@@ -13,8 +13,8 @@ PTP_OPERATOR_NAMESPACE=openshift-ptp
 export WORKER_NODE=${WORKER_NODE:-"dev-worker-0"}
 
 NUM_OF_WORKER=$(oc get nodes | grep worker | wc -l)
-NUM_OF_MASTER=$(oc get nodes | grep master | wc -l)
-NUM_OF_NODES=$(oc get nodes | grep 'worker\|master' | wc -l)
+NUM_OF_MASTER=$(oc get nodes | grep master- | wc -l)
+NUM_OF_NODES=$(oc get nodes | grep 'worker\|master-' | wc -l)
 
 if [ ! -d "ptp-operator" ]; then
 	git clone $PTP_OPERATOR_REPO
