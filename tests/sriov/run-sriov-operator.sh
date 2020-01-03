@@ -59,7 +59,7 @@ oc create -f policy-intel.yaml
 #oc wait --for condition=available ds sriov-cni -n $SRIOV_OPERATOR_NAMESPACE --timeout=60s
 #oc wait --for condition=available ds sriov-device-plugin -n $SRIOV_OPERATOR_NAMESPACE --timeout=60s
 
-for i in {1..10}; do
+for i in {1..12}; do
 	sleep 10
 	cni=$(oc get ds sriov-cni \
 			-n $SRIOV_OPERATOR_NAMESPACE | tail -n 1 | awk '{print $4}')
@@ -70,7 +70,7 @@ for i in {1..10}; do
 		break
 	fi
 
-	if [ $i -eq 10 ]; then
+	if [ $i -eq 12 ]; then
 		exit 1
 	fi
 done
@@ -80,15 +80,15 @@ sleep 30
 #oc wait --for condition=available ds sriov-cni -n $SRIOV_OPERATOR_NAMESPACE --timeout=60s
 #oc wait --for condition=available ds sriov-device-plugin -n $SRIOV_OPERATOR_NAMESPACE --timeout=60s
 
-for i in {1..12}; do
-	sleep 10
+for i in {1..30}; do
+	sleep 20
 	resource=$(oc get node $WORKER_NODE -o jsonpath="{.status.allocatable.openshift\.io/intelnics}")
 
 	if [ $resource -eq 4 ]; then
 		break
 	fi
 
-	if [ $i -eq 12 ]; then
+	if [ $i -eq 30 ]; then
 		exit 1
 	fi
 done
