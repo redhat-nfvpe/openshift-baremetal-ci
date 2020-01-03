@@ -3,9 +3,7 @@
 set -e
 set -x
 
-pushd openshift-baremetal-ci/tests/sriov/templates
-
-oc apply -f performance.yaml
+oc apply -f templates/performance.yaml
 
 echo "Waiting for worker node to become 'NotReady,SchedulingDisabled' ..."
 count=0
