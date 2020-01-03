@@ -13,7 +13,7 @@ SRIOV_OPERATOR_NAMESPACE=openshift-sriov-network-operator
 export WORKER_NODE=${WORKER_NODE:-"dev-worker-0"}
 
 NUM_OF_WORKER=$(oc get nodes | grep worker | wc -l)
-NUM_OF_MASTER=$(oc get nodes | grep master | wc -l)
+NUM_OF_MASTER=$(oc get nodes | grep master- | wc -l)
 
 oc label node $WORKER_NODE --overwrite=true feature.node.kubernetes.io/network-sriov.capable=true
 
