@@ -20,8 +20,6 @@ spec:
     ignition:
       version: 2.2.0
   kernelArguments:
-  - intel_iommu=on
-  - iommu=pt
   - default_hugepagesz=1GB
   - hugepagesz=1G
   - hugepages=16
