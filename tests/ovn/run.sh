@@ -8,6 +8,8 @@ cleanup() {
 	popd
 }
 
+pushd openshift-baremetal-ci/tests/ovn
+
 # run unit tests of cluster network operator
 ./run-cluster-network-operator-unit.sh
 
