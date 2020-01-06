@@ -14,5 +14,9 @@ make WHAT=cmd/openshift-tests
 OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
 
 # run sig-network tests
-$OPENSHIFT_TESTS run all --dry-run | grep -E "sig-network" | \
-	grep -v "Disabled:" | $OPENSHIFT_TESTS run -f -
+# excluding 'Disabled:' and 'Skipped:NetworkOVNKubernetes' tests
+$OPENSHIFT_TESTS run all --dry-run | \
+	grep -E "sig-network" | \
+	grep -v "Disabled:" | \
+	grep -v "Skipped:Network/OVNKubernetes" | \
+	$OPENSHIFT_TESTS run -f -
