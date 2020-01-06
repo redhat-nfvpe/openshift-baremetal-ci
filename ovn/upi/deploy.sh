@@ -31,14 +31,9 @@ cleanup() {
 yum install -y git
 
 rm -rf kni-upi-lab
-git clone https://github.com/zshi-redhat/kni-upi-lab.git
+git clone https://github.com/redhat-nfvpe/kni-upi-lab.git
 
 pushd kni-upi-lab
-if [ $OPENSHIFT_MAJOR_VERSION == "4.4" ]; then
-	git checkout 4.4
-elif [ $OPENSHIFT_MAJOR_VERSION == "4.3" ]; then
-	git checkout ignore-failed-artifacts
-fi
 
 sed -i -e "s/^OPENSHIFT_RHCOS_MAJOR_REL=.*/OPENSHIFT_RHCOS_MAJOR_REL=\"${OPENSHIFT_MAJOR_VERSION}\"/g" ./common.sh
 
