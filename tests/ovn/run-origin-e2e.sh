@@ -19,4 +19,7 @@ $OPENSHIFT_TESTS run all --dry-run | \
 	grep -E "sig-network" | \
 	grep -v "Disabled:" | \
 	grep -v "Skipped:Network/OVNKubernetes" | \
+	grep -v "should handle load balancer cleanup finalizer for service" | \
+	grep -v "for LoadBalancer service" | \
+	grep -v "should transfer ~ 1GB" | \
 	$OPENSHIFT_TESTS run -f -
