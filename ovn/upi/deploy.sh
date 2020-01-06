@@ -71,6 +71,7 @@ sleep 320
 
 sleep 30
 cp -rf ./requirements/oc /usr/local/bin/
+cp -rf ./requirements/kubectl /usr/local/bin/
 ./requirements/oc --config ./ocp/auth/kubeconfig get nodes || true
 
 sleep 30
