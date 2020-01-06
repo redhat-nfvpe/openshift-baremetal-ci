@@ -22,4 +22,5 @@ $OPENSHIFT_TESTS run all --dry-run | \
 	grep -v "should handle load balancer cleanup finalizer for service" | \
 	grep -v "for LoadBalancer service" | \
 	grep -v "should transfer ~ 1GB" | \
+	grep -v "Should be able to send traffic between Pods without SNAT" | \
 	$OPENSHIFT_TESTS run -f -
