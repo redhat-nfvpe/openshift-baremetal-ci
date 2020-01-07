@@ -1,6 +1,5 @@
 #!/bin/bash
 set -x
-set -e
 
 if [ ! -d "origin" ]; then
 	git clone https://github.com/openshift/origin.git
@@ -12,6 +11,22 @@ pushd origin
 make WHAT=cmd/openshift-tests
 
 OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
+
+# run conformance parallel tests
+$OPENSHIFT_TESTS run openshift/conformance/parallel \
+	-o ./comformance-parallel.e2e.log \
+	--junit-dir ./parallel.junit
+
+# run conformance serial tests
+$OPENSHIFT_TESTS run openshift/conformance/serial \
+	-o ./comformance-serial.e2e.log \
+	--junit-dir ./serial.junit
+
+# run scalability tests
+$OPENSHIFT_TESTS run openshift/scalability \
+	-o ./scalability.e2e.log \
+	--junit-dir ./scalability.junit
+
 
 # run sig-network tests
 # excluding 'Disabled:' and 'Skipped:NetworkOVNKubernetes' tests
