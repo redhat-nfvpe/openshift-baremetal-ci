@@ -1,27 +1,27 @@
 #!/bin/bash
 
-PTP_OPERATOR_RAW=$(oc get istag -n ocp 4.3-art-latest:ptp-operator \
+PTP_OPERATOR_RAW=$(oc get istag -n ocp 4.4-art-latest:ptp-operator \
 	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-PTP_RAW=$(oc get istag -n ocp 4.3-art-latest:ptp \
+PTP_RAW=$(oc get istag -n ocp 4.4-art-latest:ptp \
 	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_DEVICE_PLUGIN_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-network-device-plugin \
+SRIOV_DEVICE_PLUGIN_RAW=$(oc get istag -n ocp 4.4-art-latest:sriov-network-device-plugin \
 	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_CNI_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-cni \
+SRIOV_CNI_RAW=$(oc get istag -n ocp 4.4-art-latest:sriov-cni \
 	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-NETWORK_RESOURCES_INJECTOR_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-dp-admission-controller \
+NETWORK_RESOURCES_INJECTOR_RAW=$(oc get istag -n ocp 4.4-art-latest:sriov-dp-admission-controller \
 	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_CONFIG_DAEMON_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-network-config-daemon \
+SRIOV_CONFIG_DAEMON_RAW=$(oc get istag -n ocp 4.4-art-latest:sriov-network-config-daemon \
 	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_WEBHOOK_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-network-webhook \
+SRIOV_WEBHOOK_RAW=$(oc get istag -n ocp 4.4-art-latest:sriov-network-webhook \
 	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_OPERATOR_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-network-operator \
+SRIOV_OPERATOR_RAW=$(oc get istag -n ocp 4.4-art-latest:sriov-network-operator \
 	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
 echo $PTP_OPERATOR_RAW
