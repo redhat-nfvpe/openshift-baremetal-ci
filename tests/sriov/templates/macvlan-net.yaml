@@ -4,15 +4,48 @@ metadata:
   name: cluster
 spec:
   additionalNetworks:
-  - name: macvlan-net
+  - name: macvlan-net-1
     namespace: openshift-sriov-network-operator
     type: SimpleMacvlan
     simpleMacvlanConfig:
-      master: ens787f1
+      master: ens802f1
       mode: bridge
       mtu: 1500
       ipamConfig:
         type: static
         staticIPAMConfig:
           addresses:
-          - address: 10.56.217.10/24
+          - address: 10.56.217.11/24
+  - name: macvlan-net-2
+    type: SimpleMacvlan
+    simpleMacvlanConfig:
+      master: ens802f1
+      mode: bridge
+      mtu: 1500
+      ipamConfig:
+        type: static
+        staticIPAMConfig:
+          addresses:
+          - address: 10.56.217.12/24
+#  - name: macvlan-net-3
+#    type: SimpleMacvlan
+#    simpleMacvlanConfig:
+#      master: ens802f1v0
+#      mode: bridge
+#      mtu: 1500
+#      ipamConfig:
+#        type: static
+#        staticIPAMConfig:
+#          addresses:
+#          - address: 10.56.217.13/24
+##  - name: macvlan-net-4
+#    type: SimpleMacvlan
+#    simpleMacvlanConfig:
+#      master: bond0.200
+#      mode: bridge
+#      mtu: 1500
+#      ipamConfig:
+#        type: static
+#        staticIPAMConfig:
+#          addresses:
+#          - address: 10.56.217.14/24
