@@ -1,0 +1,57 @@
+templateinstance readiness test  should report failed soon after an annotated objects has failed
+templateinstance readiness test  should report ready soon after all annotated objects are ready
+Multi-stage image builds  should succeed
+result image should have proper labels set  Docker build from a template should create a image from "test-docker-build.json" template with proper Docker labels
+result image should have proper labels set  S2I build from a template should create a image from "test-s2i-build.json" template with proper Docker labels
+build can reference a cluster service  with a build being created from new-build should be able to run a build that references a cluster service
+custom build with buildah  being created from new-build should complete build with custom builder image
+oc new-app  should fail with a --name longer than 58 characters
+oc new-app  should succeed with a --name of 58 characters
+oc new-app  should succeed with an imagestream
+s2i build with a root user image should create a root build and pass with a privileged SCC
+process valueFrom in build strategy environment variables  should fail resolving unresolvable valueFrom in docker build environment variable references
+process valueFrom in build strategy environment variables  should fail resolving unresolvable valueFrom in sti build environment variable references
+process valueFrom in build strategy environment variables  should successfully resolve valueFrom in docker build environment variables
+process valueFrom in build strategy environment variables  should successfully resolve valueFrom in s2i build environment variables
+prune builds based on settings in the buildconfig  [Conformance] buildconfigs should have a default history limit set when created via the group api
+prune builds based on settings in the buildconfig  should prune builds after a buildConfig change
+prune builds based on settings in the buildconfig  should prune canceled builds based on the failedBuildsHistoryLimit setting
+prune builds based on settings in the buildconfig  should prune completed builds based on the successfulBuildsHistoryLimit setting
+prune builds based on settings in the buildconfig  should prune errored builds based on the failedBuildsHistoryLimit setting
+prune builds based on settings in the buildconfig  should prune failed builds based on the failedBuildsHistoryLimit setting
+docker build using a pull secret  Building from a template should create a docker build that pulls using a secret run it
+capture build stages and durations  should record build stages and durations for docker
+capture build stages and durations  should record build stages and durations for s2i
+deploymentconfigs should respect image stream tag reference policy [Conformance] resolve the image pull spec
+deploymentconfigs with minimum ready seconds set [Conformance] should not transition the deployment to Complete before satisfied
+Image append should create images by appending them
+Image extract should extract content from an image
+Image layer subresource should return layers from tagged images
+Image policy should perform lookup when the pod has the resolve-names annotation
+Image policy should update standard Kube object image fields when local names are on
+oc tag should change image reference for internal images
+OAuth server should use http1.1 only to prevent http2 connection reuse
+expected headers returned from the authorize URL
+expected headers returned from the grant URL
+expected headers returned from the login URL for the allow all IDP
+expected headers returned from the login URL for the bootstrap IDP
+expected headers returned from the login URL for when there is only one IDP
+expected headers returned from the logout URL
+expected headers returned from the root URL
+expected headers returned from the token URL
+expected headers returned from the token request URL [Suite:openshift/conformance/parallel]
+Using a OAuth client with a non-default token max age to generate tokens that do not expire works as expected when using a code authorization flow
+Using a OAuth client with a non-default token max age to generate tokens that do not expire works as expected when using a token authorization flow
+Using a OAuth client with a non-default token max age to generate tokens that expire shortly works as expected when using a code authorization flow
+Using a OAuth client with a non-default token max age to generate tokens that expire shortly works as expected when using a token authorization flow
+well-known endpoint should be reachable
+TestAutomaticCreationOfPullSecrets
+TestDockercfgTokenDeletedController
+Managed cluster should ensure control plane pods do not run in best-effort QoS
+Managed cluster should ensure pods use downstream images from our release image with proper ImagePullPolicy
+Prometheus when installed on the cluster should have important platform topology metrics
+Prometheus when installed on the cluster shouldn't report any alerts in firing state apart from Watchdog and AlertmanagerReceiversNotConfigured
+HTPasswd IDP should successfully configure htpasswd and be responsive
+LDAP IDP should authenticate against an ldap server
+LDAP should start an OpenLDAP test server
+Networking should provide Internet connection for containers
