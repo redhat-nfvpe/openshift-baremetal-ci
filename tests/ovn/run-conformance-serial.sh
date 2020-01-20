@@ -30,7 +30,7 @@ $OPENSHIFT_TESTS run openshift/conformance/serial --dry-run | \
 	grep -v "validates resource limits of pods that are allowed to run" | \
 	grep -v "test RequestHeaders IdP" | \
 	grep -v "ldap group sync can sync groups from ldap" | \
-	$OPENSHIFT_TESTS run -f -o ./comformance-serial.e2e.log --junit-dir /serial.junit -
+	$OPENSHIFT_TESTS run -o ./comformance-serial.e2e.log --junit-dir /serial.junit -f -
 
 # Frequent Failed Tests
 # 1. [Feature:OpenShiftAuthorization][Serial] authorization  TestAuthorizationResourceAccessReview should succeed [Suite:openshift/conformance/serial]
