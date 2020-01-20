@@ -13,7 +13,7 @@ process valueFrom in build strategy environment variables  should fail resolving
 process valueFrom in build strategy environment variables  should fail resolving unresolvable valueFrom in sti build environment variable references
 process valueFrom in build strategy environment variables  should successfully resolve valueFrom in docker build environment variables
 process valueFrom in build strategy environment variables  should successfully resolve valueFrom in s2i build environment variables
-prune builds based on settings in the buildconfig  [Conformance] buildconfigs should have a default history limit set when created via the group api
+buildconfigs should have a default history limit set when created via the group api
 prune builds based on settings in the buildconfig  should prune builds after a buildConfig change
 prune builds based on settings in the buildconfig  should prune canceled builds based on the failedBuildsHistoryLimit setting
 prune builds based on settings in the buildconfig  should prune completed builds based on the successfulBuildsHistoryLimit setting
@@ -22,8 +22,8 @@ prune builds based on settings in the buildconfig  should prune failed builds ba
 docker build using a pull secret  Building from a template should create a docker build that pulls using a secret run it
 capture build stages and durations  should record build stages and durations for docker
 capture build stages and durations  should record build stages and durations for s2i
-deploymentconfigs should respect image stream tag reference policy [Conformance] resolve the image pull spec
-deploymentconfigs with minimum ready seconds set [Conformance] should not transition the deployment to Complete before satisfied
+deploymentconfigs should respect image stream tag reference policy
+deploymentconfigs with minimum ready seconds set
 Image append should create images by appending them
 Image extract should extract content from an image
 Image layer subresource should return layers from tagged images
@@ -39,7 +39,7 @@ expected headers returned from the login URL for when there is only one IDP
 expected headers returned from the logout URL
 expected headers returned from the root URL
 expected headers returned from the token URL
-expected headers returned from the token request URL [Suite:openshift/conformance/parallel]
+expected headers returned from the token request URL
 Using a OAuth client with a non-default token max age to generate tokens that do not expire works as expected when using a code authorization flow
 Using a OAuth client with a non-default token max age to generate tokens that do not expire works as expected when using a token authorization flow
 Using a OAuth client with a non-default token max age to generate tokens that expire shortly works as expected when using a code authorization flow
