@@ -1,8 +1,8 @@
 templateinstance readiness test  should report failed soon after an annotated objects has failed
 templateinstance readiness test  should report ready soon after all annotated objects are ready
 Multi-stage image builds  should succeed
-result image should have proper labels set  Docker build from a template should create a image from "test-docker-build.json" template with proper Docker labels
-result image should have proper labels set  S2I build from a template should create a image from "test-s2i-build.json" template with proper Docker labels
+result image should have proper labels set  Docker build from a template should create a image from
+result image should have proper labels set  S2I build from a template should create a image from
 build can reference a cluster service  with a build being created from new-build should be able to run a build that references a cluster service
 custom build with buildah  being created from new-build should complete build with custom builder image
 oc new-app  should fail with a --name longer than 58 characters
