@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ovn-service
+spec:
+  selector:
+    matchLabels:
+      run: ovn-service
+  template:
+    metadata:
+      labels:
+        run: ovn-service
+    spec:
+      nodeSelector:
+        beta.kubernetes.io/arch: amd64
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        operator: Exists
+        effect: NoSchedule
+      containers:
+      - name: ovn-service
+        image: nginx
