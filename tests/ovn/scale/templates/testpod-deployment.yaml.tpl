@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ovn-deployment-${index}
+  name: backend-deployment-${index}
 spec:
   selector:
     matchLabels:
-      run: ovn-service-${index}
+      run: test-service-${index}
   replicas: ${replica}
   template:
     metadata:
       labels:
-        run: ovn-service-${index}
+        run: test-service-${index}
     spec:
       containers:
-      - name: ovn-service-${index}
+      - name: test-service-${index}
         image: nginx
         ports:
         - containerPort: 80

@@ -56,7 +56,7 @@ sleep 1
 
 for i in {1..6}; do
 	sleep 10
-	daemonset=$(oc get ds ovn-service \
+	daemonset=$(oc get ds test-service \
 		-n $TEST_NAMESPACE | tail -n 1 | awk '{print $4}')
 
 	if [ $daemonset -eq $NUM_OF_NODES ]; then
@@ -92,7 +92,7 @@ DURATION_ALL_PODS_CREATED=$SECONDS
 
 SECONDS=0
 for index in $(seq 1 $SERVICE_NUM); do
-	oc wait --for condition=available -n $TEST_NAMESPACE deployment/ovn-deployment-${index} --timeout=${TIMEOUT}s
+	oc wait --for condition=available -n $TEST_NAMESPACE deployment/backend-deployment-${index} --timeout=${TIMEOUT}s
 done
 DURATION_ALL_PODS_BECOME_AVAILABLE=$SECONDS
 
@@ -100,11 +100,11 @@ sleep 1
 
 SECONDS=0
 for index in $(seq 1 $SERVICE_NUM); do
-	NUM_OF_PODS=$(oc get pods -n $TEST_NAMESPACE -l run=ovn-service-${index} -o yaml | grep -w podIP | wc -l)
-	POD_IPS=$(oc get pods -n $TEST_NAMESPACE -l run=ovn-service-${index} -o yaml | grep -w podIP)
+	NUM_OF_PODS=$(oc get pods -n $TEST_NAMESPACE -l run=test-service-${index} -o yaml | grep -w podIP | wc -l)
+	POD_IPS=$(oc get pods -n $TEST_NAMESPACE -l run=test-service-${index} -o yaml | grep -w podIP)
 	count=0
 	for j in $(seq 1 $NUM_OF_PODS); do
-		podName=$(oc get pods -n $TEST_NAMESPACE -l run=ovn-service-${index} -o name | awk "NR==$j")
+		podName=$(oc get pods -n $TEST_NAMESPACE -l run=test-service-${index} -o name | awk "NR==$j")
 		podIP=$(oc get -n $TEST_NAMESPACE $podName -o json | jq -r '.status.podIP')
 		if oc -n $TEST_NAMESPACE exec debugpod -- curl --silent --fail $podIP > /dev/null; then
 			count=$(($count+1))
@@ -125,8 +125,12 @@ for index in $(seq 1 $SERVICE_NUM); do
 done
 DURATION_ALL_SERVICES_CREATED=$SECONDS
 
+# TODO: wait for endpoints become ready
+sleep 10
+
 SECONDS=0
 for index in $(seq 1 $SERVICE_NUM); do
-	oc -n $TEST_NAMESPACE exec debugpod -- nslookup ovn-service-${index}
+	oc -n $TEST_NAMESPACE exec debugpod -- nslookup test-service-${index}
+	oc -n $TEST_NAMESPACE exec debugpod -- curl --silent --fail test-service-${index}
 done
 DURATION_CHECK_ALL_SERVICES_CONNECTIVITY=$SECONDS
