@@ -49,8 +49,10 @@ NUM_OF_WORKER=$(oc get nodes | grep worker- | wc -l)
 NUM_OF_MASTER=$(oc get nodes | grep master- | wc -l)
 NUM_OF_NODES=$(oc get nodes | grep 'worker-\|master-' | wc -l)
 
+
+pushd openshift-baremetal-ci/tests/ovn/scale/templates
+
 # Download test pod image on each node
-pushd templates
 oc create -f testpod-daemon.yaml -n $TEST_NAMESPACE
 sleep 1
 
