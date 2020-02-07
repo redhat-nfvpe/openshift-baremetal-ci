@@ -32,7 +32,7 @@ sleep 20
 
 # Create my-ripsaw namespace so that net-attach-def
 # can be created in that namespace
-oc create ns my-ripsaw
+oc create ns my-ripsaw || true
 
 oc create -f templates/ripsaw-client-nad.yaml
 oc create -f templates/ripsaw-server-nad.yaml
