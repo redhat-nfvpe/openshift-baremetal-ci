@@ -71,7 +71,7 @@ sleep 30
 
 oc create -f policy-intel.yaml
 
-for i in {1..12}; do
+for i in {1..60}; do
 	sleep 10
 	cni=$(oc get ds sriov-cni \
 			-n $SRIOV_OPERATOR_NAMESPACE | tail -n 1 | awk '{print $4}')
@@ -82,7 +82,7 @@ for i in {1..12}; do
 		break
 	fi
 
-	if [ $i -eq 12 ]; then
+	if [ $i -eq 60 ]; then
 		exit 1
 	fi
 done
