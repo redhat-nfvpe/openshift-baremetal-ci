@@ -21,7 +21,7 @@ git clone https://github.com/cloud-bulldozer/plow.git
 
 pushd openshift-baremetal-ci/tests/sriov
 
-./apply-performance-conf.sh
+# ./apply-performance-conf.sh
 
 sleep 20
 
