@@ -7,7 +7,7 @@ trap cleanup 0 1
 
 cleanup() {
 	for ns in $(seq 1 $NAMESPACE); do
-		oc delete -f scale-deployment.yaml -n "test-"$ns || true
+		oc delete -f templates/scale-deployment.yaml -n "test-"$ns || true
 		sleep 1
 		oc delete ns "test-"$ns || true
 	done
