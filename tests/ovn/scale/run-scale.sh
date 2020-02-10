@@ -23,6 +23,9 @@ pushd openshift-baremetal-ci/tests/ovn/scale
 for ns in $(seq 1 $NAMESPACE); do
 	oc create ns "test-"$ns
 	oc create -f templates/scale-deployment.yaml -n "test-"$ns
+done
+
+for ns in $(seq 1 $NAMESPACE); do
 	oc wait --for condition=available -n "test-"$ns deployment/$DEPLOYMENT --timeout=120s
 done
 
