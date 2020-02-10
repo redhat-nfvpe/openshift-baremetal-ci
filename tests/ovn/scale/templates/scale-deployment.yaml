@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scale-deployment
+spec:
+  selector:
+    matchLabels:
+      run: scale
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: scale
+    spec:
+      containers:
+      - name: scale
+        image: centos/tools
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 300000; done;" ]
