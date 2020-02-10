@@ -14,8 +14,8 @@ cleanup() {
 	popd
 }
 
-export SCALE=${SCALE:-10}
-export NAMESPACE=${NAMESPACE:-5}
+export SCALE=${SCALE:-400}
+export NAMESPACE=${NAMESPACE:-100}
 export DEPLOYMENT=${DEPLOYMENT:-"scale-deployment"}
 
 pushd openshift-baremetal-ci/tests/ovn/scale
