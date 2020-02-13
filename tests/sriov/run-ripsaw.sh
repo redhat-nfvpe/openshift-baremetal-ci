@@ -42,10 +42,11 @@ popd
 #  For internal machines we have an ES server to warehouse the results from each run. 
 export ES_PORT=9200
 export ES_SERVER=perf-sm5039-4-5.perf.lab.eng.rdu2.redhat.com
+export PERF_TEST_ENV=${PERF_TEST_ENV:-"ovn-baremetal-ci"}
 
 export MULTUS_CLIENT_NAD=my-ripsaw/client-nad
 export MULTUS_SERVER_NAD=my-ripsaw/server-nad
 
 pushd plow/workloads/network-perf/
 echo "running perf multus network test"
-./run_multus_network_tests_fromgit.sh ovn-baremetal-ci
+./run_multus_network_tests_fromgit.sh $PERF_TEST_ENV
