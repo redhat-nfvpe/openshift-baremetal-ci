@@ -42,7 +42,20 @@ popd
 #  For internal machines we have an ES server to warehouse the results from each run. 
 export ES_PORT=9200
 export ES_SERVER=perf-sm5039-4-5.perf.lab.eng.rdu2.redhat.com
-export PERF_TEST_ENV=${PERF_TEST_ENV:-"ovn-baremetal-ci"}
+# export PERF_TEST_ENV=${PERF_TEST_ENV:-"ovn-baremetal-ci"}
+
+if oc get ns | grep openshift-ovn-kubernetes; then
+        PERF_TEST_ENV="ovn-baremetal-ci"
+fi
+
+if oc get ns | grep openshift-sdn; then
+        PERF_TEST_ENV="sdn-baremetal-ci"
+fi
+
+if [ -z $PERF_TEST_ENV ]; then
+        echo "PERF_TEST_ENV is not detected"
+        exit 1
+fi
 
 export MULTUS_CLIENT_NAD=my-ripsaw/client-nad
 export MULTUS_SERVER_NAD=my-ripsaw/server-nad
