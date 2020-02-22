@@ -17,6 +17,7 @@ cleanup() {
 export SCALE=${SCALE:-400}
 export NAMESPACE=${NAMESPACE:-100}
 export DEPLOYMENT=${DEPLOYMENT:-"scale-deployment"}
+export TIMEOUT=${TIMEOUT:-600}
 
 pushd openshift-baremetal-ci/tests/ovn/scale
 
@@ -26,7 +27,7 @@ for ns in $(seq 1 $NAMESPACE); do
 done
 
 for ns in $(seq 1 $NAMESPACE); do
-	oc wait --for condition=available -n "test-"$ns deployment/$DEPLOYMENT --timeout=120s
+	oc wait --for condition=available -n "test-"$ns deployment/$DEPLOYMENT --timeout=${TIMEOUT}s
 done
 
 /usr/bin/python checktimetoscale.py $SCALE $NAMESPACE $DEPLOYMENT
