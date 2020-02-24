@@ -31,12 +31,13 @@ cleanup() {
 yum install -y git
 
 rm -rf kni-upi-lab
-# git clone https://github.com/zshi-redhat/kni-upi-lab.git
-git clone https://github.com/redhat-nfvpe/kni-upi-lab.git
+git clone https://github.com/zshi-redhat/kni-upi-lab.git
+# git clone https://github.com/redhat-nfvpe/kni-upi-lab.git
 
 pushd kni-upi-lab
-git fetch origin pull/95/head:fix
-git checkout fix
+# git fetch origin pull/95/head:fix
+# git checkout fix
+git checkout failed-artifacts
 
 sed -i -e "s/^OPENSHIFT_RHCOS_MAJOR_REL=.*/OPENSHIFT_RHCOS_MAJOR_REL=\"${OPENSHIFT_MAJOR_VERSION}\"/g" ./common.sh
 
