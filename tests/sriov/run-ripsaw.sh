@@ -25,7 +25,6 @@ pushd openshift-baremetal-ci/tests/sriov
 
 sleep 20
 
-export SUBSCRIPTION=true
 ./run-sriov-operator.sh
 
 sleep 20
