@@ -18,16 +18,16 @@ cleanup() {
 
 pushd openshift-baremetal-ci/tests/sriov
 
-./apply-performance-conf.sh
+# ./apply-performance-conf.sh
 
 sleep 20
 
-wget http://lacrosse.corp.redhat.com/~zshi/ocp/image-references.sh
-source ./image-references.sh
+# wget http://lacrosse.corp.redhat.com/~zshi/ocp/image-references.sh
+# source ./image-references.sh
 
 export SUBSCRIPTION=false
 ./run-sriov-operator.sh
 
 sleep 20
 
-./run-pod.sh
+./pod.sh
