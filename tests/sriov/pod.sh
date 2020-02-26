@@ -3,6 +3,8 @@
 set -e
 set -x
 
+export WORKER_NAME_PREFIX=${WORKER_NODE:-"ci-worker"}
+
 inspect_pod() {
 	pod_name=$1
 	oc exec $pod_name -- ip link show net1
