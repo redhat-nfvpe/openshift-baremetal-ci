@@ -13,6 +13,7 @@ SRIOV_OPERATOR_NAMESPACE=openshift-sriov-network-operator
 # WORKER_NODE=nfvpe-08.oot.lab.eng.bos.redhat.com
 export WORKER_NAME_PREFIX=${WORKER_NODE:-"ci-worker"}
 export SUBSCRIPTION=${SUBSCRIPTION:-false}
+export CREATE_NODE_POLICY=${CREATE_NODE_POLICY:-true}
 
 NUM_OF_WORKER=$(oc get nodes | grep worker | wc -l)
 NUM_OF_MASTER=$(oc get nodes | grep master- | wc -l)
@@ -65,6 +66,11 @@ for worker in $(seq 0 $((NUM_OF_WORKER-1))); do
 	oc label node $WORKER_NAME_PREFIX-$worker \
 		--overwrite=true feature.node.kubernetes.io/network-sriov.capable=true
 done
+
+if [ $CREATE_NODE_POLICY == false ]; then
+	echo "Skip node policy configuration as CREATE_NODE_POLICY is $CREATE_NODE_POLICY"
+	exit 0
+fi
 
 # Wait for operator webhook to become ready
 sleep 30
