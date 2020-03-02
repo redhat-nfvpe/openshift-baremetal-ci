@@ -180,13 +180,22 @@ pushd templates
 oc create -f sn-$NIC_VENDOR-static.yaml
 sleep 1
 export pod_index=6
-export nad='[{"name": "sriov-$NIC_VENDOR","mac": "CA:FE:C0:FF:EE:01","ips": ["10.10.10.11/24", "2001::1/64"]}]'
+if [ $NIC_VENDOR == 'mlx' ]; then
+	export nad='[{"name": "sriov-mlx","mac": "CA:FE:C0:FF:EE:01","ips": ["10.10.10.11/24", "2001::1/64"]}]'
+else
+	export nad='[{"name": "sriov-intel","mac": "CA:FE:C0:FF:EE:01","ips": ["10.10.10.11/24", "2001::1/64"]}]'
+fi
+
 export node=$WORKER_NAME_PREFIX-0
 envsubst <"pod.yaml.tpl" >"pod6.yaml"
 oc create -f pod6.yaml
 
 export pod_index=7
-export nad='[{"name": "sriov-$NIC_VENDOR","mac": "CA:FE:C0:FF:EE:02","ips": ["10.10.10.12/24", "2001::2/64"]}]'
+if [ $NIC_VENDOR == 'mlx' ]; then
+	export nad='[{"name": "sriov-mlx","mac": "CA:FE:C0:FF:EE:02","ips": ["10.10.10.12/24", "2001::2/64"]}]'
+else
+	export nad='[{"name": "sriov-intel","mac": "CA:FE:C0:FF:EE:02","ips": ["10.10.10.12/24", "2001::2/64"]}]'
+fi
 export node=$WORKER_NAME_PREFIX-1
 envsubst <"pod.yaml.tpl" >"pod7.yaml"
 oc create -f pod7.yaml
@@ -245,13 +254,21 @@ pushd templates
 oc create -f sn-$NIC_VENDOR-static.yaml
 sleep 1
 export pod_index=8
-export nad='[{"name": "sriov-$NIC_VENDOR","ips": ["10.129.10.11/24", "2001::11/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
+if [ $NIC_VENDOR == 'mlx' ]; then
+	export nad='[{"name": "sriov-mlx","ips": ["10.129.10.11/24", "2001::11/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
+else
+	export nad='[{"name": "sriov-intel","ips": ["10.129.10.11/24", "2001::11/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
+fi
 export node=$WORKER_NAME_PREFIX-0
 envsubst <"pod.yaml.tpl" >"pod8.yaml"
 oc create -f pod8.yaml
 sleep 1
 export pod_index=9
-export nad='[{"name": "sriov-$NIC_VENDOR","ips": ["10.129.10.12/24", "2001::12/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
+if [ $NIC_VENDOR == 'mlx' ]; then
+	export nad='[{"name": "sriov-mlx","ips": ["10.129.10.12/24", "2001::12/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
+else
+	export nad='[{"name": "sriov-intel","ips": ["10.129.10.12/24", "2001::12/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
+fi
 export node=$WORKER_NAME_PREFIX-1
 envsubst <"pod.yaml.tpl" >"pod9.yaml"
 oc create -f pod9.yaml
