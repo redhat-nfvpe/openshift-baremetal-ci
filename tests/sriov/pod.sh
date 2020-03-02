@@ -4,6 +4,7 @@ set -e
 set -x
 
 export WORKER_NAME_PREFIX=${WORKER_NODE:-"ci-worker"}
+export NIC_VENDOR=${NIC_VENDOR:-"intel"}
 
 inspect_pod() {
 	pod_name=$1
@@ -55,7 +56,7 @@ pod_default_route_ipv6() {
 
 # Test simple SR-IOV pod
 pushd templates
-oc create -f sn-intel.yaml
+oc create -f sn-$NIC_VENDOR.yaml
 sleep 1
 oc create -f pod-simple.yaml
 sleep 1
@@ -65,19 +66,19 @@ wait_for_pod_running testpod-simple
 inspect_pod testpod-simple
 
 oc delete -f pod-simple.yaml
-oc delete -f sn-intel.yaml
+oc delete -f sn-$NIC_VENDOR.yaml
 popd
 
 # Test ping between two pods
 pushd templates
-oc create -f sn-intel.yaml
+oc create -f sn-$NIC_VENDOR.yaml
 sleep 1
 export pod_index=1
-export nad=sriov-intel
+export nad=sriov-$NIC_VENDOR
 export node=$WORKER_NAME_PREFIX-0
 envsubst <"pod.yaml.tpl" >"pod1.yaml"
 export pod_index=2
-export nad=sriov-intel
+export nad=sriov-$NIC_VENDOR
 export node=$WORKER_NAME_PREFIX-0
 envsubst <"pod.yaml.tpl" >"pod2.yaml"
 oc create -f pod1.yaml
@@ -95,18 +96,18 @@ oc exec testpod2 -- ping -c 10 $pod1_ipv4 -I net1
 
 oc delete -f pod1.yaml
 oc delete -f pod2.yaml
-oc delete -f sn-intel.yaml
+oc delete -f sn-$NIC_VENDOR.yaml
 rm -rf pod1.yaml
 rm -rf pod2.yaml
 popd
 
 # Test NUMA single-numa-node policy
 pushd templates
-oc create -f sn-intel.yaml
+oc create -f sn-$NIC_VENDOR.yaml
 sleep 1
 
 export pod_index=1
-export nad=sriov-intel
+export nad=sriov-$NIC_VENDOR
 export node=$WORKER_NAME_PREFIX-0
 envsubst <"pod.yaml.tpl" >"pod1.yaml"
 export pod_index=2
@@ -170,22 +171,22 @@ oc delete -f pod1.yaml
 oc delete -f pod2.yaml
 oc delete -f pod3.yaml
 oc delete -f pod5.yaml
-oc delete -f sn-intel.yaml
+oc delete -f sn-$NIC_VENDOR.yaml
 rm -rf pod1.yaml pod2.yaml pod3.yaml pod4.yaml pod5.yaml
 popd
 
 # runtimeConfig, MAC and IP
 pushd templates
-oc create -f sn-static-ipam.yaml
+oc create -f sn-$NIC_VENDOR-static.yaml
 sleep 1
 export pod_index=6
-export nad='[{"name": "sriov-intel","mac": "CA:FE:C0:FF:EE:01","ips": ["10.10.10.11/24", "2001::1/64"]}]'
+export nad='[{"name": "sriov-$NIC_VENDOR","mac": "CA:FE:C0:FF:EE:01","ips": ["10.10.10.11/24", "2001::1/64"]}]'
 export node=$WORKER_NAME_PREFIX-0
 envsubst <"pod.yaml.tpl" >"pod6.yaml"
 oc create -f pod6.yaml
 
 export pod_index=7
-export nad='[{"name": "sriov-intel","mac": "CA:FE:C0:FF:EE:02","ips": ["10.10.10.12/24", "2001::2/64"]}]'
+export nad='[{"name": "sriov-$NIC_VENDOR","mac": "CA:FE:C0:FF:EE:02","ips": ["10.10.10.12/24", "2001::2/64"]}]'
 export node=$WORKER_NAME_PREFIX-1
 envsubst <"pod.yaml.tpl" >"pod7.yaml"
 oc create -f pod7.yaml
@@ -234,23 +235,23 @@ oc exec testpod7 -- ping6 -c 5 $pod6_ipv6 -I net1
 
 oc delete -f pod6.yaml
 oc delete -f pod7.yaml
-oc delete -f sn-static-ipam.yaml
+oc delete -f sn-$NIC_VENDOR-static.yaml
 rm -rf pod6.yaml
 rm -rf pod7.yaml
 popd
 
 # default route override
 pushd templates
-oc create -f sn-static-ipam.yaml
+oc create -f sn-$NIC_VENDOR-static.yaml
 sleep 1
 export pod_index=8
-export nad='[{"name": "sriov-intel","ips": ["10.129.10.11/24", "2001::11/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
+export nad='[{"name": "sriov-$NIC_VENDOR","ips": ["10.129.10.11/24", "2001::11/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
 export node=$WORKER_NAME_PREFIX-0
 envsubst <"pod.yaml.tpl" >"pod8.yaml"
 oc create -f pod8.yaml
 sleep 1
 export pod_index=9
-export nad='[{"name": "sriov-intel","ips": ["10.129.10.12/24", "2001::12/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
+export nad='[{"name": "sriov-$NIC_VENDOR","ips": ["10.129.10.12/24", "2001::12/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
 export node=$WORKER_NAME_PREFIX-1
 envsubst <"pod.yaml.tpl" >"pod9.yaml"
 oc create -f pod9.yaml
@@ -308,5 +309,5 @@ oc exec testpod9 -- ping6 -c 5 $pod8_ipv6 -I net1
 
 oc delete -f pod8.yaml
 oc delete -f pod9.yaml
-oc delete -f sn-static-ipam.yaml
+oc delete -f sn-$NIC_VENDOR-static.yaml
 popd

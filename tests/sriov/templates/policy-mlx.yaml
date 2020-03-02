@@ -5,7 +5,7 @@ metadata:
   namespace: openshift-sriov-network-operator
 spec:
   deviceType: netdevice
-  mtu: 1500
+  mtu: 9000
   nicSelector:
     deviceID: "1017"
     rootDevices:
@@ -15,6 +15,6 @@ spec:
     - ens801f0
   nodeSelector:
     feature.node.kubernetes.io/network-sriov.capable: "true"
-  numVfs: 4
+  numVfs: 6
   priority: 5
   resourceName: mlxnics
