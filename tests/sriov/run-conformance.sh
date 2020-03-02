@@ -24,11 +24,13 @@ pushd openshift-baremetal-ci/tests/sriov
 # sriov conformance tests don't require node policy be created.
 # setting CREATE_NODE_POLICY to false to skip node policy
 # configuration in run-sriov-operator.sh
-CREATE_NODE_POLICY=false
+export CREATE_NODE_POLICY=false
 ./run-sriov-operator.sh
 
 sleep 20
+popd
 
+pushd sriov-tests/scripts
 ./run-conformance.sh
 
 popd
