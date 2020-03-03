@@ -27,11 +27,12 @@ pushd openshift-baremetal-ci/tests/sriov
 export CREATE_NODE_POLICY=false
 ./run-sriov-operator.sh
 
+# wait for extra 20 seconds for NodeState become Succeed
 sleep 20
 popd
 
-pushd sriov-tests/scripts
-./run-conformance.sh
+pushd sriov-tests
+./scripts/run-conformance.sh
 
 popd
 pushd openshift-baremetal-ci/tests/sriov/sriov-network-operator
