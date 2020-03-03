@@ -37,7 +37,13 @@ git clone https://github.com/zshi-redhat/kni-upi-lab.git
 pushd kni-upi-lab
 # git fetch origin pull/95/head:fix
 # git checkout fix
-git checkout failed-artifacts
+if [ $OPENSHIFT_MAJOR_VERSION == '4.3' ]; then
+	git checkout 4.3-nightly
+elif [ $OPENSHIFT_MAJOR_VERSION == '4.4' ]; then
+	git checkout failed-artifacts
+else
+	git checkout master
+fi
 
 sed -i -e "s/^OPENSHIFT_RHCOS_MAJOR_REL=.*/OPENSHIFT_RHCOS_MAJOR_REL=\"${OPENSHIFT_MAJOR_VERSION}\"/g" ./common.sh
 
