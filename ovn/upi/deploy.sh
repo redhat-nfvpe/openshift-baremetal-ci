@@ -41,6 +41,8 @@ if [ $OPENSHIFT_MAJOR_VERSION == '4.3' ]; then
 	git checkout 4.3-nightly
 elif [ $OPENSHIFT_MAJOR_VERSION == '4.4' ]; then
 	git checkout failed-artifacts
+elif [ $OPENSHIFT_MAJOR_VERSION == '4.5' ]; then
+	git checkout 4.5-boot-index
 else
 	git checkout master
 fi
