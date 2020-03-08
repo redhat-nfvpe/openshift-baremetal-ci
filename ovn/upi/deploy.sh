@@ -80,6 +80,12 @@ sleep 30
 cp -rf ./requirements/oc /usr/local/bin/
 cp -rf ./requirements/kubectl /usr/local/bin/
 cp -rf ./ocp/auth/kubeconfig /root/kubeconfig
+mkdir -p ~/.kube || true
+
+# Copy kubeconfig to user root <~/.kube/config>
+# Some tests detect kubeconfig automatically
+cp -rf ./ocp/auth/kubeconfig ~/.kube/config
+
 ./requirements/oc --kubeconfig ./ocp/auth/kubeconfig get nodes || true
 
 sleep 30
