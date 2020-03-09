@@ -40,15 +40,19 @@ cleanup() {
 	echo "# Time elapsed CHECK_ALL_SERVICES_CONNECTIVITY: $DURATION_CHECK_ALL_SERVICES_CONNECTIVITY (s)"
 }
 
-export POD_NUM=${POD_NUM:-400}
-export SERVICE_NUM=${SERVICE_NUM:-100}
-export TIMEOUT=${TIMEOUT:-300}
-export TEST_NAMESPACE=${TEST_NAMESPACE:-"default"}
-
 NUM_OF_WORKER=$(oc get nodes | grep worker- | wc -l)
 NUM_OF_MASTER=$(oc get nodes | grep master- | wc -l)
 NUM_OF_NODES=$(oc get nodes | grep 'worker-\|master-' | wc -l)
 
+if (( $NUM_OF_WORKER > 1 )); then
+	export POD_NUM=${POD_NUM:-400}
+	export SERVICE_NUM=${SERVICE_NUM:-100}
+else
+	export POD_NUM=${POD_NUM:-200}
+	export SERVICE_NUM=${SERVICE_NUM:-50}
+fi
+export TIMEOUT=${TIMEOUT:-300}
+export TEST_NAMESPACE=${TEST_NAMESPACE:-"default"}
 
 pushd openshift-baremetal-ci/tests/ovn/scale/templates
 

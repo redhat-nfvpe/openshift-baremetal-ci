@@ -14,8 +14,17 @@ cleanup() {
 	popd
 }
 
-export SCALE=${SCALE:-400}
-export NAMESPACE=${NAMESPACE:-100}
+NUM_OF_WORKER=$(oc get nodes | grep worker- | wc -l)
+NUM_OF_MASTER=$(oc get nodes | grep master- | wc -l)
+NUM_OF_NODES=$(oc get nodes | grep 'worker-\|master-' | wc -l)
+
+if (( $NUM_OF_WORKER > 1 )); then
+	export SCALE=${SCALE:-400}
+	export NAMESPACE=${NAMESPACE:-100}
+else
+	export SCALE=${SCALE:-200}
+	export NAMESPACE=${NAMESPACE:-50}
+fi
 export DEPLOYMENT=${DEPLOYMENT:-"scale-deployment"}
 export TIMEOUT=${TIMEOUT:-600}
 
