@@ -105,8 +105,8 @@ sleep 30
 for i in {1..30}; do
 	sleep 20
 	count=0
-	for worker in $(seq 0 $((NUM_OF_WORKER-1))); do
-		resource=$(oc get node $WORKER_NAME_PREFIX-$worker \
+	for worker in $(oc get nodes | grep worker- | awk '{print $1}'); do
+		resource=$(oc get node $worker \
 			-o jsonpath="{.status.allocatable.openshift\.io/intelnics}")
 
 		if [ $resource -eq 4 ]; then
