@@ -7,6 +7,12 @@ export WORKER_NAME_PREFIX=${WORKER_NODE:-"ci-worker"}
 export NIC_VENDOR=${NIC_VENDOR:-"intel"}
 
 NUM_OF_WORKER=$(oc get nodes | grep worker- | wc -l)
+if (( NUM_OF_WORKER > 1 ));then
+	WORKER_0=$WORKER_NAME_PREFIX"-0"
+	WORKER_1=$WORKER_NAME_PREFIX"-1"
+else
+	WORKER_0=$(oc get nodes | grep worker- | awk '{print $1}')
+fi
 
 inspect_pod() {
 	pod_name=$1
@@ -77,11 +83,11 @@ oc create -f sn-$NIC_VENDOR.yaml
 sleep 1
 export pod_index=1
 export nad=sriov-$NIC_VENDOR
-export node=$WORKER_NAME_PREFIX-0
+export node=$WORKER_0
 envsubst <"pod.yaml.tpl" >"pod1.yaml"
 export pod_index=2
 export nad=sriov-$NIC_VENDOR
-export node=$WORKER_NAME_PREFIX-0
+export node=$WORKER_0
 envsubst <"pod.yaml.tpl" >"pod2.yaml"
 oc create -f pod1.yaml
 oc create -f pod2.yaml
@@ -110,7 +116,7 @@ sleep 1
 
 export pod_index=1
 export nad=sriov-$NIC_VENDOR
-export node=$WORKER_NAME_PREFIX-0
+export node=$WORKER_0
 envsubst <"pod.yaml.tpl" >"pod1.yaml"
 export pod_index=2
 envsubst <"pod.yaml.tpl" >"pod2.yaml"
@@ -188,7 +194,7 @@ else
 	export nad='[{"name": "sriov-intel","mac": "CA:FE:C0:FF:EE:01","ips": ["10.10.10.11/24", "2001::1/64"]}]'
 fi
 
-export node=$WORKER_NAME_PREFIX-0
+export node=$WORKER_0
 envsubst <"pod.yaml.tpl" >"pod6.yaml"
 oc create -f pod6.yaml
 
@@ -199,10 +205,10 @@ else
 	export nad='[{"name": "sriov-intel","mac": "CA:FE:C0:FF:EE:02","ips": ["10.10.10.12/24", "2001::2/64"]}]'
 fi
 
-if (( $NUM_OF_WORKER > 1 )); then
-	export node=$WORKER_NAME_PREFIX-1
+if (( NUM_OF_WORKER > 1 )); then
+	export node=$WORKER_1
 else
-	export node=$WORKER_NAME_PREFIX-0
+	export node=$WORKER_0
 fi
 envsubst <"pod.yaml.tpl" >"pod7.yaml"
 oc create -f pod7.yaml
@@ -266,7 +272,7 @@ if [ $NIC_VENDOR == 'mlx' ]; then
 else
 	export nad='[{"name": "sriov-intel","ips": ["10.129.10.11/24", "2001::11/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
 fi
-export node=$WORKER_NAME_PREFIX-0
+export node=$WORKER_0
 envsubst <"pod.yaml.tpl" >"pod8.yaml"
 oc create -f pod8.yaml
 sleep 1
@@ -276,10 +282,10 @@ if [ $NIC_VENDOR == 'mlx' ]; then
 else
 	export nad='[{"name": "sriov-intel","ips": ["10.129.10.12/24", "2001::12/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
 fi
-if (( $NUM_OF_WORKER > 1 )); then
-	export node=$WORKER_NAME_PREFIX-1
+if (( NUM_OF_WORKER > 1 )); then
+	export node=$WORKER_1
 else
-	export node=$WORKER_NAME_PREFIX-0
+	export node=$WORKER_0
 fi
 envsubst <"pod.yaml.tpl" >"pod9.yaml"
 oc create -f pod9.yaml
