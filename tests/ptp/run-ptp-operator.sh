@@ -18,9 +18,12 @@ NUM_OF_NODES=$(oc get nodes | grep 'worker\|master-' | wc -l)
 
 if [ ! -d "ptp-operator" ]; then
 	git clone $PTP_OPERATOR_REPO
-	pushd ptp-operator
-	git checkout fix-env-var-name
-	popd
+fi
+
+# override PTP images with 4.3.z version
+if oc version | grep 4.3 ; then
+	wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.3-image-references.sh
+	source ./4.3-image-references.sh
 fi
 
 pushd ptp-operator
