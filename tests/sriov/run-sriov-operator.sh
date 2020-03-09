@@ -68,8 +68,8 @@ else
 	pushd templates
 fi
 
-for worker in $(seq 0 $((NUM_OF_WORKER-1))); do
-	oc label node $WORKER_NAME_PREFIX-$worker \
+for worker in $(oc get nodes | grep worker- | awk '{print $1}'); do
+	oc label node $worker \
 		--overwrite=true feature.node.kubernetes.io/network-sriov.capable=true
 done
 
