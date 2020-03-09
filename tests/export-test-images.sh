@@ -1,84 +1,88 @@
 #!/bin/bash
 
-PTP_OPERATOR_RAW=$(oc get istag -n ocp 4.3-art-latest:ptp-operator \
-	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
+for v in 4.3 4.4
+do
 
-PTP_RAW=$(oc get istag -n ocp 4.3-art-latest:ptp \
-	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
+	PTP_OPERATOR_RAW=$(oc get istag -n ocp $v-art-latest:ptp-operator \
+		-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_DEVICE_PLUGIN_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-network-device-plugin \
-	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
+	PTP_RAW=$(oc get istag -n ocp $v-art-latest:ptp \
+		-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_CNI_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-cni \
-	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
+	SRIOV_DEVICE_PLUGIN_RAW=$(oc get istag -n ocp $v-art-latest:sriov-network-device-plugin \
+		-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-NETWORK_RESOURCES_INJECTOR_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-dp-admission-controller \
-	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
+	SRIOV_CNI_RAW=$(oc get istag -n ocp $v-art-latest:sriov-cni \
+		-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_CONFIG_DAEMON_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-network-config-daemon \
-	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
+	NETWORK_RESOURCES_INJECTOR_RAW=$(oc get istag -n ocp $v-art-latest:sriov-dp-admission-controller \
+		-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_WEBHOOK_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-network-webhook \
-	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
+	SRIOV_CONFIG_DAEMON_RAW=$(oc get istag -n ocp $v-art-latest:sriov-network-config-daemon \
+		-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-SRIOV_OPERATOR_RAW=$(oc get istag -n ocp 4.3-art-latest:sriov-network-operator \
-	-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
+	SRIOV_WEBHOOK_RAW=$(oc get istag -n ocp $v-art-latest:sriov-network-webhook \
+		-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-echo $PTP_OPERATOR_RAW
-echo $PTP_RAW
+	SRIOV_OPERATOR_RAW=$(oc get istag -n ocp $v-art-latest:sriov-network-operator \
+		-o jsonpath='{.image.dockerImageMetadata.Config.Labels.url}')
 
-echo $SRIOV_DEVICE_PLUGIN_RAW
-echo $SRIOV_CNI_RAW
-echo $NETWORK_RESOURCES_INJECTOR_RAW
-echo $SRIOV_CONFIG_DAEMON_RAW
-echo $SRIOV_WEBHOOK_RAW
-echo $SRIOV_OPERATOR_RAW
+	echo $PTP_OPERATOR_RAW
+	echo $PTP_RAW
 
-PTP_OPERATOR_IMAGE=$(echo $PTP_OPERATOR_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
-PTP_IMAGE=$(echo $PTP_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
+	echo $SRIOV_DEVICE_PLUGIN_RAW
+	echo $SRIOV_CNI_RAW
+	echo $NETWORK_RESOURCES_INJECTOR_RAW
+	echo $SRIOV_CONFIG_DAEMON_RAW
+	echo $SRIOV_WEBHOOK_RAW
+	echo $SRIOV_OPERATOR_RAW
 
-SRIOV_DEVICE_PLUGIN_IMAGE=$(echo $SRIOV_DEVICE_PLUGIN_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
-SRIOV_CNI_IMAGE=$(echo $SRIOV_CNI_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
-NETWORK_RESOURCES_INJECTOR_IMAGE=$(echo $NETWORK_RESOURCES_INJECTOR_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
-SRIOV_CONFIG_DAEMON_IMAGE=$(echo $SRIOV_CONFIG_DAEMON_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
-SRIOV_WEBHOOK_IMAGE=$(echo $SRIOV_WEBHOOK_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
-SRIOV_OPERATOR_IMAGE=$(echo $SRIOV_OPERATOR_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
+	PTP_OPERATOR_IMAGE=$(echo $PTP_OPERATOR_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
+	PTP_IMAGE=$(echo $PTP_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
 
-echo $PTP_OPERATOR_IMAGE
-echo $PTP_IMAGE
+	SRIOV_DEVICE_PLUGIN_IMAGE=$(echo $SRIOV_DEVICE_PLUGIN_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
+	SRIOV_CNI_IMAGE=$(echo $SRIOV_CNI_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
+	NETWORK_RESOURCES_INJECTOR_IMAGE=$(echo $NETWORK_RESOURCES_INJECTOR_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
+	SRIOV_CONFIG_DAEMON_IMAGE=$(echo $SRIOV_CONFIG_DAEMON_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
+	SRIOV_WEBHOOK_IMAGE=$(echo $SRIOV_WEBHOOK_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
+	SRIOV_OPERATOR_IMAGE=$(echo $SRIOV_OPERATOR_RAW | awk -F'/' '{print "quay.io/openshift-release-dev/ocp-v4.0-art-dev:"$NF"-"$(NF-2)}')
 
-echo $SRIOV_DEVICE_PLUGIN_IMAGE
-echo $SRIOV_CNI_IMAGE
-echo $NETWORK_RESOURCES_INJECTOR_IMAGE
-echo $SRIOV_CONFIG_DAEMON_IMAGE
-echo $SRIOV_WEBHOOK_IMAGE
-echo $SRIOV_OPERATOR_IMAGE
+	echo $PTP_OPERATOR_IMAGE
+	echo $PTP_IMAGE
 
-#export SRIOV_NETWORK_OPERATOR_IMAGE=${SRIOV_OPERATOR_IMAGE}
-#export SRIOV_NETWORK_WEBHOOK_IMAGE=${SRIOV_WEBHOOK_IMAGE}
-#export SRIOV_NETWORK_CONFIG_DAEMON_IMAGE=${SRIOV_CONFIG_DAEMON_IMAGE}
-#export NETWORK_RESOURCES_INJECTOR_IMAGE=${NETWORK_RESOURCES_INJECTOR_IMAGE}
-#export SRIOV_DEVICE_PLUGIN_IMAGE=${SRIOV_DEVICE_PLUGIN_IMAGE}
-#export SRIOV_CNI_IMAGE=${SRIOV_CNI_IMAGE}
+	echo $SRIOV_DEVICE_PLUGIN_IMAGE
+	echo $SRIOV_CNI_IMAGE
+	echo $NETWORK_RESOURCES_INJECTOR_IMAGE
+	echo $SRIOV_CONFIG_DAEMON_IMAGE
+	echo $SRIOV_WEBHOOK_IMAGE
+	echo $SRIOV_OPERATOR_IMAGE
 
-echo "export PTP_OPERATOR_IMAGE=${PTP_OPERATOR_IMAGE}"
-echo "export INUXPTP_DAEMON_IMAGE=${PTP_IMAGE}"
-echo "export SRIOV_NETWORK_OPERATOR_IMAGE=${SRIOV_OPERATOR_IMAGE}"
-echo "export SRIOV_NETWORK_WEBHOOK_IMAGE=${SRIOV_WEBHOOK_IMAGE}"
-echo "export SRIOV_NETWORK_CONFIG_DAEMON_IMAGE=${SRIOV_CONFIG_DAEMON_IMAGE}"
-echo "export NETWORK_RESOURCES_INJECTOR_IMAGE=${NETWORK_RESOURCES_INJECTOR_IMAGE}"
-echo "export SRIOV_DEVICE_PLUGIN_IMAGE=${SRIOV_DEVICE_PLUGIN_IMAGE}"
-echo "export SRIOV_CNI_IMAGE=${SRIOV_CNI_IMAGE}"
+	#export SRIOV_NETWORK_OPERATOR_IMAGE=${SRIOV_OPERATOR_IMAGE}
+	#export SRIOV_NETWORK_WEBHOOK_IMAGE=${SRIOV_WEBHOOK_IMAGE}
+	#export SRIOV_NETWORK_CONFIG_DAEMON_IMAGE=${SRIOV_CONFIG_DAEMON_IMAGE}
+	#export NETWORK_RESOURCES_INJECTOR_IMAGE=${NETWORK_RESOURCES_INJECTOR_IMAGE}
+	#export SRIOV_DEVICE_PLUGIN_IMAGE=${SRIOV_DEVICE_PLUGIN_IMAGE}
+	#export SRIOV_CNI_IMAGE=${SRIOV_CNI_IMAGE}
 
-echo "#!/bin/bash" > image-references.sh
+	echo "export PTP_OPERATOR_IMAGE=${PTP_OPERATOR_IMAGE}"
+	echo "export INUXPTP_DAEMON_IMAGE=${PTP_IMAGE}"
+	echo "export SRIOV_NETWORK_OPERATOR_IMAGE=${SRIOV_OPERATOR_IMAGE}"
+	echo "export SRIOV_NETWORK_WEBHOOK_IMAGE=${SRIOV_WEBHOOK_IMAGE}"
+	echo "export SRIOV_NETWORK_CONFIG_DAEMON_IMAGE=${SRIOV_CONFIG_DAEMON_IMAGE}"
+	echo "export NETWORK_RESOURCES_INJECTOR_IMAGE=${NETWORK_RESOURCES_INJECTOR_IMAGE}"
+	echo "export SRIOV_DEVICE_PLUGIN_IMAGE=${SRIOV_DEVICE_PLUGIN_IMAGE}"
+	echo "export SRIOV_CNI_IMAGE=${SRIOV_CNI_IMAGE}"
 
-echo "export PTP_OPERATOR_IMAGE=${PTP_OPERATOR_IMAGE}" >> image-references.sh
-echo "export INUXPTP_DAEMON_IMAGE=${PTP_IMAGE}" >> image-references.sh
-echo "export SRIOV_NETWORK_OPERATOR_IMAGE=${SRIOV_OPERATOR_IMAGE}" >> image-references.sh
-echo "export SRIOV_NETWORK_WEBHOOK_IMAGE=${SRIOV_WEBHOOK_IMAGE}" >> image-references.sh
-echo "export SRIOV_NETWORK_CONFIG_DAEMON_IMAGE=${SRIOV_CONFIG_DAEMON_IMAGE}" >> image-references.sh
-echo "export NETWORK_RESOURCES_INJECTOR_IMAGE=${NETWORK_RESOURCES_INJECTOR_IMAGE}" >> image-references.sh
-echo "export SRIOV_DEVICE_PLUGIN_IMAGE=${SRIOV_DEVICE_PLUGIN_IMAGE}" >> image-references.sh
-echo "export SRIOV_CNI_IMAGE=${SRIOV_CNI_IMAGE}" >> image-references.sh
+	echo "#!/bin/bash" > $v-image-references.sh
 
-chmod a+x image-references.sh
+	echo "export PTP_OPERATOR_IMAGE=${PTP_OPERATOR_IMAGE}" >> $v-image-references.sh
+	echo "export INUXPTP_DAEMON_IMAGE=${PTP_IMAGE}" >> $v-image-references.sh
+	echo "export SRIOV_NETWORK_OPERATOR_IMAGE=${SRIOV_OPERATOR_IMAGE}" >> $v-image-references.sh
+	echo "export SRIOV_NETWORK_WEBHOOK_IMAGE=${SRIOV_WEBHOOK_IMAGE}" >> $v-image-references.sh
+	echo "export SRIOV_NETWORK_CONFIG_DAEMON_IMAGE=${SRIOV_CONFIG_DAEMON_IMAGE}" >> $v-image-references.sh
+	echo "export NETWORK_RESOURCES_INJECTOR_IMAGE=${NETWORK_RESOURCES_INJECTOR_IMAGE}" >> $v-image-references.sh
+	echo "export SRIOV_DEVICE_PLUGIN_IMAGE=${SRIOV_DEVICE_PLUGIN_IMAGE}" >> $v-image-references.sh
+	echo "export SRIOV_CNI_IMAGE=${SRIOV_CNI_IMAGE}" >> $v-image-references.sh
+
+	chmod a+x $v-image-references.sh
+done
