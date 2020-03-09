@@ -6,6 +6,8 @@ set -x
 export WORKER_NAME_PREFIX=${WORKER_NODE:-"ci-worker"}
 export NIC_VENDOR=${NIC_VENDOR:-"intel"}
 
+NUM_OF_WORKER=$(oc get nodes | grep worker- | wc -l)
+
 inspect_pod() {
 	pod_name=$1
 	oc exec $pod_name -- ip link show net1
@@ -196,7 +198,12 @@ if [ $NIC_VENDOR == 'mlx' ]; then
 else
 	export nad='[{"name": "sriov-intel","mac": "CA:FE:C0:FF:EE:02","ips": ["10.10.10.12/24", "2001::2/64"]}]'
 fi
-export node=$WORKER_NAME_PREFIX-1
+
+if (( $NUM_OF_WORKER > 1 )); then
+	export node=$WORKER_NAME_PREFIX-1
+else
+	export node=$WORKER_NAME_PREFIX-0
+fi
 envsubst <"pod.yaml.tpl" >"pod7.yaml"
 oc create -f pod7.yaml
 
@@ -269,7 +276,11 @@ if [ $NIC_VENDOR == 'mlx' ]; then
 else
 	export nad='[{"name": "sriov-intel","ips": ["10.129.10.12/24", "2001::12/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
 fi
-export node=$WORKER_NAME_PREFIX-1
+if (( $NUM_OF_WORKER > 1 )); then
+	export node=$WORKER_NAME_PREFIX-1
+else
+	export node=$WORKER_NAME_PREFIX-0
+fi
 envsubst <"pod.yaml.tpl" >"pod9.yaml"
 oc create -f pod9.yaml
 
