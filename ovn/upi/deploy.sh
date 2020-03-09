@@ -4,6 +4,7 @@ set -e
 set -x
 
 export OPENSHIFT_MAJOR_VERSION=${OPENSHIFT_MAJOR_VERSION:-"4.3"}
+export NETWORK_TYPE=${NETWORK_TYPE:-"OVNKubernetes"}
 
 # export PULL_SECRET=${PULL_SECRET:-""}
 # [ -z $PULL_SECRET ] && echo "empty pull secret, exiting" && exit 1
@@ -52,6 +53,9 @@ sed -i -e "s/^OPENSHIFT_RHCOS_MAJOR_REL=.*/OPENSHIFT_RHCOS_MAJOR_REL=\"${OPENSHI
 cp -rf /root/upi-config/site-config.yaml cluster/
 cp -rf /root/upi-config/install-config.yaml cluster/
 cp -rf /root/upi-config/ha-lab-ipmi-creds.yaml cluster/
+
+# update network type {OpenShiftSDN|OVNKubernetes}, default is OVNKubernetes
+sed -i -e "s/networkType: .*/networkType: ${NETWORK_TYPE}/g" cluster/install-config.yaml
 
 make clean
 
