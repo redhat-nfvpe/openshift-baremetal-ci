@@ -23,6 +23,12 @@ if [ $SUBSCRIPTION == false ]; then
 		sudo git clone $SRIOV_OPERATOR_REPO
 	fi
 
+	# override SR-IOV images with 4.3.z version
+	if oc version | grep 4.3 ; then
+		wget http://lacrosse.corp.redhat.com/~zshi/ocp/image-references.sh
+		source ./image-references.sh
+	fi
+
 	pushd sriov-network-operator
 	make deploy-setup
 	popd
