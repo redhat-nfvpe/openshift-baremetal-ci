@@ -19,6 +19,7 @@ inspect_pod() {
 	oc exec $pod_name -- ip link show net1
 	oc exec $pod_name -- ethtool -i net1
 	oc exec $pod_name -- env | grep PCIDEVICE
+	oc exec $pod_name -- cat /sys/fs/cgroup/cpuset/cpuset.cpus
 }
 
 wait_for_pod_running() {
