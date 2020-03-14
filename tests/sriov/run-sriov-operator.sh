@@ -116,7 +116,7 @@ for i in {1..30}; do
 		resource=$(oc get node $worker \
 			-o jsonpath="{.status.allocatable.openshift\.io/intelnics}")
 
-		if [ $resource -eq 4 ]; then
+		if [ $resource -eq 63 ]; then
 			count=$((count+1))
 		fi
 	done
