@@ -25,8 +25,15 @@ if [ $SUBSCRIPTION == false ]; then
 
 	# override SR-IOV images with 4.3.z version
 	if oc version | grep 4.3 ; then
+		rm -rf ./4.3-image-references.sh
 		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.3-image-references.sh
 		source ./4.3-image-references.sh
+	fi
+	# override SR-IOV images with 4.3.z version
+	if oc version | grep 4.4 ; then
+		rm -rf ./4.4-image-references.sh
+		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.4-image-references.sh
+		source ./4.4-image-references.sh
 	fi
 
 	pushd sriov-network-operator
