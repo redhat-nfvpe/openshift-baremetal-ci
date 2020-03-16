@@ -1,0 +1,16 @@
+# SriovNetwork Custom Resource (CR)
+# This CR is to create network-attachment-definition used by SR-IOV CNI
+# This CR shall be applied after successful install of SR-IOV Operator
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetwork
+metadata:
+  name: sriov-mlx
+  namespace: openshift-sriov-network-operator
+spec:
+  ipam: |
+    {}
+  vlan: 0
+  spoofChk: "off"
+  resourceName: mlxnics
+  networkNamespace: default

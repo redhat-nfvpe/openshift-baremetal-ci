@@ -1,0 +1,25 @@
+# SriovNetworkNodePolicy Custom Resource (CR)
+# This CR is to create SR-IOV VF and bind VF with vfio-pci driver
+# This CR shall be applied after successful install of SR-IOV Operator
+# Update nicSelector according to SR-IOV hardware in OCP worker node
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: policy-mlx
+  namespace: openshift-sriov-network-operator
+spec:
+  deviceType: vfio-pci
+  mtu: 1500
+  nicSelector:
+    deviceID: "1017"
+    rootDevices:
+    - 0000:b1:00.0
+    vendor: "15b3"
+    pfNames:
+    - ens801f0
+  nodeSelector:
+    feature.node.kubernetes.io/network-sriov.capable: "true"
+  numVfs: 6
+  priority: 5
+  resourceName: mlxnics
