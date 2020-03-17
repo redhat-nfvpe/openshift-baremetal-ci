@@ -41,7 +41,10 @@ popd
 #  For internal machines we have an ES server to warehouse the results from each run. 
 export ES_PORT=9200
 export ES_SERVER=perf-sm5039-4-5.perf.lab.eng.rdu2.redhat.com
-# export PERF_TEST_ENV=${PERF_TEST_ENV:-"ovn-baremetal-ci"}
+
+# disable metadata collection until below issue fixed
+# https://github.com/cloud-bulldozer/scribe/issues/24
+export METADATA_COLLECTION=false
 
 if oc get ns | grep openshift-ovn-kubernetes; then
         PERF_TEST_ENV="ovn-baremetal-ci"
