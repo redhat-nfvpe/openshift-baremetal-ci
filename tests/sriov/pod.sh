@@ -5,6 +5,7 @@ set -x
 
 export WORKER_NAME_PREFIX=${WORKER_NODE:-"ci-worker"}
 export NIC_VENDOR=${NIC_VENDOR:-"intel"}
+export TIMEOUT=${TIMEOUT:-120}
 
 NUM_OF_WORKER=$(oc get nodes | grep worker- | wc -l)
 if (( NUM_OF_WORKER > 1 ));then
@@ -69,7 +70,7 @@ oc create -f sn-$NIC_VENDOR.yaml
 sleep 1
 oc create -f pod-simple.yaml
 sleep 1
-oc wait --for condition=ready pods testpod-simple -n default --timeout=60s
+oc wait --for condition=ready pods testpod-simple -n default --timeout=${TIMEOUT}s
 
 wait_for_pod_running testpod-simple
 inspect_pod testpod-simple
@@ -93,8 +94,8 @@ envsubst <"pod.yaml.tpl" >"pod2.yaml"
 oc create -f pod1.yaml
 oc create -f pod2.yaml
 sleep 1
-oc wait --for condition=ready pods testpod1 -n default --timeout=60s
-oc wait --for condition=ready pods testpod2 -n default --timeout=60s
+oc wait --for condition=ready pods testpod1 -n default --timeout=${TIMEOUT}s
+oc wait --for condition=ready pods testpod2 -n default --timeout=${TIMEOUT}s
 
 wait_for_pod_running testpod2
 inspect_pod testpod1
@@ -132,10 +133,10 @@ oc create -f pod2.yaml
 oc create -f pod3.yaml
 oc create -f pod4.yaml
 sleep 1
-oc wait --for condition=ready pods testpod1 -n default --timeout=60s
-oc wait --for condition=ready pods testpod2 -n default --timeout=60s
-oc wait --for condition=ready pods testpod3 -n default --timeout=60s
-oc wait --for condition=ready pods testpod4 -n default --timeout=60s
+oc wait --for condition=ready pods testpod1 -n default --timeout=${TIMEOUT}s
+oc wait --for condition=ready pods testpod2 -n default --timeout=${TIMEOUT}s
+oc wait --for condition=ready pods testpod3 -n default --timeout=${TIMEOUT}s
+oc wait --for condition=ready pods testpod4 -n default --timeout=${TIMEOUT}s
 
 wait_for_pod_running testpod4
 inspect_pod testpod1
@@ -155,7 +156,7 @@ oc exec testpod4 -- ping -c 5 $pod3_ipv4 -I net1
 oc delete -f pod4.yaml
 oc create -f pod5.yaml
 sleep 1
-oc wait --for condition=ready pods testpod5 -n default --timeout=60s
+oc wait --for condition=ready pods testpod5 -n default --timeout=${TIMEOUT}s
 wait_for_pod_running testpod5
 inspect_pod testpod5
 oc exec testpod5 -- ping -c 5 $pod1_ipv4 -I net1
@@ -215,8 +216,8 @@ envsubst <"pod.yaml.tpl" >"pod7.yaml"
 oc create -f pod7.yaml
 
 sleep 1
-oc wait --for condition=ready pods testpod6 -n default --timeout=60s
-oc wait --for condition=ready pods testpod7 -n default --timeout=60s
+oc wait --for condition=ready pods testpod6 -n default --timeout=${TIMEOUT}s
+oc wait --for condition=ready pods testpod7 -n default --timeout=${TIMEOUT}s
 
 wait_for_pod_running testpod7
 inspect_pod testpod6
@@ -291,8 +292,8 @@ fi
 envsubst <"pod.yaml.tpl" >"pod9.yaml"
 oc create -f pod9.yaml
 
-oc wait --for condition=ready pods testpod8 -n default --timeout=60s
-oc wait --for condition=ready pods testpod9 -n default --timeout=60s
+oc wait --for condition=ready pods testpod8 -n default --timeout=${TIMEOUT}s
+oc wait --for condition=ready pods testpod9 -n default --timeout=${TIMEOUT}s
 
 wait_for_pod_running testpod9
 inspect_pod testpod8
