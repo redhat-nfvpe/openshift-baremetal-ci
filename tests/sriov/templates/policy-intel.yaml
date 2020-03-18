@@ -19,6 +19,6 @@ spec:
 #    - ens787f1  # nfvpe-08
   nodeSelector:
     feature.node.kubernetes.io/network-sriov.capable: "true"
-  numVfs: 63
+  numVfs: 10
   priority: 5
   resourceName: intelnics
