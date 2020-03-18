@@ -44,7 +44,9 @@ export ES_SERVER=perf-sm5039-4-5.perf.lab.eng.rdu2.redhat.com
 
 # disable metadata collection until below issue fixed
 # https://github.com/cloud-bulldozer/scribe/issues/24
-export METADATA_COLLECTION=false
+# fixed by https://github.com/cloud-bulldozer/scribe/pull/25
+# export METADATA_COLLECTION=false
+
 
 if oc get ns | grep openshift-ovn-kubernetes; then
         PERF_TEST_ENV="ovn-baremetal-ci"
