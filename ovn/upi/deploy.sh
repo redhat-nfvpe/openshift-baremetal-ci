@@ -39,11 +39,13 @@ pushd kni-upi-lab
 # git fetch origin pull/95/head:fix
 # git checkout fix
 if [ $OPENSHIFT_MAJOR_VERSION == '4.3' ]; then
+	# we want to test latest 4.3.z nightly build instead of 4.3 release
 	git checkout 4.3-nightly
 elif [ $OPENSHIFT_MAJOR_VERSION == '4.4' ]; then
-	git checkout failed-artifacts
+	git checkout master
 elif [ $OPENSHIFT_MAJOR_VERSION == '4.5' ]; then
-	git checkout 4.5-boot-index
+	#git checkout 4.5-boot-index
+	git checkout 4.5
 else
 	git checkout master
 fi
