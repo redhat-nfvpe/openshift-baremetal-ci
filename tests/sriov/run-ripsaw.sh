@@ -6,6 +6,8 @@ set -x
 trap cleanup 0 1
 
 cleanup() {
+	oc delete -f templates/ripsaw-client-nad.yaml || true
+	oc delete -f templates/ripsaw-server-nad.yaml || true
 	oc get co || true
 	oc get clusterversion || true
 	oc get nodes || true
