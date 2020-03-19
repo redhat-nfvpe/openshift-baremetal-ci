@@ -14,7 +14,7 @@ OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
 
 # run sig-network tests
 # excluding 'Disabled:' and 'Skipped:NetworkOVNKubernetes' tests
-$OPENSHIFT_TESTS run all --dry-run | \
+$OPENSHIFT_TESTS run openshift/conformance --dry-run | \
 	grep -E "sig-network" | \
 	grep -v "Disabled:" | \
 	grep -v "Skipped:Network/OVNKubernetes" | \
