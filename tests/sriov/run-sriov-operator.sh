@@ -23,20 +23,25 @@ if [ $SUBSCRIPTION == false ]; then
 		sudo git clone $SRIOV_OPERATOR_REPO
 	fi
 
+	pushd sriov-network-operator
+
 	# override SR-IOV images with 4.3.z version
 	if oc version | grep 4.3 ; then
+		git checkout release-4.3
+
 		rm -rf ./4.3-image-references.sh
 		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.3-image-references.sh
 		source ./4.3-image-references.sh
 	fi
 	# override SR-IOV images with 4.3.z version
 	if oc version | grep 4.4 ; then
+		git checkout release-4.4
+
 		rm -rf ./4.4-image-references.sh
 		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.4-image-references.sh
 		source ./4.4-image-references.sh
 	fi
 
-	pushd sriov-network-operator
 	make deploy-setup
 	popd
 else
