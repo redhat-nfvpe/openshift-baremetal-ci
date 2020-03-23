@@ -3,7 +3,7 @@ kind: Pod
 metadata:
   name: testpod-simple
   annotations:
-    k8s.v1.cni.cncf.io/networks: sriov-intel
+    k8s.v1.cni.cncf.io/networks: '${nad}'
 spec:
   containers:
   - name: appcntr1

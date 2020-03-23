@@ -68,6 +68,8 @@ pod_default_route_ipv6() {
 pushd templates
 oc create -f sn-$NIC_VENDOR.yaml
 sleep 1
+export nad=sriov-$NIC_VENDOR
+envsubst <"pod-simple.yaml.tpl" >"pod-simple.yaml"
 oc create -f pod-simple.yaml
 sleep 1
 oc wait --for condition=ready pods testpod-simple -n default --timeout=${TIMEOUT}s
