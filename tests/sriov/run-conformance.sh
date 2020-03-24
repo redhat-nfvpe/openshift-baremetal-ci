@@ -13,12 +13,6 @@ cleanup() {
 	popd
 }
 
-if [ -d sriov-tests ]; then
-        rm -rf sriov-tests
-fi
-
-git clone https://github.com/openshift/sriov-tests.git
-
 pushd openshift-baremetal-ci/tests/sriov
 
 # sriov conformance tests don't require node policy be created.
@@ -31,8 +25,14 @@ export CREATE_NODE_POLICY=false
 sleep 20
 popd
 
-pushd sriov-tests
-./scripts/run-conformance.sh
+if [ -d sriov-network-operator ]; then
+        rm -rf sriov-network-operator
+fi
+
+git clone https://github.com/openshift/sriov-network-operator.git
+
+pushd sriov-network-operator
+make test-e2e-conformance
 
 popd
 pushd openshift-baremetal-ci/tests/sriov/sriov-network-operator
