@@ -106,8 +106,18 @@ done
 sleep 20
 # Patch storage to emptyDir to workthrough warning: "Unable to apply resources: storage backend not configured"
 # Comment out, this is only required for pre-4.2 releases
-#./requirements/oc --kubeconfig ./ocp/auth/kubeconfig patch configs.imageregistry.operator.openshift.io cluster \
-#	-p '{"spec":{"storage":{"emptyDir":{}}}}' --type='merge'
+
+# Patch storage to emptyDir first, then patch
+# configs.imageregistry.operator.openshift.io
+# to Managed state.
+./requirements/oc --kubeconfig ./ocp/auth/kubeconfig patch configs.imageregistry.operator.openshift.io cluster \
+	-p '{"spec":{"storage":{"emptyDir":{}}}}' --type='merge'
+
+sleep 1
+
+# Patch storage to 'Managed' managementState.
+./requirements/oc --kubeconfig ./ocp/auth/kubeconfig patch configs.imageregistry.operator.openshift.io cluster \
+	-p '{"spec":{"managementState": "Managed"}}' --type='merge'
 
 # Patch storage to 'Removed' managementState. This makes image-registry operator become Available immediately
 # ./requirements/oc --kubeconfig ./ocp/auth/kubeconfig patch configs.imageregistry.operator.openshift.io cluster \
