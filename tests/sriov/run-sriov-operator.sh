@@ -9,8 +9,6 @@ yum install -y wget skopeo jq
 SRIOV_OPERATOR_REPO=https://github.com/openshift/sriov-network-operator.git
 SRIOV_OPERATOR_NAMESPACE=openshift-sriov-network-operator
 
-# WORKER_NODE=ci-worker-0
-# WORKER_NODE=nfvpe-08.oot.lab.eng.bos.redhat.com
 export WORKER_NAME_PREFIX=${WORKER_NODE:-"ci-worker"}
 export SUBSCRIPTION=${SUBSCRIPTION:-false}
 export CREATE_NODE_POLICY=${CREATE_NODE_POLICY:-true}
@@ -33,13 +31,21 @@ if [ $SUBSCRIPTION == false ]; then
 		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.3-image-references.sh
 		source ./4.3-image-references.sh
 	fi
-	# override SR-IOV images with 4.3.z version
+	# override SR-IOV images with 4.4 version
 	if oc version | grep 4.4 ; then
 		git checkout release-4.4
 
 		rm -rf ./4.4-image-references.sh
 		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.4-image-references.sh
 		source ./4.4-image-references.sh
+	fi
+	# override SR-IOV images with 4.5 version
+	if oc version | grep 4.5 ; then
+		git checkout master
+
+		rm -rf ./4.5-image-references.sh
+		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.5-image-references.sh
+		source ./4.5-image-references.sh
 	fi
 
 	make deploy-setup
