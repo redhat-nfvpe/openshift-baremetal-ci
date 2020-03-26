@@ -10,7 +10,9 @@ STAGE_SRIOV_JOBS = ["OCP-SRIOV-DEV", "OCP-SRIOV-OPERATOR-E2E"]
 STAGE_SRIOV_CONFORMANCE_JOBS = ["OCP-SRIOV-CONFORMANCE"]
 
 // OVN
-STAGE_OVN_E2E_JOBS = ["OVN-E2E-Network", "OVN-E2E-Conformance-Serial", "OVN-E2E-Conformance-Parallel"]
+STAGE_OVN_E2E_NETWORK_JOBS = ["OVN-E2E-Network"]
+STAGE_OVN_E2E_SERIAL_JOBS = ["OVN-E2E-Conformance-Serial"]
+STAGE_OVN_E2E_PARALLEL_JOBS = ["OVN-E2E-Conformance-Parallel"]
 STAGE_SCALE_JOBS = ["OCP-SCALE"]
 
 // Migration
@@ -89,21 +91,63 @@ pipeline {
 				}
 			}
 		}
-		stage('OVN E2E') {
+		stage('OVN E2E Network') {
 			steps {
 				script {
 					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
 					def jobDeployResult = jobDeploy.getResult()
 
 					if (jobDeployResult == 'SUCCESS') {
-						for (int i = 0; i < STAGE_OVN_E2E_JOBS.size(); i++) {
-							echo "running ${STAGE_OVN_E2E_JOBS[i]} on ${OCP_VERSIONS[0]}"
+						for (int i = 0; i < STAGE_OVN_E2E_NETWORK_JOBS.size(); i++) {
+							echo "running ${STAGE_OVN_E2E_NETWORK_JOBS[i]} on ${OCP_VERSIONS[0]}"
 							try {
-								build job: "${STAGE_OVN_E2E_JOBS[i]}", wait: true
-								echo "stage job ${STAGE_OVN_E2E_JOBS[i]} succeeded"
+								build job: "${STAGE_OVN_E2E_NETWORK_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_OVN_E2E_NETWORK_JOBS[i]} succeeded"
 							}
 							catch (err) {
-								echo "stage job ${STAGE_OVN_E2E_JOBS[i]} failed"
+								echo "stage job ${STAGE_OVN_E2E_NETWORK_JOBS[i]} failed"
+							}
+						}
+					}
+				}
+			}
+		}
+		stage('OVN E2E Serial') {
+			steps {
+				script {
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
+					def jobDeployResult = jobDeploy.getResult()
+
+					if (jobDeployResult == 'SUCCESS') {
+						for (int i = 0; i < STAGE_OVN_E2E_SERIAL_JOBS.size(); i++) {
+							echo "running ${STAGE_OVN_E2E_SERIAL_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_OVN_E2E_SERIAL_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_OVN_E2E_SERIAL_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_OVN_E2E_SERIAL_JOBS[i]} failed"
+							}
+						}
+					}
+				}
+			}
+		}
+		stage('OVN E2E Parallel') {
+			steps {
+				script {
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
+					def jobDeployResult = jobDeploy.getResult()
+
+					if (jobDeployResult == 'SUCCESS') {
+						for (int i = 0; i < STAGE_OVN_E2E_PARALLEL_JOBS.size(); i++) {
+							echo "running ${STAGE_OVN_E2E_PARALLEL_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_OVN_E2E_PARALLEL_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_OVN_E2E_PARALLEL_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_OVN_E2E_PARALLEL_JOBS[i]} failed"
 							}
 						}
 					}
