@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for v in 4.3 4.4
+for v in 4.3 4.4 4.5
 do
 
 	PTP_OPERATOR_RAW=$(oc get istag -n ocp $v-art-latest:ptp-operator \
