@@ -1,48 +1,199 @@
 #!/usr/bin/env groovy
 
+OCP_VERSIONS = ["4.3"]
+
+// define stages (stage requires re-deployment of OCP environment)
+
+// Multus, SR-IOV and PTP Dev
+STAGE_MULTUS_JOBS = ["OCP-Multus-E2E", "OCP-PTP-DEV"]
+STAGE_SRIOV_JOBS = ["OCP-SRIOV-DEV", "OCP-SRIOV-OPERATOR-E2E"]
+STAGE_SRIOV_CONFORMANCE_JOBS = ["OCP-SRIOV-CONFORMANCE"]
+
+// OVN
+STAGE_OVN_E2E_JOBS = ["OVN-E2E-Network", "OVN-E2E-Conformance-Serial", "OVN-E2E-Conformance-Parallel"]
+STAGE_SCALE_JOBS = ["OCP-SCALE"]
+
+// Migration
+STAGE_SDN_MIGRATION_JOBS = ["OCP-Networking-SDN-Migration", "OVN-E2E-Conformance-Serial", "OCP-Networking-SDN-Rollback"]
+
+// Ripsaw
+STAGE_RIPSAW_OVN_JOBS = ["OCP-RIPSAW-OVN"]
+STAGE_RIPSAW_SRIOV_JOBS = ["OCP-RIPSAW-SRIOV"]
+
+
 pipeline {
-	agent {
-		node {
-			label 'nfvpe-multus-05'
-		}
-	}
+	agent any
 	stages {
-		stage('OCP Multus') {
+		// stage cannot contain variable
+		// stage uses single quotes
+		stage('Multus') {
 			steps {
 				script {
-					def jobDeploy = build job: 'OVN-UPI-Install', wait: true, propagate: false
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
 					def jobDeployResult = jobDeploy.getResult()
 
 					if (jobDeployResult == 'SUCCESS') {
-						build job: 'OCP-Multus-E2E', wait: true
-						build job: 'OCP-PTP-DEV', wait: true
-						build job: 'OCP-SRIOV-DEV', wait: true
-						build job: 'OCP-SRIOV-CONFORMANCE', wait: true
-						build job: 'OCP-SRIOV-OPERATOR-E2E', wait: true
+						for (int i = 0; i < STAGE_MULTUS_JOBS.size(); i++) {
+							echo "running ${STAGE_MULTUS_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_MULTUS_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_MULTUS_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_MULTUS_JOBS[i]} failed"
+							}
+						}
 					}
 				}
 			}
 		}
-		stage('OCP RIPSAW OVN') {
+		stage('SR-IOV') {
 			steps {
 				script {
-					def jobDeploy = build job: 'OVN-UPI-Install', wait: true, propagate: false
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
 					def jobDeployResult = jobDeploy.getResult()
 
 					if (jobDeployResult == 'SUCCESS') {
-						build job: 'OCP-RIPSAW-OVN', wait: true
+						for (int i = 0; i < STAGE_SRIOV_JOBS.size(); i++) {
+							echo "running ${STAGE_SRIOV_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_SRIOV_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_SRIOV_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_SRIOV_JOBS[i]} failed"
+							}
+						}
 					}
 				}
 			}
 		}
-		stage('OCP RIPSAW SRIOV') {
+		stage('SR-IOV Conformance') {
 			steps {
 				script {
-					def jobDeploy = build job: 'OVN-UPI-Install', wait: true, propagate: false
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
 					def jobDeployResult = jobDeploy.getResult()
 
 					if (jobDeployResult == 'SUCCESS') {
-						build job: 'OCP-RIPSAW-SRIOV', wait: true
+						for (int i = 0; i < STAGE_SRIOV_CONFORMANCE_JOBS.size(); i++) {
+							echo "running ${STAGE_SRIOV_CONFORMANCE_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_SRIOV_CONFORMANCE_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_SRIOV_CONFORMANCE_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_SRIOV_CONFORMANCE_JOBS[i]} failed"
+							}
+						}
+					}
+				}
+			}
+		}
+		stage('OVN E2E') {
+			steps {
+				script {
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
+					def jobDeployResult = jobDeploy.getResult()
+
+					if (jobDeployResult == 'SUCCESS') {
+						for (int i = 0; i < STAGE_OVN_E2E_JOBS.size(); i++) {
+							echo "running ${STAGE_OVN_E2E_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_OVN_E2E_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_OVN_E2E_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_OVN_E2E_JOBS[i]} failed"
+							}
+						}
+					}
+				}
+			}
+		}
+		stage('SDN Migration') {
+			steps {
+				script {
+					def jobDeploy = build job: 'OCP-UPI-Install-SDN-4.5', wait: true, propagate: false
+					def jobDeployResult = jobDeploy.getResult()
+
+					if (jobDeployResult == 'SUCCESS') {
+						for (int i = 0; i < STAGE_SDN_MIGRATION_JOBS.size(); i++) {
+							echo "running ${STAGE_SDN_MIGRATION_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_SDN_MIGRATION_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_SDN_MIGRATION_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_SDN_MIGRATION_JOBS[i]} failed, exiting"
+
+								// exit won't skip following stages
+								// exit when any of migration task failed
+								exit 0
+							}
+						}
+					}
+				}
+			}
+		}
+		stage('OVN RIPSAW') {
+			steps {
+				script {
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
+					def jobDeployResult = jobDeploy.getResult()
+
+					if (jobDeployResult == 'SUCCESS') {
+						for (int i = 0; i < STAGE_RIPSAW_OVN_JOBS.size(); i++) {
+							echo "running ${STAGE_RIPSAW_OVN_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_RIPSAW_OVN_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_RIPSAW_OVN_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_RIPSAW_OVN_JOBS[i]} failed"
+							}
+						}
+					}
+				}
+			}
+		}
+		stage('SR-IOV RIPSAW') {
+			steps {
+				script {
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
+					def jobDeployResult = jobDeploy.getResult()
+
+					if (jobDeployResult == 'SUCCESS') {
+						for (int i = 0; i < STAGE_RIPSAW_SRIOV_JOBS.size(); i++) {
+							echo "running ${STAGE_RIPSAW_SRIOV_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_RIPSAW_SRIOV_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_RIPSAW_SRIOV_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_RIPSAW_SRIOV_JOBS[i]} failed"
+							}
+						}
+					}
+				}
+			}
+		}
+		stage('OVN Scale') {
+			steps {
+				script {
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
+					def jobDeployResult = jobDeploy.getResult()
+
+					if (jobDeployResult == 'SUCCESS') {
+						for (int i = 0; i < STAGE_SCALE_JOBS.size(); i++) {
+							echo "running ${STAGE_SCALE_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_SCALE_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_SCALE_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_SCALE_JOBS[i]} failed"
+							}
+						}
 					}
 				}
 			}
