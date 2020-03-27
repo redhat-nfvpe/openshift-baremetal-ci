@@ -8,6 +8,8 @@ ssh_execute() {
         ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -l core $host "$cmd"
 }
 
+pushd openshift-baremetal-ci/tests/topology
+
 if oc version | grep 4.3; then
 	oc apply -f templates/4.3-performance.yaml
 else
@@ -85,3 +87,5 @@ done
 # wait for 15 mins util all pods in cluster are ready and running
 # creating of sriov-network-operator deployment will be suspended until openshift-apiserver operator is ready.
 timeout --foreground 15m bash -c 'until ! oc get pod --all-namespaces | egrep -v -w "Running|Completed|AGE|OOMKilled"; do sleep 10; done'
+
+popd
