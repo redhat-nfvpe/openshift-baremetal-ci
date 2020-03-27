@@ -9,6 +9,9 @@ STAGE_MULTUS_JOBS = ["OCP-Multus-E2E", "OCP-PTP-DEV"]
 STAGE_SRIOV_JOBS = ["OCP-SRIOV-DEV", "OCP-SRIOV-OPERATOR-E2E"]
 STAGE_SRIOV_CONFORMANCE_JOBS = ["OCP-SRIOV-CONFORMANCE"]
 
+// Topology Manager
+STAGE_TM_JOBS = ["OCP-PERF-CONFIG", "OCP-TM-E2E"]
+
 // OVN
 STAGE_OVN_E2E_NETWORK_JOBS = ["OVN-E2E-Network"]
 STAGE_OVN_E2E_SERIAL_JOBS = ["OVN-E2E-Conformance-Serial"]
@@ -43,6 +46,27 @@ pipeline {
 							}
 							catch (err) {
 								echo "stage job ${STAGE_MULTUS_JOBS[i]} failed"
+							}
+						}
+					}
+				}
+			}
+		}
+		stage('TM') {
+			steps {
+				script {
+					def jobDeploy = build job: "OVN-UPI-Install-${OCP_VERSIONS[0]}", wait: true, propagate: false
+					def jobDeployResult = jobDeploy.getResult()
+
+					if (jobDeployResult == 'SUCCESS') {
+						for (int i = 0; i < STAGE_TM_JOBS.size(); i++) {
+							echo "running ${STAGE_TM_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							try {
+								build job: "${STAGE_TM_JOBS[i]}", wait: true
+								echo "stage job ${STAGE_TM_JOBS[i]} succeeded"
+							}
+							catch (err) {
+								echo "stage job ${STAGE_TM_JOBS[i]} failed"
 							}
 						}
 					}
