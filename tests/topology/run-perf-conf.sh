@@ -84,4 +84,4 @@ done
 
 # wait for 15 mins util all pods in cluster are ready and running
 # creating of sriov-network-operator deployment will be suspended until openshift-apiserver operator is ready.
-timeout --foreground 15m bash -c 'until ! oc get pod --all-namespaces | egrep -w "Running|Completed|AGE|OOMKilled"; do sleep 10; done'
+timeout --foreground 15m bash -c 'until ! oc get pod --all-namespaces | egrep -v -w "Running|Completed|AGE|OOMKilled"; do sleep 10; done'
