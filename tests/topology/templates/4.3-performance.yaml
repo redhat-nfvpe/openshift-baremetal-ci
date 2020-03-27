@@ -1,0 +1,63 @@
+---
+apiVersion: config.openshift.io/v1
+kind: FeatureGate
+metadata:
+  annotations:
+    release.openshift.io/create-only: "true"
+  name: cluster
+spec:
+  featureSet: LatencySensitive
+
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: worker
+  name: 50-worker-hugepage
+spec:
+  config:
+    ignition:
+      version: 2.2.0
+  kernelArguments:
+  - default_hugepagesz=1GB
+  - hugepagesz=1G
+  - hugepages=16
+
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfigPool
+metadata:
+  labels:
+    custom-kubelet: cpumanager-enabled
+  name: worker
+
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: KubeletConfig
+metadata:
+  name: cpumanager-enabled
+spec:
+  machineConfigPoolSelector:
+    matchLabels:
+      custom-kubelet: cpumanager-enabled
+  kubeletConfig:
+     cpuManagerPolicy: static
+     cpuManagerReconcilePeriod: 5s
+     topologyManagerPolicy: single-numa-node
+
+#---
+#apiVersion: machineconfiguration.openshift.io/v1
+#kind: KubeletConfig
+#metadata:
+#  name: cpumanager-enabled
+#spec:
+#  machineConfigPoolSelector:
+#    matchLabels:
+#      custom-kubelet: cpumanager-enabled
+#  kubeletConfig:
+#     apiVersion: kubelet.config.k8s.io/v1beta1
+#     kind: KubeletConfiguration
+#     cpuManagerPolicy: static
+#     cpuManagerReconcilePeriod: 5s
+#     topologyManagerPolicy: single-numa-node
