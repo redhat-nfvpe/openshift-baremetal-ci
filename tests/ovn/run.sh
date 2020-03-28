@@ -10,6 +10,30 @@ cleanup() {
 
 pushd openshift-baremetal-ci/tests/ovn
 
+if [ ! -d "origin" ]; then
+	git clone https://github.com/openshift/origin.git
+fi
+
+pushd origin
+
+# override SR-IOV images with 4.3.z version
+if oc version | grep 4.3 ; then
+	git checkout release-4.3
+fi
+# override SR-IOV images with 4.4 version
+if oc version | grep 4.4 ; then
+	git checkout release-4.4
+fi
+# override SR-IOV images with 4.5 version
+if oc version | grep 4.5 ; then
+	git checkout release-4.5
+fi
+
+popd
+
+# build 'openshift-tests' binary
+make WHAT=cmd/openshift-tests
+
 OVN_TEST_SUITE=${1:-"network"}
 echo $OVN_TEST_SUITE
 

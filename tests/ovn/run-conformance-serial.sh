@@ -1,14 +1,7 @@
 #!/bin/bash
 set -x
 
-if [ ! -d "origin" ]; then
-	git clone https://github.com/openshift/origin.git
-fi
-
 pushd origin
-
-# build 'openshift-tests' binary
-make WHAT=cmd/openshift-tests
 
 OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
 
@@ -31,6 +24,8 @@ $OPENSHIFT_TESTS run openshift/conformance/serial --dry-run | \
 	grep -v "test RequestHeaders IdP" | \
 	grep -v "ldap group sync can sync groups from ldap" | \
 	$OPENSHIFT_TESTS run -o ./comformance-serial.e2e.log --junit-dir /serial.junit -f -
+
+popd
 
 # Frequent Failed Tests
 # 1. [Feature:OpenShiftAuthorization][Serial] authorization  TestAuthorizationResourceAccessReview should succeed [Suite:openshift/conformance/serial]

@@ -1,14 +1,7 @@
 #!/bin/bash
 set -x
 
-if [ ! -d "origin" ]; then
-	git clone https://github.com/openshift/origin.git
-fi
-
 pushd origin
-
-# build 'openshift-tests' binary
-make WHAT=cmd/openshift-tests
 
 OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
 
@@ -17,6 +10,7 @@ $OPENSHIFT_TESTS run openshift/conformance/parallel --dry-run | \
 	grep -v -f ../conformance-parallel-exclude.txt | \
 	$OPENSHIFT_TESTS run -o ./comformance-parallel.e2e.log --junit-dir ./parallel.junit -f -
 
+popd
 
 #	grep -v "Networking should provide Internet connection for containers" | \
 #	grep -v "OAuth server should use http1.1 only to prevent http2 connection reuse" | \

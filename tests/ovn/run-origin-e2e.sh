@@ -1,14 +1,7 @@
 #!/bin/bash
 set -x
 
-if [ ! -d "origin" ]; then
-	git clone https://github.com/openshift/origin.git
-fi
-
 pushd origin
-
-# build 'openshift-tests' binary
-make WHAT=cmd/openshift-tests
 
 OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
 
@@ -24,3 +17,5 @@ $OPENSHIFT_TESTS run openshift/conformance --dry-run | \
 	grep -v "Should be able to send traffic between Pods without SNAT" | \
 	grep -v "Networking should provide Internet connection for containers" | \
 	$OPENSHIFT_TESTS run -f -
+
+popd
