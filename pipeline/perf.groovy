@@ -5,7 +5,7 @@ OCP_VERSIONS = ["4.3"]
 // define stages (stage requires re-deployment of OCP environment)
 
 // Topology Manager
-STAGE_TM_JOBS = ["OCP-PERF-CONFIG", "OCP-TM-E2E"]
+STAGE_TM_JOBS = ["OCP-PERF-CONFIG", "OCP-SRIOV-Install", "OCP-TM-E2E"]
 
 // Ripsaw
 STAGE_RIPSAW_OVN_JOBS = ["OCP-RIPSAW-OVN"]
