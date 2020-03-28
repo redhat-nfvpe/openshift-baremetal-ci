@@ -5,7 +5,9 @@ set -e
 trap cleanup 0 1
 
 cleanup() {
+	mkdir -p /home/logs/ovn/${OVN_TEST_SUITE}/${BUILD_NUMBER} || true
 	oc adm must-gather || true
+	mv must-gather.local.* /home/logs/ovn/${OVN_TEST_SUITE}/${BUILD_NUMBER}/ || true
 	popd
 }
 
