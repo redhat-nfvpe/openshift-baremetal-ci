@@ -25,6 +25,15 @@ STAGE_SDN_MIGRATION_JOBS = ["OCP-Networking-SDN-Migration", "OVN-E2E-Conformance
 // STAGE_RIPSAW_OVN_JOBS = ["OCP-RIPSAW-OVN"]
 // STAGE_RIPSAW_SRIOV_JOBS = ["OCP-RIPSAW-SRIOV"]
 
+def log(String level, String str) {
+	switch (level) {
+		case 'err': echo "\033[31m [ERROR]: $str \033[0m"; break
+		case 'warn': echo "\033[33m [WARNING]: $str \033[0m"; break
+		case 'skip': echo "\033[34m [SKIPPED]: $str \033[0m"; break
+		case 'success': echo "\033[32m [SUCCESS]: $str \033[0m"; break
+		default: echo "$str"
+	}
+}
 
 pipeline {
 	agent any
@@ -39,14 +48,19 @@ pipeline {
 
 					if (jobDeployResult == 'SUCCESS') {
 						for (int i = 0; i < STAGE_MULTUS_JOBS.size(); i++) {
-							echo "running ${STAGE_MULTUS_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							log("", "running ${STAGE_MULTUS_JOBS[i]} on ${OCP_VERSIONS[0]}")
 							try {
 								build job: "${STAGE_MULTUS_JOBS[i]}", wait: true
-								echo "stage job ${STAGE_MULTUS_JOBS[i]} succeeded"
+								log("success", "stage job ${STAGE_MULTUS_JOBS[i]} succeeded")
 							}
 							catch (err) {
-								echo "stage job ${STAGE_MULTUS_JOBS[i]} failed"
+								log("err", "stage job ${STAGE_MULTUS_JOBS[i]} failed")
 							}
+						}
+					} else {
+						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
+						for (int i = 0; i < STAGE_MULTUS_JOBS.size(); i++) {
+							log("skip", "${STAGE_MULTUS_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -60,14 +74,28 @@ pipeline {
 
 					if (jobDeployResult == 'SUCCESS') {
 						for (int i = 0; i < STAGE_TM_JOBS.size(); i++) {
-							echo "running ${STAGE_TM_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							log("", "running ${STAGE_TM_JOBS[i]} on ${OCP_VERSIONS[0]}")
 							try {
 								build job: "${STAGE_TM_JOBS[i]}", wait: true
-								echo "stage job ${STAGE_TM_JOBS[i]} succeeded"
+								log("success", "stage job ${STAGE_TM_JOBS[i]} succeeded")
 							}
 							catch (err) {
-								echo "stage job ${STAGE_TM_JOBS[i]} failed"
+								log("err", "stage job ${STAGE_TM_JOBS[i]} failed")
+
+								// warning: stage doesn't complete due to previous job failure
+								for (int j = i+1; j < STAGE_TM_JOBS.size(); j++) {
+									log("warn", "${STAGE_TM_JOBS[j]} skipped")
+								}
+
+								// exit won't skip following stages
+								// exit when any of TM task failed
+								exit 0
 							}
+						}
+					} else {
+						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
+						for (int i = 0; i < STAGE_TM_JOBS.size(); i++) {
+							log("skip", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -81,14 +109,19 @@ pipeline {
 
 					if (jobDeployResult == 'SUCCESS') {
 						for (int i = 0; i < STAGE_SRIOV_JOBS.size(); i++) {
-							echo "running ${STAGE_SRIOV_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							log("", "running ${STAGE_SRIOV_JOBS[i]} on ${OCP_VERSIONS[0]}")
 							try {
 								build job: "${STAGE_SRIOV_JOBS[i]}", wait: true
-								echo "stage job ${STAGE_SRIOV_JOBS[i]} succeeded"
+								log("success", "stage job ${STAGE_SRIOV_JOBS[i]} succeeded")
 							}
 							catch (err) {
-								echo "stage job ${STAGE_SRIOV_JOBS[i]} failed"
+								log("err", "stage job ${STAGE_SRIOV_JOBS[i]} failed")
 							}
+						}
+					} else {
+						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
+						for (int i = 0; i < STAGE_SRIOV_JOBS.size(); i++) {
+							log("skip", "${STAGE_SRIOV_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -102,14 +135,19 @@ pipeline {
 
 					if (jobDeployResult == 'SUCCESS') {
 						for (int i = 0; i < STAGE_SRIOV_CONFORMANCE_JOBS.size(); i++) {
-							echo "running ${STAGE_SRIOV_CONFORMANCE_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							log("", "running ${STAGE_SRIOV_CONFORMANCE_JOBS[i]} on ${OCP_VERSIONS[0]}")
 							try {
 								build job: "${STAGE_SRIOV_CONFORMANCE_JOBS[i]}", wait: true
-								echo "stage job ${STAGE_SRIOV_CONFORMANCE_JOBS[i]} succeeded"
+								log("success", "stage job ${STAGE_SRIOV_CONFORMANCE_JOBS[i]} succeeded")
 							}
 							catch (err) {
-								echo "stage job ${STAGE_SRIOV_CONFORMANCE_JOBS[i]} failed"
+								log("err", "stage job ${STAGE_SRIOV_CONFORMANCE_JOBS[i]} failed")
 							}
+						}
+					} else {
+						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
+						for (int i = 0; i < STAGE_SRIOV_CONFORMANCE_JOBS.size(); i++) {
+							log("skip", "${STAGE_SRIOV_CONFORMANCE_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -123,14 +161,19 @@ pipeline {
 
 					if (jobDeployResult == 'SUCCESS') {
 						for (int i = 0; i < STAGE_OVN_E2E_NETWORK_JOBS.size(); i++) {
-							echo "running ${STAGE_OVN_E2E_NETWORK_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							log("", "running ${STAGE_OVN_E2E_NETWORK_JOBS[i]} on ${OCP_VERSIONS[0]}")
 							try {
 								build job: "${STAGE_OVN_E2E_NETWORK_JOBS[i]}", wait: true
-								echo "stage job ${STAGE_OVN_E2E_NETWORK_JOBS[i]} succeeded"
+								log("success", "stage job ${STAGE_OVN_E2E_NETWORK_JOBS[i]} succeeded")
 							}
 							catch (err) {
-								echo "stage job ${STAGE_OVN_E2E_NETWORK_JOBS[i]} failed"
+								log("err", "stage job ${STAGE_OVN_E2E_NETWORK_JOBS[i]} failed")
 							}
+						}
+					} else {
+						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
+						for (int i = 0; i < STAGE_OVN_E2E_NETWORK_JOBS.size(); i++) {
+							log("skip", "${STAGE_OVN_E2E_NETWORK_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -144,14 +187,19 @@ pipeline {
 
 					if (jobDeployResult == 'SUCCESS') {
 						for (int i = 0; i < STAGE_OVN_E2E_SERIAL_JOBS.size(); i++) {
-							echo "running ${STAGE_OVN_E2E_SERIAL_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							log("", "running ${STAGE_OVN_E2E_SERIAL_JOBS[i]} on ${OCP_VERSIONS[0]}")
 							try {
 								build job: "${STAGE_OVN_E2E_SERIAL_JOBS[i]}", wait: true
-								echo "stage job ${STAGE_OVN_E2E_SERIAL_JOBS[i]} succeeded"
+								log("success", "stage job ${STAGE_OVN_E2E_SERIAL_JOBS[i]} succeeded")
 							}
 							catch (err) {
-								echo "stage job ${STAGE_OVN_E2E_SERIAL_JOBS[i]} failed"
+								log("err", "stage job ${STAGE_OVN_E2E_SERIAL_JOBS[i]} failed")
 							}
+						}
+					} else {
+						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
+						for (int i = 0; i < STAGE_OVN_E2E_SERIAL_JOBS.size(); i++) {
+							log("skip", "${STAGE_OVN_E2E_SERIAL_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -165,14 +213,19 @@ pipeline {
 
 					if (jobDeployResult == 'SUCCESS') {
 						for (int i = 0; i < STAGE_OVN_E2E_PARALLEL_JOBS.size(); i++) {
-							echo "running ${STAGE_OVN_E2E_PARALLEL_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							log("", "running ${STAGE_OVN_E2E_PARALLEL_JOBS[i]} on ${OCP_VERSIONS[0]}")
 							try {
 								build job: "${STAGE_OVN_E2E_PARALLEL_JOBS[i]}", wait: true
-								echo "stage job ${STAGE_OVN_E2E_PARALLEL_JOBS[i]} succeeded"
+								log("success", "stage job ${STAGE_OVN_E2E_PARALLEL_JOBS[i]} succeeded")
 							}
 							catch (err) {
-								echo "stage job ${STAGE_OVN_E2E_PARALLEL_JOBS[i]} failed"
+								log("err", "stage job ${STAGE_OVN_E2E_PARALLEL_JOBS[i]} failed")
 							}
+						}
+					} else {
+						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
+						for (int i = 0; i < STAGE_OVN_E2E_PARALLEL_JOBS.size(); i++) {
+							log("skip", "${STAGE_OVN_E2E_PARALLEL_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -186,18 +239,28 @@ pipeline {
 
 					if (jobDeployResult == 'SUCCESS') {
 						for (int i = 0; i < STAGE_SDN_MIGRATION_JOBS.size(); i++) {
-							echo "running ${STAGE_SDN_MIGRATION_JOBS[i]} on ${OCP_VERSIONS[0]}"
+							log("", "running ${STAGE_SDN_MIGRATION_JOBS[i]} on ${OCP_VERSIONS[0]}")
 							try {
 								build job: "${STAGE_SDN_MIGRATION_JOBS[i]}", wait: true
-								echo "stage job ${STAGE_SDN_MIGRATION_JOBS[i]} succeeded"
+								log("success", "stage job ${STAGE_SDN_MIGRATION_JOBS[i]} succeeded")
 							}
 							catch (err) {
-								echo "stage job ${STAGE_SDN_MIGRATION_JOBS[i]} failed, exiting"
+								log("err", "stage job ${STAGE_SDN_MIGRATION_JOBS[i]} failed, exiting")
+
+								// warning: stage doesn't complete due to previous job failure
+								for (int j = i+1; j < STAGE_SDN_MIGRATION_JOBS.size(); j++) {
+									log("warn", "${STAGE_SDN_MIGRATION_JOBS[j]} skipped")
+								}
 
 								// exit won't skip following stages
 								// exit when any of migration task failed
 								exit 0
 							}
+						}
+					} else {
+						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
+						for (int i = 0; i < STAGE_SDN_MIGRATION_JOBS.size(); i++) {
+							log("skip", "${STAGE_SDN_MIGRATION_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
