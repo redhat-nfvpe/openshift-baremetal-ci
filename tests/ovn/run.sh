@@ -5,6 +5,7 @@ set -e
 trap cleanup 0 1
 
 cleanup() {
+	oc adm must-gather || true
 	popd
 }
 
@@ -29,10 +30,10 @@ if oc version | grep 4.5 ; then
 	git checkout release-4.5
 fi
 
-popd
-
 # build 'openshift-tests' binary
 make WHAT=cmd/openshift-tests
+
+popd
 
 OVN_TEST_SUITE=${1:-"network"}
 echo $OVN_TEST_SUITE
