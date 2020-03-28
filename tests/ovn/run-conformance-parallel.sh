@@ -7,8 +7,9 @@ pushd origin
 OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
 
 # run conformance parallel tests
+# grep -v -f ../conformance-parallel-exclude.txt | \
 $OPENSHIFT_TESTS run openshift/conformance/parallel --dry-run | \
-	grep -v -f ../conformance-parallel-exclude.txt | \
+	grep -v "Networking should provide Internet connection for containers" | \
 	$OPENSHIFT_TESTS run -o ./comformance-parallel.e2e.log --junit-dir ./parallel.junit -f -
 
 popd
