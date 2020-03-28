@@ -85,6 +85,7 @@ sleep 320
 sleep 30
 cp -rf ./requirements/oc /usr/local/bin/
 cp -rf ./requirements/kubectl /usr/local/bin/
+cp -rf ./requirements/openshift-install /usr/local/bin/
 cp -rf ./ocp/auth/kubeconfig /root/kubeconfig
 mkdir -p ~/.kube || true
 
