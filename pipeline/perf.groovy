@@ -23,6 +23,9 @@ def log(String level, String str) {
 }
 
 pipeline {
+	options {
+		ansiColor('xterm')
+	}
 	agent any
 	stages {
 		// stage cannot contain variable
