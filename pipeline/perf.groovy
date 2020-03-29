@@ -79,7 +79,7 @@ pipeline {
 								log("success", "stage job ${STAGE_RIPSAW_OVN_JOBS[i]} succeeded")
 							}
 							catch (err) {
-								log("err" "stage job ${STAGE_RIPSAW_OVN_JOBS[i]} failed")
+								log("err", "stage job ${STAGE_RIPSAW_OVN_JOBS[i]} failed")
 							}
 						}
 					} else {
