@@ -6,6 +6,9 @@ if [ ! -d "origin" ]; then
 	git clone https://github.com/fromanirh/origin.git
 fi
 
+# create sriov network before pushd origin folder
+oc create -f templates/sn-intel.yaml
+
 pushd origin
 # this branch contains the stable patches which will be part of PRs against
 # openshift/origin
@@ -18,9 +21,6 @@ git pull --rebase
 make WHAT=cmd/openshift-tests
 
 OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
-
-# create sriov network
-oc create -f templates/sn-intel.yaml
 
 # add SR-IOV related environment variables
 # https://github.com/fromanirh/origin/blob/topomgr-e2e-tests-ci/test/extended/topology_manager/README.md
