@@ -45,6 +45,7 @@ spec:
      cpuManagerPolicy: static
      cpuManagerReconcilePeriod: 5s
      topologyManagerPolicy: single-numa-node
+     reservedSystemCPUs: 1,3,5,7
 
 #---
 #apiVersion: machineconfiguration.openshift.io/v1
