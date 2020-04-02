@@ -3,8 +3,8 @@ apiVersion: kubevirt.io/v1alpha3
 kind: VirtualMachineInstance
 metadata:
   labels:
-    special: vmi-sriov
-  name: vmi-sriov
+    special: vmi-perf
+  name: vmi-perf
 spec:
   domain:
     cpu:
@@ -13,7 +13,13 @@ spec:
       threads: 1
       dedicatedCpuPlacement: true
     memory:
-      guest: 2Gi
+      hugepages:
+        pageSize: "1Gi"
+    resources:
+      requests:
+        memory: "4Gi"
+      limits:
+        memory: "4Gi"
     devices:
       disks:
       - disk:
@@ -47,3 +53,4 @@ spec:
         echo "fedora" |passwd fedora --stdin
         dhclient eth1
     name: cloudinitdisk
+

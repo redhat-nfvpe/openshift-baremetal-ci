@@ -90,9 +90,9 @@ pipeline {
 									log("warn", "${STAGE_TM_JOBS[j]} skipped")
 								}
 
-								// exit won't skip following stages
-								// exit when any of TM task failed
-								exit 0
+								// return when any of TM task failed
+								// return in stage won't skip the following stages
+								return
 							}
 						}
 					} else {
@@ -255,9 +255,9 @@ pipeline {
 									log("warn", "${STAGE_SDN_MIGRATION_JOBS[j]} skipped")
 								}
 
-								// exit won't skip following stages
-								// exit when any of migration task failed
-								exit 0
+								// return when any of migration task failed
+								// return in stage won't skip the following stages
+								return
 							}
 						}
 					} else {
