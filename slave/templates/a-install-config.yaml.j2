@@ -1,0 +1,88 @@
+apiVersion: v1
+baseDomain: ovn.test.org
+compute:
+ - name: worker
+   replicas: 2
+controlPlane:
+   name: master
+   platform: {}
+   replicas: 3
+metadata:
+   name: ci
+networking:
+  clusterNetworks:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  networkType: OVNKubernetes
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+   none: {}
+   apiVIP: 192.168.111.5
+   ingressVIP: 192.168.111.4
+   dnsVIP: 192.168.111.3
+   hosts:
+      # Master nodes are always RHCOS
+      # nfvpe-13
+      -  name: master-0
+         role: master
+         bmc:
+            address: ipmi://10.19.111.31
+            credentialsName: ha-lab-ipmi
+         bootMACAddress: 3c:fd:fe:b5:7d:c1  # provisioning network mac
+         sdnMacAddress: 3c:fd:fe:b5:7d:c0   # baremetal network mac
+         hardwareProfile: default
+         osProfile: 
+            pxe: bios
+            install_dev: sda
+
+      # nfvpe-12
+      -  name: master-1
+         role: master
+         bmc:
+            address: ipmi://10.19.111.29
+            credentialsName: ha-lab-ipmi
+         bootMACAddress: 3c:fd:fe:b5:72:41  # provisioning network mac
+         sdnMacAddress: 3c:fd:fe:b5:72:40   # baremetal network mac
+         hardwareProfile: default
+         osProfile: 
+            pxe: bios
+            install_dev: sda
+
+      # nfvpe-02
+      -  name: master-2
+         role: master
+         bmc:
+            address: ipmi://10.19.111.9
+            credentialsName: ha-lab-ipmi
+         bootMACAddress: 3c:fd:fe:b5:7e:35  # provisioning network mac
+         sdnMacAddress: 3c:fd:fe:b5:7e:34   # baremetal network mac
+         hardwareProfile: default
+         osProfile: 
+            pxe: bios
+            install_dev: sda
+
+      # nfvpe-22
+      -  name: worker-0
+         role: worker
+         bmc: 
+            address: ipmi://10.19.111.51
+            credentialsName: ha-lab-ipmi
+         bootMACAddress: 3c:fd:fe:cd:35:49
+         sdnMacAddress: 3c:fd:fe:cd:35:48
+         hardwareProfile: default
+
+      # nfvpe-24
+      -  name: worker-1
+         role: worker
+         bmc: 
+            address: ipmi://10.19.111.55
+            credentialsName: ha-lab-ipmi
+         bootMACAddress: 3c:fd:fe:cd:31:bd 
+         sdnMacAddress: 3c:fd:fe:cd:31:bc
+         hardwareProfile: default
+
+pullSecret: '{{ pull_secret }}'
+
+sshKey: |
+   {{ ssh_pub_key.stdout }}

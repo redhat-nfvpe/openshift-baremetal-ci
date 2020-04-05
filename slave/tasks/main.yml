@@ -1,0 +1,81 @@
+---
+- name: install packages
+  become: true
+  package:
+    name:
+      - vim
+      - git
+      - wget
+      - golang
+      - make
+      - java-1.8.0-openjdk
+    state: installed
+
+- name: put selinux in permissive mode
+  selinux:
+    policy: targeted
+    state: permissive
+
+- name: disable selinux
+  selinux:
+    state: disabled
+
+- name: be sure firewalld is disabled
+  systemd: name=firewalld enabled=no
+
+- name: check id_rsa existence
+  stat:
+    path: /root/.ssh/id_rsa
+  register: id_rsa_stat
+
+- name: generate ssh key
+  become: true
+  command: ssh-keygen -q -t rsa -f /root/.ssh/id_rsa -C "" -N ""
+  when: id_rsa_stat.stat.exists == False
+
+- name: get ssh pub key content
+  become: true
+  shell: cat /root/.ssh/id_rsa.pub
+  register: ssh_pub_key
+
+- name: inject jenknins authroized key 
+  become: true
+  shell: echo {{ jenkins_authorized_key }} >> /root/.ssh/authorized_keys
+  when: id_rsa_stat.stat.exists == False
+
+- name: create upi-config dir
+  become: true
+  file:
+    path: /root/upi-config
+    state: directory
+
+- name: generate upi-config files
+  become: true
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: ipmi-creds.yaml.j2, dest: /root/upi-config/ha-lab-ipmi-creds.yaml }
+    - { src: "{{ server_prefix }}-install-config.yaml.j2", dest: /root/upi-config/install-config.yaml }
+    - { src: "{{ server_prefix }}-site-config.yaml.j2", dest: /root/upi-config/site-config.yaml }
+
+- name: create ipi-config dir
+  become: true
+  file:
+    path: /root/ipi-config
+    state: directory
+
+- name: generate ipi-config files
+  become: true
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "{{ server_prefix }}-config_root.sh.j2", dest: /root/ipi-config/config_root.sh }
+    - { src: "{{ server_prefix }}-ironic_nodes.json.j2", dest: /root/ipi-config/ironic_nodes.json }
+
+- name: copy network interface file
+  become: true
+  copy:
+    src: disable-eno1.ign
+    dest: /root/ipi-config/nm-disable-eno1.ign

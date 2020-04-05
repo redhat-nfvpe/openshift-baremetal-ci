@@ -1,0 +1,104 @@
+{
+  "nodes": [
+      {
+      "name": "openshift-master-0",
+      "driver": "ipmi",
+      "resource_class": "baremetal",
+      "driver_info": {
+        "username": "{{ ipmi_user }}",
+        "password": "{{ ipmi_pass }}",
+        "address": "ipmi://10.19.111.17",
+        "deploy_kernel": "http://172.22.0.2/images/ironic-python-agent.kernel",
+        "deploy_ramdisk": "http://172.22.0.2/images/ironic-python-agent.initramfs"
+      },
+      "ports": [{
+        "address": "a4:bf:01:51:30:4c",
+        "pxe_enabled": true
+      }],
+      "properties": {
+        "local_gb": "50",
+        "cpu_arch": "x86_64"
+      }
+    },
+     {
+      "name": "openshift-master-1",
+      "driver": "ipmi",
+      "resource_class": "baremetal",
+      "driver_info": {
+        "username": "{{ ipmi_user }}",
+        "password": "{{ ipmi_pass }}",
+        "address": "ipmi://10.19.111.27",
+        "deploy_kernel": "http://172.22.0.2/images/ironic-python-agent.kernel",
+        "deploy_ramdisk": "http://172.22.0.2/images/ironic-python-agent.initramfs"
+      },
+      "ports": [{
+        "address": "a4:bf:01:51:42:19",
+        "pxe_enabled": true
+      }],
+      "properties": {
+        "local_gb": "50",
+        "cpu_arch": "x86_64"
+      }
+    },
+     {
+      "name": "openshift-master-2",
+      "driver": "ipmi",
+      "resource_class": "baremetal",
+      "driver_info": {
+        "username": "{{ ipmi_user }}",
+        "password": "{{ ipmi_pass }}",
+        "address": "ipmi://10.19.111.33",
+        "deploy_kernel": "http://172.22.0.2/images/ironic-python-agent.kernel",
+        "deploy_ramdisk": "http://172.22.0.2/images/ironic-python-agent.initramfs"
+      },
+      "ports": [{
+        "address": "a4:bf:01:51:30:53",
+        "pxe_enabled": true
+      }],
+      "properties": {
+        "local_gb": "50",
+        "cpu_arch": "x86_64"
+      }
+    },
+     {
+      "name": "openshift-worker-0",
+      "driver": "ipmi",
+      "resource_class": "baremetal",
+      "driver_info": {
+        "username": "{{ ipmi_user }}",
+        "password": "{{ ipmi_pass }}",
+        "address": "ipmi://10.19.111.19",
+        "deploy_kernel": "http://172.22.0.2/images/ironic-python-agent.kernel",
+        "deploy_ramdisk": "http://172.22.0.2/images/ironic-python-agent.initramfs"
+      },
+      "ports": [{
+        "address": "a4:bf:01:51:7e:40",
+        "pxe_enabled": true
+      }],
+      "properties": {
+        "local_gb": "50",
+        "cpu_arch": "x86_64"
+      }
+    },
+     {
+      "name": "openshift-worker-1",
+      "driver": "ipmi",
+      "resource_class": "baremetal",
+      "driver_info": {
+        "username": "{{ ipmi_user }}",
+        "password": "{{ ipmi_pass }}",
+        "address": "ipmi://10.19.111.21",
+        "deploy_kernel": "http://172.22.0.2/images/ironic-python-agent.kernel",
+        "deploy_ramdisk": "http://172.22.0.2/images/ironic-python-agent.initramfs"
+      },
+      "ports": [{
+        "address": "a4:bf:01:51:47:59",
+        "pxe_enabled": true
+      }],
+      "properties": {
+        "local_gb": "50",
+        "cpu_arch": "x86_64"
+      }
+    }
+  ]
+}

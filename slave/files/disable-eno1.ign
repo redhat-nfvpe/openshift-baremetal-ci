@@ -1,0 +1,1 @@
+{"ignition": {"version": "2.2.0"}, "storage": {"files": [{"path": "/etc/sysconfig/network-scripts/ifcfg-eno1", "filesystem": "root", "mode": 0644, "contents": {"source": "data:text/plain;charset=utf-8;base64,REVWSUNFPWVubzEKQk9PVFBST1RPPW5vbmUKT05CT09UPW5vClRZUEU9RXRoZXJuZXQKSVBWNklOSVQ9bm8KREVGUk9VVEU9bm8K"}}]}}

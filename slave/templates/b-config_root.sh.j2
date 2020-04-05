@@ -1,0 +1,21 @@
+#!/bin/bash
+
+export LANG=en_US.UTF-8
+export NUM_MASTERS=3
+export NUM_WORKERS=2
+export NODES_PLATFORM=baremetal
+export INT_IF="ens803f1" 
+export PRO_IF="eno2"
+export CLUSTER_NAME="sriov"
+export BASE_DOMAIN="ovn.testing"
+export NODES_FILE=/root/ipi-config/ironic_nodes.json
+export IP_STACK=v4
+
+export NETWORK_TYPE="OVNKubernetes"
+export MANAGE_BR_BRIDGE="n"
+export MANAGE_INT_BRIDGE="n"
+export IGNITION_EXTRA="ignition/nm-disable-eno1.ign"
+
+set +x
+export PULL_SECRET='{{ pull_secret }}'
+set -x

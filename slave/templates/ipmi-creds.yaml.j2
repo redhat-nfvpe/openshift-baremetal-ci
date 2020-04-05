@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name:  ha-lab-ipmi
+stringdata:
+   # Username and password for IPMI access to master and worker
+   # nodes, base64-encoded
+   username: {{ ipmi_user_base64 }}
+   password: {{ ipmi_pass_base64 }}
+
+type: Opaque

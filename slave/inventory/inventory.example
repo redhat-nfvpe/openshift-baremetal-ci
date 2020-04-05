@@ -1,0 +1,27 @@
+[a]
+10.19.111.10
+
+[b]
+10.19.111.14
+
+[a:vars]
+server_prefix=a
+
+[b:vars]
+server_prefix=b
+
+[all:vars]
+# run ansible playbook as root user
+ansible_user=root
+# CentOS 8 doesn't support python2
+ansible_python_interpreter=/usr/bin/python3
+
+# ipmi user and password for baremetal OpenShift nodes
+ipmi_user=
+ipmi_pass=
+ipmi_user_base64=
+ipmi_pass_base64=
+
+# jenkins authorized key from openshift-qe
+jenkins_authorized_key=""
+pull_secret=''

@@ -1,0 +1,6 @@
+---
+- name: play
+  hosts: b
+  gather_facts: no
+  tasks:
+    - include: tasks/main.yml 
