@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testpod-simple
+spec:
+  replica: 1
+  selector:
+    matchLabels:
+      name: testpod-simple
+  template:
+    metadata:
+      labels:
+        name: testpod-simple
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: ci-worker-0
+      containers:
+      - name: appcntr1
+        image: zenghui/centos-dpdk
+        imagePullPolicy: IfNotPresent
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "while true; do sleep 300000; done;" ]
+        resources:
+          requests:
+            cpu: 500m
+            memory: 1000Mi
+          limits:
+            cpu: 500m
+            memory: 1000Mi
