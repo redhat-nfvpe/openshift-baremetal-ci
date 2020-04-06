@@ -26,6 +26,10 @@ git clone https://github.com/openshift-kni/baremetal-deploy.git
 pushd baremetal-deploy/ansible-ipi-install
 
 
+IFCFG_DIR="roles/installer/files/customize_filesystem/master/etc/sysconfig/network-scripts"
+mkdir -p $IFCFG_DIR
+
+cp -rf /root/ipi-config/ifcfg-eno1 $IFCFG_DIR/ifcfg-eno1
 cp -rf /root/ipi-config/ansible.cfg ./ansible.cfg
 cp -rf /root/ipi-config/playbook.yml ./playbook.yml
 cp -rf /root/ipi-config/inventory.hosts inventory/inventory.hosts
