@@ -20,13 +20,27 @@ if [ ! -d "ptp-operator" ]; then
 	git clone $PTP_OPERATOR_REPO
 fi
 
+pushd ptp-operator
+
 # override PTP images with 4.3.z version
 if oc version | grep 4.3 ; then
+	git checkout release-4.3
 	wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.3-image-references.sh
 	source ./4.3-image-references.sh
 fi
 
-pushd ptp-operator
+if oc version | grep 4.4 ; then
+	git checkout release-4.4
+	wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.4-image-references.sh
+	source ./4.4-image-references.sh
+fi
+
+if oc version | grep 4.5 ; then
+	git checkout release-4.5
+	wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.5-image-references.sh
+	source ./4.5-image-references.sh
+fi
+
 make deploy-setup
 
 oc wait --for condition=available deployment ptp-operator -n $PTP_OPERATOR_NAMESPACE --timeout=60s
