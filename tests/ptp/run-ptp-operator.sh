@@ -5,7 +5,7 @@ set -x
 
 yum install -y wget skopeo jq
 
-PTP_OPERATOR_REPO=https://github.com/zshi-redhat/ptp-operator.git
+PTP_OPERATOR_REPO=https://github.com/openshift/ptp-operator.git
 PTP_OPERATOR_NAMESPACE=openshift-ptp
 
 # WORKER_NODE=ci-worker-0
