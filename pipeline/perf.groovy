@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-OCP_VERSIONS = ["4.3"]
+OCP_VERSIONS = ["4.4"]
 
 // define stages (stage requires re-deployment of OCP environment)
 

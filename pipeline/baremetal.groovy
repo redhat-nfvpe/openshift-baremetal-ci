@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-OCP_VERSIONS = ["4.3"]
+OCP_VERSIONS = ["4.4"]
 
 // define stages (stage requires re-deployment of OCP environment)
 
@@ -242,7 +242,7 @@ pipeline {
 
 					if (jobDeployResult == 'SUCCESS') {
 						for (int i = 0; i < STAGE_SDN_MIGRATION_JOBS.size(); i++) {
-							log("", "running ${STAGE_SDN_MIGRATION_JOBS[i]} on ${OCP_VERSIONS[0]}")
+							log("", "running ${STAGE_SDN_MIGRATION_JOBS[i]} on 4.5 SDN")
 							try {
 								build job: "${STAGE_SDN_MIGRATION_JOBS[i]}", wait: true
 								log("success", "stage job ${STAGE_SDN_MIGRATION_JOBS[i]} succeeded")
@@ -261,7 +261,7 @@ pipeline {
 							}
 						}
 					} else {
-						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
+						log("err", "OCP Installation OCP-UPI-Install-SDN-4.5 failed")
 						for (int i = 0; i < STAGE_SDN_MIGRATION_JOBS.size(); i++) {
 							log("skip", "${STAGE_SDN_MIGRATION_JOBS[i]} skipped due to failed ocp install")
 						}
