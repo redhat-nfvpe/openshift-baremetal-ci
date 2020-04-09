@@ -17,7 +17,7 @@ pub_nic=ens803f1
 #org_id=""
 
 # The directory used to store the cluster configuration files (install-config.yaml, pull-secret.txt, metal3-config.yaml)
-dir="{{ ansible_user_dir }}/clusterconfigs"
+dir={% raw -%}"{{ ansible_user_dir }}/clusterconfigs"{%- endraw %}
 
 # The version of the openshift-installer, undefined or empty results in the playbook failing with error message.
 # Values accepted: 'latest-4.3', 'latest-4.4', explicit version i.e. 4.3.0-0.nightly-2019-12-09-035405

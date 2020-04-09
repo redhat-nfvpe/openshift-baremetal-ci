@@ -8,6 +8,7 @@
       - wget
       - golang
       - make
+      - ansible
       - java-1.8.0-openjdk
     state: installed
 
@@ -20,8 +21,8 @@
   selinux:
     state: disabled
 
-- name: be sure firewalld is disabled
-  systemd: name=firewalld enabled=no
+- name: be sure firewalld is enabled
+  systemd: name=firewalld enabled=yes
 
 - name: check id_rsa existence
   stat:
