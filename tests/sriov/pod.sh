@@ -61,7 +61,7 @@ pod_default_route_ipv4() {
 
 pod_default_route_ipv6() {
 	pod_name=$1
-	oc exec $pod_name -- ip -6 route | grep default | awk '{print $3}'
+	oc exec $pod_name -- ip -6 route | grep default | grep -v fe80 | awk '{print $3}'
 }
 
 # Test simple SR-IOV pod
