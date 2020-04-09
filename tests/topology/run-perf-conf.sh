@@ -71,6 +71,7 @@ done
 echo "Waiting for nodes to become Ready after applying performance config ..."
 count=0
 while [ "$(oc get nodes -o wide | grep "worker-0" | awk -F' ' '{print $2}')" != "Ready" ] || \
+      [ "$(oc get nodes -o wide | grep "worker-1" | awk -F' ' '{print $2}')" != "Ready" ] || \
       [ "$(oc get nodes -o wide | grep "master-0" | awk -F' ' '{print $2}')" != "Ready" ] || \
       [ "$(oc get nodes -o wide | grep "master-1" | awk -F' ' '{print $2}')" != "Ready" ] || \
       [ "$(oc get nodes -o wide | grep "master-2" | awk -F' ' '{print $2}')" != "Ready" ];
