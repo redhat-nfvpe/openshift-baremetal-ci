@@ -9,8 +9,8 @@ export TIMEOUT=${TIMEOUT:-120}
 
 NUM_OF_WORKER=$(oc get nodes | grep worker- | wc -l)
 if (( NUM_OF_WORKER > 1 ));then
-	WORKER_0=$WORKER_NAME_PREFIX"-0"
-	WORKER_1=$WORKER_NAME_PREFIX"-1"
+	WORKER_0=$(oc get nodes | grep worker-0 | awk '{print $1}')
+	WORKER_1=$(oc get nodes | grep worker-1 | awk '{print $1}')
 else
 	WORKER_0=$(oc get nodes | grep worker- | awk '{print $1}')
 fi
