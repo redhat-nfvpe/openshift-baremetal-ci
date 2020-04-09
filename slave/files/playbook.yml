@@ -1,0 +1,6 @@
+---
+- name: IPI on Baremetal Installation Playbook
+  hosts: localhost
+  roles:
+  - node-prep
+  - installer

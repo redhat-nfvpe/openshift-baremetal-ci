@@ -65,7 +65,8 @@
     path: /root/ipi-config
     state: directory
 
-- name: generate ipi-config files
+# dev-scripts ipi config files
+- name: generate dev-scripts ipi-config files
   become: true
   template:
     src: "{{ item.src }}"
@@ -74,8 +75,30 @@
     - { src: "{{ server_prefix }}-config_root.sh.j2", dest: /root/ipi-config/config_root.sh }
     - { src: "{{ server_prefix }}-ironic_nodes.json.j2", dest: /root/ipi-config/ironic_nodes.json }
 
-- name: copy network interface file
+# dev-scripts ipi config files
+- name: copy dev-scripts network interface file
   become: true
   copy:
     src: disable-eno1.ign
     dest: /root/ipi-config/nm-disable-eno1.ign
+
+# ansible-ipi config files
+- name: generate ansible-ipi config files
+  become: true
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: "{{ server_prefix }}-inventory.hosts.j2", dest: /root/ipi-config/inventory.hosts }
+
+
+# ansible-ipi config files
+- name: copy ansible-ipi config files
+  become: true
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: ansible.cfg, dest: /root/ipi-config/ansible.cfg }
+    - { src: playbook.yml, dest: /root/ipi-config/playbook.yml }
+
