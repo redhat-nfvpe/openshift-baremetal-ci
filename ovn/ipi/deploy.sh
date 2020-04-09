@@ -46,4 +46,4 @@ sleep 2
 podman ps --all
 sleep 2
 
-ANSIBLE_FORCE_COLOR=true ansible-playbook -i inventory/inventory.hosts playbook.yml --skip-tags="packages,network,services,firewall"
+ANSIBLE_FORCE_COLOR=true ANSIBLE_DEBUG=true ANSIBLE_VERBOSITY=2 ansible-playbook -i inventory/inventory.hosts playbook.yml --skip-tags="packages,network,services,firewall"
