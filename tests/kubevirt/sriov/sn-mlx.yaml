@@ -1,0 +1,13 @@
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetwork
+metadata:
+  name: sriov-mlx
+  namespace: openshift-sriov-network-operator
+spec:
+  ipam: |
+    {}
+  vlan: 0
+  spoofChk: "off"
+  resourceName: mlxnics
+  networkNamespace: default

@@ -1,0 +1,17 @@
+---
+Dockerfile is to create containerDisk image.
+The image is configured in VMI manifest `spec.volumes.containerDisk.image`
+
+With CentOS cloud image `CentOS-GenericCloud`, `mlx_core` driver will be
+loaded automatically upon VM start, it saves time from installing
+kernel-modules package and loading the driver manually.
+
+CentOS cloud image can be downloaded from:
+CentOS-7: https://cloud.centos.org/centos/7/images/
+CentOS-8: https://cloud.centos.org/centos/8/x86_64/images/
+
+`dpdk` pkg provides `testpmd` binary (used as test application).
+
+`libibverbs` is a userspace library for using Mellanox device.
+
+

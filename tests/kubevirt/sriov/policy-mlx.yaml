@@ -1,0 +1,21 @@
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkNodePolicy
+metadata:
+  name: policy-mlx
+  namespace: openshift-sriov-network-operator
+spec:
+  deviceType: vfio-pci
+  mtu: 9000
+  nicSelector:
+    deviceID: "1017"
+    rootDevices:
+    - 0000:b1:00.0
+    vendor: "15b3"
+    pfNames:
+    - ens801f0
+  nodeSelector:
+    feature.node.kubernetes.io/network-sriov.capable: "true"
+  numVfs: 6
+  priority: 5
+  resourceName: mlxnics
