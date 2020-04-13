@@ -47,3 +47,17 @@ podman ps --all
 sleep 2
 
 ANSIBLE_FORCE_COLOR=true ansible-playbook -i inventory/inventory.hosts playbook.yml --skip-tags="packages,network,services,firewall"
+
+# Patch storage to emptyDir first, then patch
+# configs.imageregistry.operator.openshift.io
+# to Managed state.
+oc patch configs.imageregistry.operator.openshift.io cluster \
+        -p '{"spec":{"storage":{"emptyDir":{}}}}' --type='merge'
+
+# Patch storage to 'Managed' managementState.
+oc patch configs.imageregistry.operator.openshift.io cluster \
+        -p '{"spec":{"managementState": "Managed"}}' --type='merge'
+
+# wait for 20 seconds for image-registry operator change become effective.
+# no error checking on this as it usually does not fail
+sleep 20
