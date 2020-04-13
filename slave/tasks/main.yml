@@ -9,6 +9,7 @@
       - golang
       - make
       - ansible
+      - dnsmasq
       - java-1.8.0-openjdk
     state: installed
 
@@ -92,6 +93,11 @@
   with_items:
     - { src: "{{ server_prefix }}-inventory.hosts.j2", dest: /root/ipi-config/inventory.hosts }
 
+- name: create ansible-ipi dhcpv6 hostfile dir
+  become: true
+  file:
+    path: /opt/dnsmasq/
+    state: directory
 
 # ansible-ipi config files
 - name: copy ansible-ipi config files
@@ -102,4 +108,5 @@
   with_items:
     - { src: ansible.cfg, dest: /root/ipi-config/ansible.cfg }
     - { src: playbook.yml, dest: /root/ipi-config/playbook.yml }
-
+    - { src: "{{ server_prefix }}-dnsmasq-ipv6.conf", dest: /etc/dnsmasq.d/openshift.conf }
+    - { src: "{{ server_prefix }}-dnsmasq-ipv6.hostsfile", dest: /opt/dnsmasq/ipv6.hostsfile }
