@@ -10,7 +10,7 @@ ssh_execute() {
 
 pushd openshift-baremetal-ci/tests/topology
 
-if oc version | grep 4.3; then
+if oc version | grep "Client Version: 4.3"; then
 	oc apply -f templates/4.3-performance.yaml
 else
 	oc apply -f templates/performance.yaml
