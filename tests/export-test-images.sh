@@ -65,7 +65,7 @@ do
 	#export SRIOV_CNI_IMAGE=${SRIOV_CNI_IMAGE}
 
 	echo "export PTP_OPERATOR_IMAGE=${PTP_OPERATOR_IMAGE}"
-	echo "export INUXPTP_DAEMON_IMAGE=${PTP_IMAGE}"
+	echo "export LINUXPTP_DAEMON_IMAGE=${PTP_IMAGE}"
 	echo "export SRIOV_NETWORK_OPERATOR_IMAGE=${SRIOV_OPERATOR_IMAGE}"
 	echo "export SRIOV_NETWORK_WEBHOOK_IMAGE=${SRIOV_WEBHOOK_IMAGE}"
 	echo "export SRIOV_NETWORK_CONFIG_DAEMON_IMAGE=${SRIOV_CONFIG_DAEMON_IMAGE}"
@@ -76,7 +76,7 @@ do
 	echo "#!/bin/bash" > $v-image-references.sh
 
 	echo "export PTP_OPERATOR_IMAGE=${PTP_OPERATOR_IMAGE}" >> $v-image-references.sh
-	echo "export INUXPTP_DAEMON_IMAGE=${PTP_IMAGE}" >> $v-image-references.sh
+	echo "export LINUXPTP_DAEMON_IMAGE=${PTP_IMAGE}" >> $v-image-references.sh
 	echo "export SRIOV_NETWORK_OPERATOR_IMAGE=${SRIOV_OPERATOR_IMAGE}" >> $v-image-references.sh
 	echo "export SRIOV_NETWORK_WEBHOOK_IMAGE=${SRIOV_WEBHOOK_IMAGE}" >> $v-image-references.sh
 	echo "export SRIOV_NETWORK_CONFIG_DAEMON_IMAGE=${SRIOV_CONFIG_DAEMON_IMAGE}" >> $v-image-references.sh
