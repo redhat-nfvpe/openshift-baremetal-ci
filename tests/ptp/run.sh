@@ -17,3 +17,8 @@ cleanup() {
 
 pushd openshift-baremetal-ci/tests/ptp
 ./run-ptp-operator.sh
+popd
+
+pushd openshift-baremetal-ci/tests/ptp/ptp-operator
+make functests
+popd
