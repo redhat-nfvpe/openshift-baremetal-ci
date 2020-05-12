@@ -2,8 +2,9 @@
 
 # IMAGE_SOURCE could be "origin" or "art"
 IMAGE_SOURCE=${1:-"origin"}
+IMAGE_VERSIONS=${2:-"4.3 4.4 4.5"}
 
-for v in 4.3 4.4 4.5
+for v in ${IMAGE_VERSIONS}
 do
 	if [[ $IMAGE_SOURCE == "art" ]]; then
 		PTP_OPERATOR_RAW=$(oc get istag -n ocp $v-art-latest:ptp-operator \

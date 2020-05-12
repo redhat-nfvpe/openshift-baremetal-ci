@@ -104,6 +104,41 @@ pipeline {
 				}
 			}
 		}
+		stage('TM-4.5') {
+			steps {
+				script {
+					def jobDeploy = build job: "OVN-UPI-Install-4.5", wait: true, propagate: false
+					def jobDeployResult = jobDeploy.getResult()
+
+					if (jobDeployResult == 'SUCCESS') {
+						for (int i = 0; i < STAGE_TM_JOBS.size(); i++) {
+							log("", "running ${STAGE_TM_JOBS[i]} on 4.5")
+							try {
+								build job: "${STAGE_TM_JOBS[i]}", wait: true
+								log("success", "stage job ${STAGE_TM_JOBS[i]} succeeded")
+							}
+							catch (err) {
+								log("err", "stage job ${STAGE_TM_JOBS[i]} failed")
+
+								// warning: stage doesn't complete due to previous job failure
+								for (int j = i+1; j < STAGE_TM_JOBS.size(); j++) {
+									log("warn", "${STAGE_TM_JOBS[j]} skipped")
+								}
+
+								// return when any of TM task failed
+								// return in stage won't skip the following stages
+								return
+							}
+						}
+					} else {
+						log("err", "OCP Installation OVN-UPI-Install-4.5 failed")
+						for (int i = 0; i < STAGE_TM_JOBS.size(); i++) {
+							log("skip", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
+						}
+					}
+				}
+			}
+		}
 		stage('SR-IOV') {
 			steps {
 				script {
