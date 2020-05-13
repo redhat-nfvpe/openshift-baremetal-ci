@@ -41,7 +41,7 @@ if [ $SUBSCRIPTION == false ]; then
 	fi
 	# override SR-IOV images with 4.5 version
 	if oc version | grep "Client Version: 4.5" ; then
-		git checkout master
+		git checkout release-4.5
 
 		rm -rf ./4.5-image-references.sh
 		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.5-image-references.sh
