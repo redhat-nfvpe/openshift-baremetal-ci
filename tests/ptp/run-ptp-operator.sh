@@ -25,20 +25,17 @@ pushd ptp-operator
 # override PTP images with 4.3.z version
 if oc version | grep "Client Version: 4.3" ; then
 	git checkout release-4.3
-	wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.3-image-references.sh
-	source ./4.3-image-references.sh
+	source ../origin-images.sh 4.3
 fi
 
 if oc version | grep "Client Version: 4.4" ; then
 	git checkout release-4.4
-	wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.4-image-references.sh
-	source ./4.4-image-references.sh
+	source ../origin-images.sh 4.4
 fi
 
 if oc version | grep "Client Version: 4.5" ; then
 	git checkout release-4.5
-	wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.5-image-references.sh
-	source ./4.5-image-references.sh
+	source ../origin-images.sh 4.5
 fi
 
 make deploy-setup
