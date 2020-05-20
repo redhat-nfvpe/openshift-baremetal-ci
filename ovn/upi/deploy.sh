@@ -31,22 +31,29 @@ cleanup() {
 
 yum install -y git
 
-rm -rf kni-upi-lab
-git clone https://github.com/zshi-redhat/kni-upi-lab.git
 # git clone https://github.com/redhat-nfvpe/kni-upi-lab.git
 
-pushd kni-upi-lab
 # git fetch origin pull/95/head:fix
 # git checkout fix
 if [ $OPENSHIFT_MAJOR_VERSION == '4.3' ]; then
 	# we want to test latest 4.3.z nightly build instead of 4.3 release
+	rm -rf kni-upi-lab
+	git clone https://github.com/zshi-redhat/kni-upi-lab.git
+	pushd kni-upi-lab
 	git checkout 4.3-nightly
 elif [ $OPENSHIFT_MAJOR_VERSION == '4.4' ]; then
+	rm -rf kni-upi-lab
+	git clone https://github.com/redhat-nfvpe/kni-upi-lab.git
+	pushd kni-upi-lab
 	git checkout master
 elif [ $OPENSHIFT_MAJOR_VERSION == '4.5' ]; then
 	#git checkout 4.5-boot-index
+	rm -rf kni-upi-lab
+	git clone https://github.com/zshi-redhat/kni-upi-lab.git
+	pushd kni-upi-lab
 	git checkout 4.5
 else
+	pushd kni-upi-lab
 	git checkout master
 fi
 
