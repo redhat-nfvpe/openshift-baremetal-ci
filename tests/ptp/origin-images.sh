@@ -1,6 +1,6 @@
 #!/bin/bash                
 
-version={$1:-""}
+version=${1:-""}
 PTP_OPERATOR_IMAGE_DIGEST=$(skopeo inspect docker://quay.io/openshift/origin-ptp-operator:$version | jq --raw-output '.Digest')
 PTP_IMAGE_DIGEST=$(skopeo inspect docker://quay.io/openshift/origin-ptp:$version | jq --raw-output '.Digest')
 

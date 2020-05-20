@@ -1,6 +1,6 @@
 #!/bin/bash                
 
-version={$1:-""}
+version=${1:-""}
 
 SRIOV_DEVICE_PLUGIN_IMAGE_DIGEST=$(skopeo inspect docker://quay.io/openshift/origin-sriov-network-device-plugin:$version | jq --raw-output '.Digest')
 SRIOV_CNI_IMAGE_DIGEST=$(skopeo inspect docker://quay.io/openshift/origin-sriov-cni:$version | jq --raw-output '.Digest')
