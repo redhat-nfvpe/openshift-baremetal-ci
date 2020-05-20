@@ -26,26 +26,17 @@ if [ $SUBSCRIPTION == false ]; then
 	# override SR-IOV images with 4.3.z version
 	if oc version | grep "Client Version: 4.3" ; then
 		git checkout release-4.3
-
-		rm -rf ./4.3-image-references.sh
-		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.3-image-references.sh
-		source ./4.3-image-references.sh
+		source ../origin-images.sh 4.3
 	fi
 	# override SR-IOV images with 4.4 version
 	if oc version | grep "Client Version: 4.4" ; then
 		git checkout release-4.4
-
-		rm -rf ./4.4-image-references.sh
-		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.4-image-references.sh
-		source ./4.4-image-references.sh
+		source ../origin-images.sh 4.4
 	fi
 	# override SR-IOV images with 4.5 version
 	if oc version | grep "Client Version: 4.5" ; then
 		git checkout release-4.5
-
-		rm -rf ./4.5-image-references.sh
-		wget http://lacrosse.corp.redhat.com/~zshi/ocp/4.5-image-references.sh
-		source ./4.5-image-references.sh
+		source ../origin-images.sh 4.5
 	fi
 
 	make deploy-setup
