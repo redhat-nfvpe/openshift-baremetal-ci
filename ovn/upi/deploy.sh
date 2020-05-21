@@ -43,9 +43,9 @@ if [ $OPENSHIFT_MAJOR_VERSION == '4.3' ]; then
 	git checkout 4.3-nightly
 elif [ $OPENSHIFT_MAJOR_VERSION == '4.4' ]; then
 	rm -rf kni-upi-lab
-	git clone https://github.com/redhat-nfvpe/kni-upi-lab.git
+	git clone https://github.com/zshi-redhat/kni-upi-lab.git
 	pushd kni-upi-lab
-	git checkout master
+	git checkout 4.4
 elif [ $OPENSHIFT_MAJOR_VERSION == '4.5' ]; then
 	#git checkout 4.5-boot-index
 	rm -rf kni-upi-lab
