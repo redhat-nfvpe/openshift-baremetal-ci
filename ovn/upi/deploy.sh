@@ -105,7 +105,7 @@ cp -rf ./ocp/auth/kubeconfig ~/.kube/config
 sleep 30
 # Start Openshift-installer wait-for when image-registry is rendered
 # This allows us to wait a few more mins for cluster to come up
-while [ "$(./requirements/oc --kubeconfig ./ocp/auth/kubeconfig get co | grep image-registry)" == "" ]
+while [ "$(./requirements/oc --kubeconfig ./ocp/auth/kubeconfig get configs.imageregistry.operator.openshift.io | grep cluster)" == "" ]
 do
 	sleep 10
 	echo "waiting for image-registry operator to be deployed"
