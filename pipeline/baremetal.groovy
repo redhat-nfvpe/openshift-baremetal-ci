@@ -63,7 +63,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_MULTUS_JOBS.size(); i++) {
-							log("skip", "${STAGE_MULTUS_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_MULTUS_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -98,7 +98,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_TM_JOBS.size(); i++) {
-							log("skip", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -133,7 +133,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-4.5 failed")
 						for (int i = 0; i < STAGE_TM_JOBS.size(); i++) {
-							log("skip", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -159,7 +159,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_SRIOV_JOBS.size(); i++) {
-							log("skip", "${STAGE_SRIOV_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_SRIOV_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -185,7 +185,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_SRIOV_CONFORMANCE_JOBS.size(); i++) {
-							log("skip", "${STAGE_SRIOV_CONFORMANCE_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_SRIOV_CONFORMANCE_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -211,7 +211,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_OVN_E2E_NETWORK_JOBS.size(); i++) {
-							log("skip", "${STAGE_OVN_E2E_NETWORK_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_OVN_E2E_NETWORK_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -237,7 +237,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_OVN_E2E_SERIAL_JOBS.size(); i++) {
-							log("skip", "${STAGE_OVN_E2E_SERIAL_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_OVN_E2E_SERIAL_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -263,7 +263,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_OVN_E2E_PARALLEL_JOBS.size(); i++) {
-							log("skip", "${STAGE_OVN_E2E_PARALLEL_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_OVN_E2E_PARALLEL_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -298,7 +298,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OCP-UPI-Install-SDN-4.5 failed")
 						for (int i = 0; i < STAGE_SDN_MIGRATION_JOBS.size(); i++) {
-							log("skip", "${STAGE_SDN_MIGRATION_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_SDN_MIGRATION_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}

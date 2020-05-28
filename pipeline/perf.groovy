@@ -59,7 +59,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_TM_JOBS.size(); i++) {
-							log("skip", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -94,7 +94,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-4.5 failed")
 						for (int i = 0; i < STAGE_TM_JOBS.size(); i++) {
-							log("skip", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_TM_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -120,7 +120,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_RIPSAW_OVN_JOBS.size(); i++) {
-							log("skip", "${STAGE_RIPSAW_OVN_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_RIPSAW_OVN_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -146,7 +146,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_RIPSAW_SRIOV_JOBS.size(); i++) {
-							log("skip", "${STAGE_RIPSAW_SRIOV_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_RIPSAW_SRIOV_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
@@ -172,7 +172,7 @@ pipeline {
 					} else {
 						log("err", "OCP Installation OVN-UPI-Install-${OCP_VERSIONS[0]} failed")
 						for (int i = 0; i < STAGE_SCALE_JOBS.size(); i++) {
-							log("skip", "${STAGE_SCALE_JOBS[i]} skipped due to failed ocp install")
+							log("warn", "${STAGE_SCALE_JOBS[i]} skipped due to failed ocp install")
 						}
 					}
 				}
