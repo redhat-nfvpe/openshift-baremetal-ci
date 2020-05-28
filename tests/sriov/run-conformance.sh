@@ -36,4 +36,9 @@ make test-e2e-conformance
 
 popd
 pushd openshift-baremetal-ci/tests/sriov/sriov-network-operator
+
+# There are legacy sriovnetworks blocking operator from undeploying
+# remove finalizers for sriovnetwork so that 'make undeploy' can succeed
+oc patch crd/sriovnetworks.sriovnetwork.openshift.io -p '{"metadata":{"finalizers":[]}}' --type=merge
+
 make undeploy
