@@ -2,13 +2,17 @@
 set -x
 
 if [ ! -d "origin" ]; then
-	git clone https://github.com/openshift/origin.git
+	git clone https://github.com/fromanirh/origin.git
 fi
 
 # create sriov network before pushd origin folder
 oc create -f templates/sn-intel.yaml
 
 pushd origin
+# fetch the fix to be submitted to openshift
+git checkout e2e-tm-fix-concurrent-creation-test
+# make sure to pull the last changes
+git pull --rebase
 
 # build 'openshift-tests' binary
 make WHAT=cmd/openshift-tests
