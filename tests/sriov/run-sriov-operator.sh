@@ -38,6 +38,11 @@ if [ $SUBSCRIPTION == false ]; then
 		git checkout release-4.5
 		source ../origin-images.sh 4.5
 	fi
+	# override SR-IOV images with 4.6 version
+	if oc version | grep "Client Version: 4.6" ; then
+		git checkout release-4.6
+		source ../origin-images.sh 4.6
+	fi
 
 	make deploy-setup
 	popd
