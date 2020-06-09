@@ -52,6 +52,12 @@ elif [ $OPENSHIFT_MAJOR_VERSION == '4.5' ]; then
 	git clone https://github.com/zshi-redhat/kni-upi-lab.git
 	pushd kni-upi-lab
 	git checkout 4.5
+elif [ $OPENSHIFT_MAJOR_VERSION == '4.6' ]; then
+	#git checkout 4.5-boot-index
+	rm -rf kni-upi-lab
+	git clone https://github.com/zshi-redhat/kni-upi-lab.git
+	pushd kni-upi-lab
+	git checkout 4.6
 else
 	pushd kni-upi-lab
 	git checkout master
