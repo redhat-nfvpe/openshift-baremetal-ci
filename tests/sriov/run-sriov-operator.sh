@@ -96,8 +96,10 @@ fi
 sleep 30
 
 oc create -f policy-intel.yaml
+sleep 1
+oc create -f policy-intel-dpdk.yaml
 
-for i in {1..60}; do
+for i in {1..30}; do
 	sleep 10
 	cni=$(oc get ds sriov-cni \
 			-n $SRIOV_OPERATOR_NAMESPACE | tail -n 1 | awk '{print $4}')
@@ -116,14 +118,17 @@ done
 #Wait for device plugin be rebooted
 sleep 30
 
-for i in {1..30}; do
+for i in {1..60}; do
 	sleep 20
 	count=0
 	for worker in $(oc get nodes | grep worker- | awk '{print $1}'); do
-		resource=$(oc get node $worker \
+		resource_sriov=$(oc get node $worker \
 			-o jsonpath="{.status.allocatable.openshift\.io/intelnics}")
 
-		if [ $resource -eq 10 ]; then
+		resource_dpdk=$(oc get node $worker \
+			-o jsonpath="{.status.allocatable.openshift\.io/inteldpdk}")
+
+		if [ $resource_sriov -eq 10 ] && [ $resource_dpdk -eq 10 ]; then
 			count=$((count+1))
 		fi
 	done
@@ -132,7 +137,7 @@ for i in {1..30}; do
 		break
 	fi
 
-	if [ $i -eq 30 ]; then
+	if [ $i -eq 60 ]; then
 		exit 1
 	fi
 done
