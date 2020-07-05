@@ -39,4 +39,4 @@ for ns in $(seq 1 $NAMESPACE); do
 	oc wait --for condition=available -n "test-"$ns deployment/$DEPLOYMENT --timeout=${TIMEOUT}s
 done
 
-/usr/bin/python checktimetoscale.py $SCALE $NAMESPACE $DEPLOYMENT
+/usr/bin/python3 checktimetoscale.py $SCALE $NAMESPACE $DEPLOYMENT
