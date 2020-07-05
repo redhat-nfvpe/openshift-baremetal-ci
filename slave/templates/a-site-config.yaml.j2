@@ -55,12 +55,12 @@ provisioningInfrastructure:
   provHost:
     interfaces:
       # Interface on the provisioning host that connects to the provisioning network
-      provisioning: enp134s0f1
+      provisioning: ens803f1
       # Must be in provisioningIpCidr range
       # pxe boot server will be at port 8080 on this address
       provisioningIpAddress: 172.22.0.10
       # Interface on the provisioning host that connects to the baremetal network
-      baremetal: enp134s0f0
+      baremetal: ens803f0
       # Must be in baremetalIpCidr range
       baremetalIpAddress: 192.168.111.6
       # Interface on the provisioning host that connects to the internet/external network
