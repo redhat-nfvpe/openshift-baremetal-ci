@@ -138,4 +138,11 @@ sleep 1
 # 	-p '{"spec":{"managementState": "Removed"}}' --type='merge'
 
 # Wait for install complete
+# Force exit with 0 as workers won't be ready (due to more NICs need to be inspected)
+./requirements/openshift-install --dir ./ocp wait-for install-complete --log-level debug || true
+
+# Manually approve pending CSRs from worker node that join late
+./requirements/oc get csr -o name | xargs -n 1 ./requirements/oc adm certificate approve
+
+# Wait again for install complete after approving worker CSRs
 ./requirements/openshift-install --dir ./ocp wait-for install-complete --log-level debug
