@@ -1,0 +1,6 @@
+[connection]
+id=ens8f1
+type=ethernet
+interface-name=ens8f1
+master=bond0
+slave-type=bond

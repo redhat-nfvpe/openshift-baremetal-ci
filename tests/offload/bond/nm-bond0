@@ -1,0 +1,17 @@
+[connection]
+id=bond0
+type=bond
+interface-name=bond0
+autoconnect=true
+connection.autoconnect-slaves=1
+
+[bond]
+mode=active-backup
+miimon=100
+
+[ipv4]
+method=auto
+dhcp-timeout=2147483647
+
+[ipv6]
+method=disabled

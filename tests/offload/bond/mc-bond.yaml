@@ -1,0 +1,30 @@
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: offload
+  name: 00-bond-switchdev
+spec:
+  config:
+    ignition:
+      version: 3.1.0
+    storage:
+      files:
+      - contents:
+          source: data:text/plain;charset=utf-8;base64,W2Nvbm5lY3Rpb25dCmlkPWVuczhmMAp0eXBlPWV0aGVybmV0CmludGVyZmFjZS1uYW1lPWVuczhmMAptYXN0ZXI9Ym9uZDAKc2xhdmUtdHlwZT1ib25kCg==
+        mode: 0600
+        overwrite: true
+        filesystem: root
+        path: /etc/NetworkManager/system-connections/ens8f0.nmconnection
+      - contents:
+          source: data:text/plain;charset=utf-8;base64,W2Nvbm5lY3Rpb25dCmlkPWVuczhmMQp0eXBlPWV0aGVybmV0CmludGVyZmFjZS1uYW1lPWVuczhmMQptYXN0ZXI9Ym9uZDAKc2xhdmUtdHlwZT1ib25kCg==
+        mode: 0600
+        overwrite: true
+        filesystem: root
+        path: /etc/NetworkManager/system-connections/ens8f1.nmconnection
+      - contents:
+          source: data:text/plain;charset=utf-8;base64,W2Nvbm5lY3Rpb25dCmlkPWJvbmQwCnR5cGU9Ym9uZAppbnRlcmZhY2UtbmFtZT1ib25kMAphdXRvY29ubmVjdD10cnVlCmNvbm5lY3Rpb24uYXV0b2Nvbm5lY3Qtc2xhdmVzPTEKCltib25kXQptb2RlPWFjdGl2ZS1iYWNrdXAKbWlpbW9uPTEwMAoKW2lwdjRdCm1ldGhvZD1hdXRvCmRoY3AtdGltZW91dD0yMTQ3NDgzNjQ3CgpbaXB2Nl0KbWV0aG9kPWRpc2FibGVkCg==
+        mode: 0600
+        overwrite: true
+        filesystem: root
+        path: /etc/NetworkManager/system-connections/bond0.nmconnection
