@@ -7,8 +7,8 @@ metadata:
 spec:
   containers:
   - name: appcntr1 
-    image: zenghui/centos-dpdk-debug
-    #image: zenghui/centos-dpdk
+    image: quay.io/pliurh/centos-dpdk-debug
+    #image: quay.io/pliurh/centos-dpdk
     #image: bmcfall/dpdk-app-centos
     #image: quay.io/pliurh/dpdk_app
     imagePullPolicy: IfNotPresent
