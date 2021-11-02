@@ -11,3 +11,7 @@ spec:
     imagePullPolicy: IfNotPresent
     command: [ "/bin/bash", "-c", "--" ]
     args: [ "while true; do sleep 300000; done;" ]
+    securityContext:
+      privileged: true
+      capabilities:
+        add: ["NET_RAW"]
