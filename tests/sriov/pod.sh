@@ -26,7 +26,7 @@ inspect_pod() {
 wait_for_pod_running() {
 	pod_name=$1
 	for i in {1..6}; do
-		sleep 10
+		sleep 30
 		pod_state=$(oc get pods $pod_name | tail -n 1 | awk '{print $3}')
 
 		if [ "$pod_state" == "Running" ]; then
@@ -67,11 +67,11 @@ pod_default_route_ipv6() {
 # Test simple SR-IOV pod
 pushd templates
 oc create -f sn-$NIC_VENDOR.yaml
-sleep 1
+sleep 3
 export nad=sriov-$NIC_VENDOR
 envsubst <"pod-simple.yaml.tpl" >"pod-simple.yaml"
 oc create -f pod-simple.yaml
-sleep 1
+sleep 3
 oc wait --for condition=ready pods testpod-simple -n default --timeout=${TIMEOUT}s
 
 wait_for_pod_running testpod-simple
@@ -84,7 +84,7 @@ popd
 # Test ping between two pods
 pushd templates
 oc create -f sn-$NIC_VENDOR.yaml
-sleep 1
+sleep 3
 export pod_index=1
 export nad=sriov-$NIC_VENDOR
 export node=$WORKER_0
@@ -95,7 +95,7 @@ export node=$WORKER_0
 envsubst <"pod.yaml.tpl" >"pod2.yaml"
 oc create -f pod1.yaml
 oc create -f pod2.yaml
-sleep 1
+sleep 3
 oc wait --for condition=ready pods testpod1 -n default --timeout=${TIMEOUT}s
 oc wait --for condition=ready pods testpod2 -n default --timeout=${TIMEOUT}s
 
@@ -116,7 +116,7 @@ popd
 # Test NUMA single-numa-node policy
 pushd templates
 oc create -f sn-$NIC_VENDOR.yaml
-sleep 1
+sleep 3
 
 export pod_index=1
 export nad=sriov-$NIC_VENDOR
@@ -134,7 +134,7 @@ oc create -f pod1.yaml
 oc create -f pod2.yaml
 oc create -f pod3.yaml
 oc create -f pod4.yaml
-sleep 1
+sleep 3
 oc wait --for condition=ready pods testpod1 -n default --timeout=${TIMEOUT}s
 oc wait --for condition=ready pods testpod2 -n default --timeout=${TIMEOUT}s
 oc wait --for condition=ready pods testpod3 -n default --timeout=${TIMEOUT}s
@@ -157,7 +157,7 @@ oc exec testpod4 -- ping -c 5 $pod3_ipv4 -I net1
 
 oc delete -f pod4.yaml
 oc create -f pod5.yaml
-sleep 1
+sleep 3
 oc wait --for condition=ready pods testpod5 -n default --timeout=${TIMEOUT}s
 wait_for_pod_running testpod5
 inspect_pod testpod5
@@ -167,7 +167,7 @@ oc exec testpod5 -- ping -c 5 $pod3_ipv4 -I net1
 
 ## Check that Topology Affinity un-satisified
 #for i in {1..10}; do
-#	sleep 1
+#	sleep 3
 #	pod_state=$(oc get pods testpod5 | tail -n 1 | awk '{print $3 $4 $5}')
 #
 #	if [ "$pod_state" == "TopologyAffinityError" ]; then
@@ -190,7 +190,7 @@ popd
 # runtimeConfig, MAC and IP
 pushd templates
 oc create -f sn-$NIC_VENDOR-static.yaml
-sleep 1
+sleep 3
 export pod_index=6
 if [ $NIC_VENDOR == 'mlx' ]; then
 	export nad='[{"name": "sriov-mlx","mac": "CA:FE:C0:FF:EE:01","ips": ["10.10.10.11/24", "2001::1/64"]}]'
@@ -217,7 +217,7 @@ fi
 envsubst <"pod.yaml.tpl" >"pod7.yaml"
 oc create -f pod7.yaml
 
-sleep 1
+sleep 3
 oc wait --for condition=ready pods testpod6 -n default --timeout=${TIMEOUT}s
 oc wait --for condition=ready pods testpod7 -n default --timeout=${TIMEOUT}s
 
@@ -269,7 +269,7 @@ popd
 # default route override
 pushd templates
 oc create -f sn-$NIC_VENDOR-static.yaml
-sleep 1
+sleep 3
 export pod_index=8
 if [ $NIC_VENDOR == 'mlx' ]; then
 	export nad='[{"name": "sriov-mlx","ips": ["10.129.10.11/24", "2001::11/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
@@ -279,7 +279,7 @@ fi
 export node=$WORKER_0
 envsubst <"pod.yaml.tpl" >"pod8.yaml"
 oc create -f pod8.yaml
-sleep 1
+sleep 3
 export pod_index=9
 if [ $NIC_VENDOR == 'mlx' ]; then
 	export nad='[{"name": "sriov-mlx","ips": ["10.129.10.12/24", "2001::12/64"],"default-route": ["10.129.10.1", "2001::1"]}]'
