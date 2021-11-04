@@ -1,0 +1,23 @@
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfigPool
+metadata:
+  name: offload
+spec:
+  machineConfigSelector:
+    matchExpressions:
+      - {key: machineconfiguration.openshift.io/role, operator: In, values: [worker,offload]}
+  nodeSelector:
+    matchLabels:
+      feature.node.kubernetes.io/network-sriov.capable: "true"
+
+---
+apiVersion: sriovnetwork.openshift.io/v1
+kind: SriovNetworkPoolConfig
+metadata:
+  name: sriovnetworkpoolconfig-offload
+  namespace: openshift-sriov-network-operator
+spec:
+  # Add fields here
+  ovsHardwareOffloadConfig:
+    name: offload
