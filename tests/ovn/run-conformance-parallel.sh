@@ -4,7 +4,7 @@ set -e
 
 pushd origin
 
-OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
+OPENSHIFT_TESTS=$(realpath ./openshift-tests)
 
 # run conformance parallel tests
 # grep -v -f ../conformance-parallel-exclude.txt | \

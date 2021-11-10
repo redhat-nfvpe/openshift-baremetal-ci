@@ -7,16 +7,12 @@ spec:
   deviceType: netdevice
   mtu: 9000
   nicSelector:
-    deviceID: "158b"
+    deviceID: "1592"
     rootDevices:
-    - 0000:86:00.1  # nfvpe-22
-#    - 0000:86:00.1  # nfvpe-07
-#    - 0000:87:00.1  # nfvpe-08
+    - 0000:d8:00.0
     vendor: "8086"
     pfNames:
-    - ens787f1#0-9  # nfvpe-22
-#    - ens803f1  # nfvpe-07
-#    - ens787f1  # nfvpe-08
+    - ens3f0#0-9
   nodeSelector:
     feature.node.kubernetes.io/network-sriov.capable: "true"
   numVfs: 20

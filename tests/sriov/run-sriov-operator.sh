@@ -15,6 +15,7 @@ export CREATE_NODE_POLICY=${CREATE_NODE_POLICY:-true}
 
 NUM_OF_WORKER=$(oc get nodes | grep worker | wc -l)
 NUM_OF_MASTER=$(oc get nodes | grep master- | wc -l)
+NUM_OF_BM_WORKER=$(oc get node -o=custom-columns=NAME:.metadata.name | grep worker| wc -l)
 
 if [ $SUBSCRIPTION == false ]; then
 	if [ ! -d "sriov-network-operator" ]; then
@@ -101,12 +102,10 @@ oc create -f policy-intel-dpdk.yaml
 
 for i in {1..30}; do
 	sleep 10
-	cni=$(oc get ds sriov-cni \
-			-n $SRIOV_OPERATOR_NAMESPACE | tail -n 1 | awk '{print $4}')
 	dp=$(oc get ds sriov-device-plugin \
 			-n $SRIOV_OPERATOR_NAMESPACE | tail -n 1 | awk '{print $4}')
 
-	if [ $cni -eq $NUM_OF_WORKER ] && [ $dp -eq $NUM_OF_WORKER ]; then
+	if [ $dp -eq $NUM_OF_BM_WORKER ]; then
 		break
 	fi
 
@@ -133,7 +132,7 @@ for i in {1..60}; do
 		fi
 	done
 
-	if [ $count == $NUM_OF_WORKER ]; then
+	if [ $count == $NUM_OF_BM_WORKER ]; then
 		break
 	fi
 

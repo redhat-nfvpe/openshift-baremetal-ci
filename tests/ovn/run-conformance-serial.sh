@@ -4,7 +4,7 @@ set -e
 
 pushd origin
 
-OPENSHIFT_TESTS=$(realpath ./_output/local/bin/linux/amd64/openshift-tests)
+OPENSHIFT_TESTS=$(realpath ./openshift-tests)
 
 # run 'TestAuthorizationResourceAccessReview should succeed' first
 # as it may be affected by other tests
