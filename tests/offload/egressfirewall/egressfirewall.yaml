@@ -8,12 +8,6 @@ spec:
   - type: Allow
     to:
       cidrSelector: 172.22.0.0/24
-  - type: Allow
+  - type: Deny
     to:
       cidrSelector: google.com
-  - type: Deny
-    to:
-      dnsName: redhat.com
-  - type: Deny
-    to:
-      cidrSelector: 0.0.0.0/0
