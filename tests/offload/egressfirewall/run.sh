@@ -25,7 +25,7 @@ oc apply -f pod-egressfirewall.yaml
 popd
 
 sleep 2
-oc wait --for condition=ready pods testpod-egressfirewall-worker-24 -n egressip --timeout=30s
+oc wait --for condition=ready pods testpod-egressfirewall-worker-24 -n egressfirewall --timeout=30s
 
 ret=$(oc -n egressfirewall exec testpod-egressfirewall-worker-24 -- ping -c 10 google.com)
 
