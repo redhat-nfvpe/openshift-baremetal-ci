@@ -10,4 +10,4 @@ spec:
       cidrSelector: 172.22.0.0/24
   - type: Deny
     to:
-      cidrSelector: google.com
+      dnsName: google.com
