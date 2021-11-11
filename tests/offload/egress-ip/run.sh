@@ -3,7 +3,7 @@
 set -e
 set -x
 
-oc label nodes worker-advnetlab24 k8s.ovn.org/egress-assignable=""
+oc label nodes worker-advnetlab24 k8s.ovn.org/egress-assignable="" --overwrite
 
 pushd openshift-baremetal-ci/tests/offload/egress-ip
 oc apply -f namespace.yaml
