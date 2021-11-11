@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -e
+set -x
+
 oc label nodes worker-advnetlab24 k8s.ovn.org/egress-assignable=""
 
 pushd openshift-baremetal-ci/tests/offload/egress-ip
@@ -14,7 +17,7 @@ oc apply -f pod-egressip.yaml
 popd
 
 sleep 2
-oc wait --for condition=ready pods testpod-egressip-worker-24 -n egressip --timeout=30
+oc wait --for condition=ready pods testpod-egressip-worker-24 -n egressip --timeout=30s
 
 oc exec testpod-egressip-worker-24 -- ping -c 10 redhat.com
 
