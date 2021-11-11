@@ -19,7 +19,7 @@ popd
 sleep 2
 oc wait --for condition=ready pods testpod-egressip-worker-24 -n egressip --timeout=30s
 
-oc exec testpod-egressip-worker-24 -- ping -c 10 redhat.com
+oc -n egressip exec testpod-egressip-worker-24 -- ping -c 10 redhat.com
 
 pushd openshift-baremetal-ci/tests/offload/egress-ip
 oc delete -f pod-egressip.yaml
