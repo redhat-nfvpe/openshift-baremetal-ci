@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testpod-egressfirewall-worker-24
+  namespace: egressfirewall
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: worker-advnetlab24
+  containers:
+  - name: appcntr1
+    image: quay.io/zshi/centos:httpd-iperf
+    imagePullPolicy: IfNotPresent
