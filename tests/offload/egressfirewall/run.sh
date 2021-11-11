@@ -28,7 +28,7 @@ oc wait --for condition=ready pods testpod-egressfirewall-worker-24 -n egressfir
 
 set +e
 oc -n egressfirewall exec testpod-egressfirewall-worker-24 -- ping -c 10 google.com
-if [ $ret == 0 ]; then
+if [ $? == 0 ]; then
 	echo "ping to google.com succeeded, expected"
 else
 	echo "expect ping to google.com to succeed, but failed"
@@ -36,7 +36,7 @@ else
 fi
 
 oc -n egressfirewall exec testpod-egressfirewall-worker-24 -- ping -c 10 redhat.com
-if [ $ret == 0 ]; then
+if [ $? == 0 ]; then
 	echo "ping to redhat.com succeeded, expected"
 else
 	echo "expect ping to redhat.com to succeed, but failed"
@@ -53,7 +53,7 @@ sleep 5
 
 set +e
 oc -n egressfirewall exec testpod-egressfirewall-worker-24 -- ping -c 10 google.com
-if [ $ret == 0 ]; then
+if [ $? == 0 ]; then
 	echo "ping to google.com succeeded, expected"
 else
 	echo "expect ping to google.com to succeed, but failed"
@@ -61,7 +61,7 @@ else
 fi
 
 oc -n egressfirewall exec testpod-egressfirewall-worker-24 -- ping -c 10 redhat.com
-if [ $ret == 0 ]; then
+if [ $? == 0 ]; then
 	echo "expect ping to redhat.com to fail, but succeeded"
 	exit 1
 else
