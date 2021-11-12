@@ -46,7 +46,7 @@ oc apply -f egressrouter-svc.yaml
 if [ $TestMode == OVN ]; then
 	oc apply -f pod-egressrouter.yaml
 elif [ $TestMode == SRIOV ]; then
-        oc apply -f sriovpod-egressfirewall.yaml
+        oc apply -f sriovpod-egressrouter.yaml
 else
         exit 1
 fi
