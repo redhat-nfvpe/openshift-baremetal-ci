@@ -3,6 +3,26 @@
 set -e
 set -x
 
+TestMode=OVN
+
+while [[ $# -gt 0 ]]; do
+  key="$1"
+  case $key in
+    -s|--sriov)
+      TestMode=SRIOV
+      shift # past argument
+      ;;
+    -d|--default)
+      TestMode=OVN
+      shift # past argument
+      ;;
+    *)    # unknown option
+      TestMode=OVN
+      shift # past argument
+      ;;
+  esac
+done
+
 trap cleanup 0 1
 
 cleanup() {
@@ -23,7 +43,13 @@ sleep 5
 
 pushd openshift-baremetal-ci/tests/offload/egressrouter
 oc apply -f egressrouter-svc.yaml
-oc apply -f pod-egressrouter.yaml
+if [ $TestMode == OVN ]; then
+	oc apply -f pod-egressrouter.yaml
+elif [ $TestMode == SRIOV ]; then
+        oc apply -f sriovpod-egressfirewall.yaml
+else
+        exit 1
+fi
 popd
 
 sleep 2
