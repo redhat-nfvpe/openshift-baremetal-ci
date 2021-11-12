@@ -6,15 +6,15 @@ metadata:
 spec:
   addresses: [
     {
-      ip: "192.168.123.134/24",
-      gateway: "192.168.123.1",
+      ip: "192.168.111.190/24",
+      gateway: "192.168.111.1",
     },
   ]
   mode: Redirect
   redirect: {
     redirectRules: [
       {
-        destinationIP: "142.250.81.206",
+        destinationIP: "10.4.204.55",
         port: 80,
         protocol: TCP,
       },

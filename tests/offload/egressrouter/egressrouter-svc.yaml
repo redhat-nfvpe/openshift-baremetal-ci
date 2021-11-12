@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: egressrouter-svc
+  namespace: egressrouter
 spec:
   selector:
     app: egress-router-cni

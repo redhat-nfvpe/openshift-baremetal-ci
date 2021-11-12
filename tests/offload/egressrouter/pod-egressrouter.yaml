@@ -1,25 +1,20 @@
-apiVersion: apps/v1
-kind: Deployment
+---
+apiVersion: v1
+kind: Pod
 metadata:
   name: testpod-egressrouter-worker-24
+  namespace: egressrouter
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      name: pod-label
-  template:
-    metadata:
-      labels:
-        name: pod-label
-    spec:
-      nodeSelector:
-        kubernetes.io/hostname: worker-advnetlab24
-      containers:
-      - name: testcontainer
-        image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
-        ports:
-        - containerPort: 8080
-        - containerPort: 443
-        env:
-        - name: RESPONSE
-          value: test-pod
+  nodeSelector:
+    kubernetes.io/hostname: worker-advnetlab24
+  containers:
+  - name: appcntr1
+    imagePullPolicy: IfNotPresent
+    #    image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
+    image: quay.io/zshi/centos:httpd-iperf
+    ports:
+    - containerPort: 8080
+    - containerPort: 443
+    env:
+    - name: RESPONSE
+      value: test-pod
