@@ -57,7 +57,7 @@ else
 	exit 1
 fi
 
-oc -n egressrouter exec testpod-egressrouter-worker-24 -- curl $svc:80
+oc -n egressrouter exec testpod-egressrouter-worker-24 -- curl $podip:80
 if [ $? == 0 ]; then
 	echo "curl to endpoint pod $podip:80 succeeded, expected"
 else
@@ -65,7 +65,7 @@ else
 	exit 1
 fi
 
-oc -n egressrouter exec testpod-egressrouter-worker-24 -- curl $svc:8080
+oc -n egressrouter exec testpod-egressrouter-worker-24 -- curl $podip:8080
 if [ $? == 0 ]; then
 	echo "curl to endpoint pod $podip:8080 succeeded, expected"
 else
@@ -73,7 +73,7 @@ else
 	exit 1
 fi
 
-oc -n egressrouter exec testpod-egressrouter-worker-24 -- curl $svc:8888
+oc -n egressrouter exec testpod-egressrouter-worker-24 -- curl $podip:8888
 if [ $? == 0 ]; then
 	echo "curl to endpoint pod $podip:8888 succeeded, expected"
 else
