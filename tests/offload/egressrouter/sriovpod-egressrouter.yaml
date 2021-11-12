@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testpod-egressrouter-worker-24
+  namespace: egressrouter
+  annotations:
+    v1.multus-cni.io/default-network: default/default
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: worker-advnetlab24
+  containers:
+  - name: appcntr1
+    imagePullPolicy: IfNotPresent
+    #    image: quay.io/openshifttest/hello-sdn@sha256:d5785550cf77b7932b090fcd1a2625472912fb3189d5973f177a5a2c347a1f95
+    image: quay.io/zshi/centos:httpd-iperf
+    ports:
+    - containerPort: 8080
+    - containerPort: 443
+    env:
+    - name: RESPONSE
+      value: test-pod
