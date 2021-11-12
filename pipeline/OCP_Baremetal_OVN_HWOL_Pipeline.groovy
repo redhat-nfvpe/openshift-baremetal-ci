@@ -2,6 +2,7 @@
 
 OCP_VERSIONS = ["master"]
 // OVN
+STAGE_OVN_FEATURE_JOBS = ["OVN-Features"]
 STAGE_OVN_E2E_NETWORK_JOBS = ["OVN-E2E-Network"]
 STAGE_OVN_E2E_SERIAL_JOBS = ["OVN-E2E-Conformance-Serial"]
 STAGE_OVN_E2E_PARALLEL_JOBS = ["OVN-E2E-Conformance-Parallel"]
@@ -32,6 +33,28 @@ pipeline {
         stage ('Enable HWOL') {
             steps {
                 build job: 'Enable_CX5_Hardware_Offloading'
+            }
+        }
+
+        stage('OVN FEATURE') {
+            steps {
+                catchError(stageResult: 'FAILURE') {
+                    script {
+                        def result = 0
+                        for (int i = 0; i < STAGE_OVN_FEATURE_JOBS.size(); i++) {
+                            log("", "running ${STAGE_OVN_FEATURE_JOBS[i]} on ${OCP_VERSIONS[0]}")
+                            try {
+                                build job: "${STAGE_OVN_FEATURE_JOBS[i]}", wait: true
+                                log("success", "stage job ${STAGE_OVN_FEATURE_JOBS[i]} succeeded")
+                            }
+                            catch (err) {
+                                log("err", "stage job ${STAGE_OVN_FEATURE_JOBS[i]} failed")
+                                result = 1
+                            }
+                        }
+                        sh "exit $result"
+                    }
+                }
             }
         }
 
