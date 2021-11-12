@@ -3,6 +3,26 @@
 set -e
 set -x
 
+TestMode=OVN
+
+while [[ $# -gt 0 ]]; do
+  key="$1"
+  case $key in
+    -s|--sriov)
+      TestMode=SRIOV
+      shift # past argument
+      ;;
+    -d|--default)
+      TestMode=OVN
+      shift # past argument
+      ;;
+    *)    # unknown option
+      TestMode=OVN
+      shift # past argument
+      ;;
+  esac
+done
+
 oc label nodes worker-advnetlab24 k8s.ovn.org/egress-assignable="" --overwrite
 
 pushd openshift-baremetal-ci/tests/offload/egress-ip
@@ -12,8 +32,15 @@ popd
 
 sleep 5
 
+
 pushd openshift-baremetal-ci/tests/offload/egress-ip
-oc apply -f pod-egressip.yaml
+if [ $TestMode == OVN ]; then
+	oc apply -f pod-egressip.yaml
+elif [ $TestMode == SRIOV ]; then
+	oc apply -f sriovpod-egressip.yaml
+else
+        exit 1
+fi
 popd
 
 sleep 2
