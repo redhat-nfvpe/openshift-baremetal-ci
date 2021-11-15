@@ -27,8 +27,11 @@ trap cleanup 0 1
 
 cleanup() {
 	pushd openshift-baremetal-ci/tests/offload/networkpolicy
+	oc delete -f pod-client.yaml || true
 	oc delete -f pod-networkpolicy.yaml || true
-	oc delete -f networkpolicy.yaml || true
+	oc delete -f sriovpod-networkpolicy.yaml || true
+	oc delete -f networkpolicy-deny-by-default.yaml || true
+	oc delete -f networkpolicy-allow-same-namespace.yaml || true
 	oc delete -f namespace.yaml || true
 	popd
 }
