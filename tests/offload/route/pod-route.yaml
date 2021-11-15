@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: testpod-route-worker-24
+  namespace: route
+  labels:
+    app: route
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: worker-advnetlab24
+  containers:
+  - name: appcntr1
+    image: quay.io/zshi/fedora:httpd
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 8080
+    - containerPort: 443
